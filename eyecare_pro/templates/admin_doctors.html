@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+
+<!-- doctors23:12-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico'%}">
+    <title>eye</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/select2.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap-datetimepicker.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css'%}">
+    <!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.min.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+    <div class="main-wrapper">
+         <div class="header">
+			 
+                
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li class="menu-title">Main</li>
+                          <li>
+                            <a href="index-2.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                        </li>  
+						<li class="active">
+                            <a href=" {% url 'admin_doctors' %}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
+                        </li>
+                           
+                        <li>
+                            <a href="{% url 'departments' %}"><i class="fa fa-hospital-o"></i> <span>Departments</span></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'phar' %}"><i class="fa fa-hospital-o"></i> <span>Pharmacy</span></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'rep' %}"><i class="fa fa-hospital-o"></i> <span>Recepionists</span></a>
+                        </li>
+                         
+                </div>
+            </div>
+        </div>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-4 col-3">
+                        <h4 class="page-title"><a href="{% url 'admin_adddoctor' %}">Doctors</h4>
+                    </div>
+                    <div class="col-sm-8 col-9 text-right m-b-20">
+                        <a href="admin_adddoctor" class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Doctor</a>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <form id="search-form" method="GET" action="{% url 'search_doc' %}">
+                            <div class="input-group">
+                                <a href="{% url 'admin_doctors' %}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i></a>&ensp;&ensp;&ensp;&ensp;
+                                <input type="text" class="form-control" name="id" placeholder="Search by doctor name" size="8">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><br><br>
+
+
+				<div class="row doctor-grid">
+                
+                    {% for doct in doct %}
+                     {% if  doct.is_active %}
+
+                    <div class="col-md-4 col-sm-4  col-lg-3">
+                        <div class="profile-widget">
+                             <div class="doctor-img">
+                                <a class="avatar" href="profile.html"><img alt=""   "{% static doct.profile_photo.url %}"></a>
+                            </div> 
+                            <div class="dropdown profile-action">
+                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                 <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href=" {% url 'admin_editdoctor' doct.id %}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a class="dropdown-item" href="{% url 'delete_doctor' doct.id %}" data-toggle="modal" >
+                                        <i class="fa fa-trash-o m-r-5"></i> Delete
+                                    </a>
+                                    
+                                </div>  
+                            </div>
+                            <h4 class="doctor-name text-ellipsis"><a href="profile.html"> {{ doct.Name }}</a></h4>
+                            {% comment %} <div class="doc-prof">Gynecologist</div> {% endcomment %}
+                            <div class="user-country">
+                                <i class="fa fa-map-marker"></i> {{ doct.address }}
+                            </div>
+                            <div>
+                                    <p > D_ID {{ doct.id }}</p>
+
+                                    <p class="doctor-name text-ellipsis">  Email: {{ doct.email }}</p>
+                                    <p class="doctor-name text-ellipsis">  Password: {{ doct.password }}</p>
+                                    <p class="doctor-name text-ellipsis">DOB: {{ doct.date_of_birth}}</p>
+                                    <p class="doctor-name text-ellipsis">City: {{ doct.city }}</p>
+                                    <p class="doctor-name text-ellipsis">Department: {{ doct.Dep_id.Dep_name }}</p>
+
+                                    <p class="doctor-name text-ellipsis">Postal: {{ doct.postal }}</p>
+                                    <p class="doctor-name text-ellipsis">Phone: {{ doct.phone }}</p>
+                            </div>
+                        </div>
+                    </div>
+                     {% endif %}
+                    {% endfor %} 
+                </div> 
+                
+                    </div>
+                     
+                     
+                </div>  
+				    
+            </div>
+             
+        </div>
+		 
+    </div>
+    <div class="sidebar-overlay" data-reff=""></div>
+    <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
+	<script src="{% static 'assets/js/popper.min.js'%}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
+    <script src="{% static 'assets/js/select2.min.js'%}"></script>
+    <script src="{% static 'assets/js/moment.min.js'%}"></script>
+    <script src="{% static 'assets/js/bootstrap-datetimepicker.min.js'%}"></script>
+    <script src="{% static 'assets/js/app.js'%}"></script>
+</body>
+
+
+<!-- doctors23:17-->
+</html>

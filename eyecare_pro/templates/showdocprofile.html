@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+
+<!-- profile22:59-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico'%}">
+    <title>DOCTORS</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css'%}">
+    <!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.min.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+    <div class="main-wrapper">
+         
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-8 col-9 text-right m-b-20">
+                        <a href="profile" class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Doctor</a>
+                    </div>
+                    <div class="col-sm-12">
+                        <h4 class="page-title">My Profile</h4>
+                         
+                    </div>
+                </div>
+                <form method="post" enctype="multipart/form-data">
+                {% comment %} {% csrf_token %} {% endcomment %}
+                    <div class="card-box">
+                        <h3 class="card-title">Basic Informations</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="profile-img-wrap">
+                                {% if user.doctorprofile.profile_pic %}
+                                    <img id="propic" src="{{user.doctorprofile.profile_pic.url }}" alt="profile pic" class="inline-block"/>
+                                {% else %}
+                                    <img class="inline-block" src="/static/assets/img/user.jpg" alt="user">
+                                {% endif %}
+                                    <div class="fileupload btn">
+                                        <span class="btn-text">edit</span>
+                                        <input class="upload" name="profile_pic" type="file" >
+                                    </div>
+                                </div>
+                                <div class="profile-basic">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>First Name  </label>
+                                            <div class="form-group form-focus"> 
+                                                {% comment %} <label class="focus-label">First Name</label> {% endcomment %}
+                                                <input type="text" class="form-control floating" value="{{ user.DoctorProfile.first_name }} " name="fname">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Last Name</label>
+                                            <div class="form-group form-focus"> 
+                                                {% comment %} <label class="focus-label">Last Name</label> {% endcomment %}
+                                                <input type="text" placeholder="last" class="form-control floating" value="{{ user.DoctorProfile.first_name }}" name="lname">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Birth Date </label>
+                                            <div class="form-group form-focus"> 
+                                                 
+                                                <div class="cal-icon"> 
+                                                    <input class="form-control floating datetimepicker" type="text" value="" name="dob">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Email: </label>
+                                            <div class="form-group form-focus"> 
+                                                 
+                                                <div class="cal-icon"> 
+                                                    <input class="form-control floating datetimepicker" type="text" value=" {{ user.email }} " name="email">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-focus select-focus">
+                                                <label class="focus-label">Gender</label>
+                                                <select class="select form-control floating" name="gen">
+                                                    <option value=" ">Male</option>
+                                                    <option value=" ">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-box">
+                        <h3 class="card-title">Contact Informations</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Address  </label>
+                                <div class="form-group form-focus"> 
+                                     
+                                    <input type="text" class="form-control floating" value=" " name="add">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>State </label>
+                                <div class="form-group form-focus"> 
+                                     
+                                    <input type="text" class="form-control floating" value="{{ user_profile.state}} " name="state">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Country  </label>
+                                <div class="form-group form-focus"> 
+                                     
+                                    <input type="text" class="form-control floating" value="" name="country">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Pin Code  </label>
+                                <div class="form-group form-focus">
+                                     
+                                    <input type="text" class="form-control floating" value="" name="pin">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Phone Number</label>
+                                <div class="form-group form-focus"> 
+                                    
+                                    <input type="text" class="form-control floating" value="" name="phno">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-box">
+                        <h3 class="card-title">Education Informations</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Institution</label>
+                                <div class="form-group form-focus">
+                                     
+                                    <input type="text" class="form-control floating" value=" " name="inst">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Subject</span></label>
+                                <div class="form-group form-focus">
+                                     
+                                    <input type="text" class="form-control floating" value=" " name="sub">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Starting Date</label>
+                                <div class="form-group form-focus">
+                                     
+									<div class="cal-icon">
+										<input type="text" class="form-control floating datetimepicker" value=" " name="sd">
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Complete Date</label>
+                                <div class="form-group form-focus">
+                                     
+									<div class="cal-icon">
+										<input type="text" class="form-control floating datetimepicker" value=" " name="cd">
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Degree</label>
+                                <div class="form-group form-focus">
+                                     
+                                    <input type="text" class="form-control floating" value=" " name="degree">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Grade </label>
+                                <div class="form-group form-focus">
+                                     
+                                    <input type="text" class="form-control floating" value=" " name="grade">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-more">
+                            <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Add More Institute</a>
+                        </div>
+                    </div>
+                    <div class="card-box">
+                        <h3 class="card-title">Experience Informations</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Company Name</label>
+                                <div class="form-group form-focus">
+                                    
+                                    <input type="text" class="form-control floating" value="" name="cname">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Location</label>
+                                <div class="form-group form-focus">
+                                     
+                                    <input type="text" class="form-control floating" value=" " name="loc">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Job Position </label>
+                                <div class="form-group form-focus">
+                                     
+                                    <input type="text" class="form-control floating" value=" " name="jobp">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Period From </label>
+                                <div class="form-group form-focus">
+                                     
+									<div class="cal-icon">
+										<input type="text" class="form-control floating datetimepicker" value=" " name="periodf">
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Period To </label>
+                                <div class="form-group form-focus">
+                                     
+									<div class="cal-icon">
+										<input type="text" class="form-control floating datetimepicker" value=" " name="periodt">
+									</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-more">
+                            <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Add More Experience</a>
+                        </div>
+                    </div>
+                    <div class="text-center m-t-20">
+                        <button class="btn btn-primary submit-btn" type="button">Save</button>
+                    </div>
+                </form>
+            </div>
+             
+        </div>
+    </div>
+    <div class="sidebar-overlay" data-reff=""></div>
+    <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
+	<script src="{% static 'assets/js/popper.min.js'%}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
+    <script src="{% static 'assets/js/app.js'%}"></script>
+</body>
+
+
+<!-- profile23:03-->
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add a background image */
+        body {
+            background-image: url(' https://media.istockphoto.com/id/1294129593/photo/empty-modern-hospital-corridor.jpg?s=612x612&w=0&k=20&c=uXrV9VDTIalbXcEB2Zut5rXnhtfCoykBZ_z-FaoE0cU='); /* Replace 'your-background-image.jpg' with the URL of your background image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* Add styles for the navigation bar */
+        .navbar {
+            background-color: #007bff; /* Blue background color */
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff; /* White text color */
+        }
+
+        /* Add styles for the content area */
+        .content {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Style the profile image */
+        .profile-img {
+            max-width: 100%;
+            border-radius: 50%;
+        }
+
+        /* Add some spacing between elements */
+        .mt-20 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Doctor's Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Appointment List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Conference</a>
+                </li>
+                 
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'loggout' %}">Logout</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Profile Image -->
+                <img src="your-profile-image.jpg" alt="" class="profile-img">
+            </div>
+            <div class="col-md-8 content">
+                <!-- Doctor's Dashboard Content Goes Here -->
+                <h2>Welcome, Doctors</h2>
+                <p>This is your doctor's dashboard. You can manage appointments, view patient details, and more.</p>
+                <a href="#" class="btn btn-primary mt-20">View Appointments</a>
+                <a href="#" class="btn btn-info mt-20">Schedule Conference</a>
+                <a href="{% url 'profile' %}" class="btn btn-success mt-20">Profile Settings</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

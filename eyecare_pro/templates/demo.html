@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>Appointment Form</title>
+    <style>
+        /* Add your CSS styles here for form styling */
+        /* Example styles for form container, labels, and inputs */
+        .appointment-form {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #E6F7FF; /* Light blue background color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        #allergy_details {
+            display: none; /* Hide the allergy details text box by default */
+        }
+
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="appointment-form">
+        <h2>Appointment Request Form</h2>
+        <form action="/submit_appointment" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="place">Place:</label>
+                <input type="text" id="place" name="place" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender:</label>
+                <input type="radio" id="male" name="gender" value="Male">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="Female">
+                <label for="female">Female</label>
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile Number:</label>
+                <input type="tel" id="mobile" name="mobile" required>
+            </div>
+
+            <div class="form-group">
+                <label for="allergy">Allergy to Any Medicine:</label>
+                <input type="radio" id="allergy_yes" name="allergy" value="Yes">
+                <label for="allergy_yes">Yes</label>
+                <input type="radio" id="allergy_no" name="allergy" value="No">
+                <label for="allergy_no">No</label>
+            </div>
+
+             
+
+            <div class="form-group">
+                <label for="reason">Reason for Consultation:</label>
+                <textarea id="reason" name="reason" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="doctor">Select Doctor:</label>
+                <select id="doctor" name="doctor" required>
+                    <option value="Dr. Smith">Dr. Smith</option>
+                    <option value="Dr. Johnson">Dr. Johnson</option>
+                    <!-- Add more doctor options here -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="appointment_date">Select Date:</label>
+                <input type="date" id="appointment_date" name="appointment_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="appointment_time">Select Time:</label>
+                <select id="appointment_time" name="appointment_time" required>
+                    <option value="9:00 AM">9:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <!-- Add more time options here -->
+                </select>
+            </div>
+
+            <button type="submit">Submit Appointment Request</button>
+        </form>
+    </div>
+
+    <!-- JavaScript to show/hide the allergy details field -->
+    <script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+         
+    </script>
+</body>
+</html>

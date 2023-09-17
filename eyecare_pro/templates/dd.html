@@ -1,0 +1,195 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <title>LOGIN</title>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .image-container {
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 image-container">
+        <img src="https://img.freepik.com/premium-vector/ophthalmology-concept-ophthalmologist-doctor-checks-patient-eyesight-optical-test-eyes-good-vision-care-oculist-pointing-eye-test-chart-ophthalmological-sight-examination-treatment_458444-567.jpg" alt="Image">
+      </div>
+      <div class="col-md-6">
+        <div class="container form-container mt-5">
+          <h1>Login Form</h1>
+          {% for messages in messages %}
+                <h3 style="color: blue">{{ messages }}</h3>
+          {% endfor %}
+          <form  action="#" id="registrationForm" method="POST">
+          {% csrf_token %}
+            {% comment %} <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="text" class="form-control" id="username" name="username" required>
+              <small id="usernameError" class="form-text text-danger"></small>
+            </div> {% endcomment %}
+
+             <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+              <small id="emailError" class="form-text text-danger"></small>
+            </div> 
+
+            <!-- <div class="form-group">
+              <label for="phoneNumber">Phone Number:</label>
+              <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
+              <small id="phoneNumberError" class="form-text text-danger"></small>
+            </div> -->
+
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+              <small id="passwordError" class="form-text text-danger"></small>
+            </div>
+
+            <!-- <div class="form-group">
+              <label for="confirmPassword">Confirm Password:</label>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+              <small id="confirmPasswordError" class="form-text text-danger"></small>
+            </div> -->
+
+            <button type="submit" class="btn btn-primary">Log In</button>
+              <button class="btn btn-outline-info">
+        <a href="{% provider_login_url 'google'%}?next=/">
+            <i class="fab fa-google"></i>
+            Login with Google
+        </a>
+    </button>  
+            <pre>Don't Have an Account? <a href="{% url 'cc' %}" style="color: rgb(201, 7, 7); font-size: 14px;">Signup</a></pre>
+          </form>
+          <form action="{% url 'password_reset' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <a href="{% url 'password_reset' %}" class="forgot-password">Forgot Password?</a>
+                    </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Bootstrap JS and jQuery scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <script>
+    const registrationForm = document.getElementById('registrationForm');
+    // const usernameInput = document.getElementById('username'); 
+     const emailInput = document.getElementById('email');
+    // const phoneNumberInput = document.getElementById('phoneNumber');
+    const passwordInput = document.getElementById('password');
+    // const confirmPasswordInput = document.getElementById('confirmPassword');
+
+   // function validateUsername() {
+     // const usernameValue = usernameInput.value;
+     // const usernameError = document.getElementById('usernameError');
+      
+     // if (!/^[a-zA-Z]+$/.test(usernameValue)) {
+      //  usernameError.textContent = 'Username should contain only alphabetical characters.';
+      //  return false;
+      //} else {
+      //  usernameError.textContent = '';
+      //  return true;
+      //}
+   // }
+
+     function validateEmail() {
+       const emailValue = emailInput.value;
+       const emailError = document.getElementById('emailError');
+      
+       if (!/^\S+@\S+\.\S+$/.test(emailValue)) {
+         emailError.textContent = 'Enter a valid email address.';
+         return false;
+       } else {
+         emailError.textContent = '';
+        return true;
+      }
+    }
+
+    // function validatePhoneNumber() {
+    //   const phoneNumberValue = phoneNumberInput.value;
+    //   const phoneNumberError = document.getElementById('phoneNumberError');
+      
+    //   if (!/^\d{1,10}$/.test(phoneNumberValue)) {
+    //     phoneNumberError.textContent = 'Phone number should be numeric and not exceed 10 digits.';
+    //     return false;
+    //   } else {
+    //     phoneNumberError.textContent = '';
+    //     return true;
+    //   }
+    // }
+
+    function validatePassword() {
+      const passwordValue = passwordInput.value;
+      const passwordError = document.getElementById('passwordError');
+      
+      if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}/.test(passwordValue)) {
+        passwordError.textContent = 'Password should contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.';
+        return false;
+      } else {
+        passwordError.textContent = '';
+        return true;
+      }
+    }
+
+    // function validateConfirmPassword() {
+    //   const confirmPasswordValue = confirmPasswordInput.value;
+    //   const confirmPasswordError = document.getElementById('confirmPasswordError');
+      
+    //   if (confirmPasswordValue !== passwordInput.value) {
+    //     confirmPasswordError.textContent = 'Passwords do not match.';
+    //     return false;
+    //   } else {
+    //     confirmPasswordError.textContent = '';
+    //     return true;
+    //   }
+    // }
+
+    // Validate on keyup for individual fields
+    //usernameInput.addEventListener('keyup', validateUsername);
+     emailInput.addEventListener('keyup', validateEmail);
+    // phoneNumberInput.addEventListener('keyup', validatePhoneNumber);
+     passwordInput.addEventListener('keyup', validatePassword);
+    // confirmPasswordInput.addEventListener('keyup', validateConfirmPassword);
+
+    // Validate on form submit
+    registrationForm.addEventListener('submit', function(event) {
+      //const isUsernameValid = validateUsername();
+       const isEmailValid = validateEmail();
+    //   const isPhoneNumberValid = validatePhoneNumber();
+       const isPasswordValid = validatePassword();
+    //   const isConfirmPasswordValid = validateConfirmPassword();
+
+      if (!isUsernameValid || !isEmailValid || !isPhoneNumberValid || !isPasswordValid || !isConfirmPasswordValid) {
+        event.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
