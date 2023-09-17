@@ -249,7 +249,7 @@ def profile(request):
         # user_profile.period_to = request.POST.get('periodt')
         # print("Period To:", user_profile.period_to)
 
-        # Save the changes to the user_profile
+    
         user_profile.save()
 
          
