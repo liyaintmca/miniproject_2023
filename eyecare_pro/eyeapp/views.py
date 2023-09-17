@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.shortcuts import render,redirect, get_object_or_404
+from django.shortcuts import render,redirect, get_object_or_404 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages,auth
@@ -12,6 +12,8 @@ from .models import Phar
 from .models import Rep
 from .models import CustomUser
 from .models import DoctorProfile
+ 
+
 
 from django.contrib.auth import get_user_model
  
@@ -506,5 +508,42 @@ def loggout(request):
     return redirect('/')
 
 
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
- 
+def generate_pdf(request):
+    template_path = 'departments.html'
+    deptss = Deps.objects.all()
+    context = {'deptss': deptss}
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="departments.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
+
+    return response
+
+
+# doctors download pdf
+def generate_pdfs(request):
+    template_path = 'admin_doctors.html'
+    doct = Docs.objects.all()
+    context = {'doct': doct}
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="admin_doctors.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
+
+    return response

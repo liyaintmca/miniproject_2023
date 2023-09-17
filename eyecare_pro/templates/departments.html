@@ -92,6 +92,9 @@
                         </div>
                     </div>
                 </div>
+                <form method="get" action="{% url 'generate_pdf' %}">
+                    <button type="submit" class="btn btn-primary">Generate PDF</button>
+                </form>
             </div>
             {% comment %} <div class="notification-box">
                 <div class="msg-sidebar notifications msg-noti">
@@ -109,10 +112,12 @@
 						<div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
 							<button type="submit" class="btn btn-danger">Delete</button>
 						</div>
+                         
 					</div>
 				</div>
 			</div>
 		</div>
+         
     </div>
     <div class="sidebar-overlay" data-reff=""></div>
     <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>

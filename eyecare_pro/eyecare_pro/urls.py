@@ -22,6 +22,7 @@ from eyeapp.views import service, contact, about, department,department_single,d
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+ 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -56,6 +57,8 @@ urlpatterns = [
     path('add_admin_dep',views.add_admin_dep,name="add_admin_dep"),
     path('cc',views.cc,name='cc'),
     path('dd',views.dd,name='dd'),
+    path('generate-pdf/', views.generate_pdf, name='generate_pdf'),
+    path('generate-pdfs/', views.generate_pdfs, name='generate_pdfs'),
     path('loggout', loggout, name='loggout'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
