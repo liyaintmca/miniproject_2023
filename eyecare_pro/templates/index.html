@@ -98,7 +98,7 @@
 			  	</li> {% endcomment %}
 			   <li class="nav-item"><a class="nav-link" href=" {% url 'contact' %}">Contact</a></li>
 			   {% if user.is_authenticated %}
-			   <li><a class="nav-link" href=" {% url 'profile' %}">PROFILE</a></li>
+			   {% comment %} <li><a class="nav-link" href=" {% url 'profile' %}">PROFILE</a></li> {% endcomment %}
 
 			        <li><a class="nav-link" href=" {% url 'loggout' %}">LOGOUT</a></li>
 				{% else %}

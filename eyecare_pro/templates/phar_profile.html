@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico'%}">
+    <title>Pharmacist</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css'%}">
+    <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.min.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body style="background-image: url('https://st3.depositphotos.com/9999814/15720/i/450/depositphotos_157206488-stock-photo-male-doctor-in-the-hospital.jpg'); background-size: cover; background-repeat: no-repeat;">
+
+    <div class="main-wrapper">
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">My Profile</h4>
+                    </div>
+                </div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-box">
+                        <h3 class="card-title">Basic Information</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="profile-img-wrap">
+                                    {% comment %} {% if user.doctorprofile.profile_pic %}
+                                    <img id="propic" src="{{user.doctorprofile.profile_pic.url }}" alt="profile pic"
+                                        class="inline-block" />
+                                    {% else %}
+                                    <img class="inline-block" src="/static/assets/img/user.jpg" alt="user">
+                                    {% endif %} {% endcomment %}
+                                    {% comment %}
+                                    <div class="fileupload btn">
+                                        <span class="btn-text">edit</span>
+                                        <input class="upload" name="profile_pic" type="file">
+                                    </div>
+                                    {% endcomment %}
+                                </div>
+                                <div class="profile-basic">
+                                    <div class="row">
+                                        <!-- Inside your profile page HTML -->
+                                        <div class="col-md-6">
+                                            <label>First Name</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.first_name }}" name="fname">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Last Name</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.last_name }}" name="lname">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Email</label>
+                                            <div class="form-group form-focus">
+                                                <input type="email" class="form-control floating"
+                                                    value="{{ user.email }}" name="email">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Gender</label>
+                                            <div class="form-group form-focus select-focus">
+                                                <select class="select form-control floating" name="gender">
+                                                    <option value="Male" {% if pharprofile.gender == 'Male' %}
+                                                        selected {% endif %}>Male</option>
+                                                    <option value="Female" {% if pharprofile.gender == 'Female' %}
+                                                        selected {% endif %}>Female</option>
+                                                    <option value="Other" {% if pharprofile.gender == 'Other' %}
+                                                        selected {% endif %}>Others</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label>Address</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.address }}" name="add">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>State</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.state }}" name="state">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Country</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.country }}" name="country">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Pin Code</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.pin_code }}" name="pin">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Phone Number</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.phone_number }}" name="phno">
+                                            </div>
+                                        </div>
+                                        <div class="card-box">
+                                            <h3 class="card-title">Educational Information</h3>
+                                            <div class="row">
+                                        
+                                         
+                                        <div class="col-md-6">
+                                            <label>Institution</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.institution }}" name="inst">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Subject</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.subject }}" name="sub">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Degree</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.degree }}" name="degree">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Grade</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.grade }}" name="grade">
+                                            </div>
+                                        </div>
+                                        <div class="card-box">
+                                            <h3 class="card-title">Experience Information</h3>
+                                            <div class="row">
+                                         
+                                        <div class="col-md-6">
+                                            <label>Hospital Name</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.company_name }}" name="cname">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Location</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.location }}" name="loc">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Job Position</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.job_position }}" name="jobp">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Year Of Experience</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating"
+                                                    value="{{ pharprofile.job_position }}" name="yr">
+                                            </div>
+                                        </div>
+                                        <div class="text-center m-t-20">
+                                            <button class="btn btn-primary submit-btn" type="submit">Save</button>
+                                        </div>
+                                    </form>
+                                        </div>
+                                        <!-- end row -->
+                                        </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar-overlay" data-reff=""></div>
+                        <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
+                        <script src="{% static 'assets/js/popper.min.js'%}"></script>
+                        <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
+                        <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
+                        <script src="{% static 'assets/js/app.js'%}"></script>
+</body>
+
+</html>

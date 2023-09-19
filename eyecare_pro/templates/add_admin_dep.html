@@ -59,12 +59,23 @@
 							{% csrf_token %}
                             <div class="form-group">
 								<label>Department Name</label>
-								<input class="form-control" type="text" name="depp">
-							</div>
+								<input class="form-control" type="text" name="depp" id="depp">
+                                 
+                                    <span id="depp-error" class="text-danger"></span> <!-- Display error message here -->
+                                    <span id="depp-count" class="text-info">0 characters</span> <!-- Display character count here -->
+                            </div>
+							 
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea cols="30" rows="4" class="form-control" name="desc"></textarea>
+                                <textarea cols="100" rows="4" class="form-control" name="desc" id="desc"></textarea>
+                                 
+                                        <span id="desc-error" class="text-danger"></span> <!-- Display error message here -->
+                                        <span id="desc-count" class="text-info">0 characters</span> 
                             </div>
+                            <div class="m-t-20 text-center">
+                                <button class="btn btn-primary submit-btn">Create Department</button>
+                            </div>
+                        </div>
                             {% comment %} <div class="form-group">
                                 <label class="display-block">Department Status</label>
 								<div class="form-check form-check-inline">
@@ -80,9 +91,7 @@
 									</label>
 								</div>
                             </div> {% endcomment %}
-                            <div class="m-t-20 text-center">
-                                <button class="btn btn-primary submit-btn">Create Department</button>
-                            </div>
+                             
                         </form>
                     </div>
                 </div>
@@ -121,6 +130,27 @@
     <script src="/static/assets/js/jquery.slimscroll.js"></script>
     <script src="/static/assets/js/select2.min.js"></script>
     <script src="/static/assets/js/app.js"></script>
+    <script>
+        // Validate Department Name on keyup
+        $('#depp').keyup(function () {
+            var departmentName = $(this).val();
+            if (departmentName.length < 3) {
+                $('#depp-error').text('Department Name must be at least 3 characters long');
+            } else {
+                $('#depp-error').text('');
+            }
+        });
+
+        // Validate Description on keyup
+        $('#desc').keyup(function () {
+            var description = $(this).val();
+            if (description.length < 5) {
+                $('#desc-error').text('Description must be at least 5 characters long');
+            } else {
+                $('#desc-error').text('');
+            }
+        });
+    </script>
 </body>
 
 

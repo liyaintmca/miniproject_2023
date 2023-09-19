@@ -1,4 +1,4 @@
-{% comment %} {% comment %} <!DOCTYPE html>
+  {% comment %} <!DOCTYPE html>
 {% load static %}
 <html lang="en">
 
@@ -35,16 +35,16 @@
                             <label>Password</label>
                             <input type="password" class="form-control">
                         </div>
-                        {% comment %} <div class="form-group text-right">
+                          <div class="form-group text-right">
                             <a href="forgot-password.html">Forgot your password?</a>
-                        </div> {% endcomment %}
-                        {% comment %} <div class="form-group text-center">
+                        </div>  
+                        <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary account-btn"><a href="{% url 'admin_doctors' %}">Login</button>
-                        </div> {% endcomment %}
-                        {% comment %} <div class="text-center register-link">
+                        </div>  
+                          <div class="text-center register-link">
                             Don’t have an account? <a href="register.html">Register Now</a>
-                        </div> {% endcomment %}
-                    {% comment %} </form>
+                        </div>  
+                      </form>
                 </div>
 			</div>
         </div>
@@ -57,9 +57,9 @@
 
 
 <!-- login23:12-->
-</html> {% endcomment %}  
+</html>  
 
-{% comment %} <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -195,7 +195,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
   </script>
 </body>
-</html> {% endcomment %} 
+</html>   {% endcomment %}
 
 {% load socialaccount %}
 <!DOCTYPE html>
@@ -229,6 +229,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   </style>
 </head>
 <body>
+  
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-6 image-container">
@@ -297,12 +298,12 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   
-  {% comment %} <script>
-    const registrationForm = document.getElementById('registrationForm');
+  <script>
+    //const registrationForm = document.getElementById('registrationForm');
     // const usernameInput = document.getElementById('username'); 
-     const emailInput = document.getElementById('email');
+     //const emailInput = document.getElementById('email');
     // const phoneNumberInput = document.getElementById('phoneNumber');
-    const passwordInput = document.getElementById('password');
+    //const passwordInput = document.getElementById('password');
     // const confirmPasswordInput = document.getElementById('confirmPassword');
 
    // function validateUsername() {
@@ -389,6 +390,6 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         event.preventDefault();
       }
     });
-  </script> {% endcomment %}
+  </script>  
 </body>
 </html>

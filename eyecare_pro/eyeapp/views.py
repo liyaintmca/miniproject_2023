@@ -5,13 +5,14 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages,auth
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from .models import Docs
 from .models import Deps
 from .models import Phar
 from .models import Rep
 from .models import CustomUser
-from .models import DoctorProfile
+from .models import DoctorProfile,PharProfile
  
 
 
@@ -47,6 +48,10 @@ def contact(request):
     return render(request,'contact.html')
 def doctors_page(request):
     return render(request,'doctors_page.html')
+def phar_staff_page(request):
+    return render(request,'phar_staff_page.html')
+def phar_profile(request):
+    return render(request,'phar_profile.html')
 def loginadmin(request): 
     if request.method == "POST":
         username = request.POST['email']
@@ -67,11 +72,13 @@ def loginadmin(request):
     else:
         return render(request, 'loginadmin.html') 
 # DOCTORS PRINT 
+@login_required(login_url='loginadmin')   
 def admin_doctors(request):
     doct = Docs.objects.all()
     print(doct)
     return render(request,'admin_doctors.html',{'doct': doct})
- 
+
+@login_required(login_url='loginadmin') 
 def admin_adddoctor(request):
     if request.method == 'POST':
         fname=request.POST['fname']
@@ -107,18 +114,19 @@ def admin_adddoctor(request):
         user.set_password(password)
         user.role=role
         if 'profile_photo' in request.FILES:
-            obj.profile_photo = profile_photo
+            obj.profile_pic = profile_photo
             print('got')
         obj.save()
         user.save()
 
         obj.save()
 
-        messages.success(request, 'Doctor created successfully!')
+        # messages.success(request, 'Doctor created successfully!')
         return redirect('admin_doctors')
     depts = Deps.objects.all()
     return render(request,'admin_adddoctor.html',{"depts":depts})
 
+@login_required(login_url='loginadmin') 
 def admin_editdoctor(request, doctor_id):
     doctor = get_object_or_404(Docs, id=doctor_id)
     depts = Deps.objects.all()
@@ -144,17 +152,16 @@ def admin_editdoctor(request, doctor_id):
         doctor.phone=phn
         doctor.save()
 
-        messages.success(request, 'Doctor created successfully!')
+        # messages.success(request, 'Doctor created successfully!')
         return redirect('admin_doctors')
     context={'doctor' : doctor, 'depts': depts}
     return render(request,'edit_doc.html',context)
 
 #delete
-
-# views.py
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 
+@login_required(login_url='loginadmin') 
 def delete_doctor(request, doctor_id):
     doctor = get_object_or_404(Docs, id=doctor_id)
 
@@ -164,7 +171,7 @@ def delete_doctor(request, doctor_id):
         doctor.save()
 
         # Add a success message to the session
-        messages.success(request, 'Doctor deleted successfully!')
+        # messages.success(request, 'Doctor deleted successfully!')
 
         # Redirect to the 'admin_doctors' page (or adjust the URL as needed)
         return redirect('admin_doctors')
@@ -264,6 +271,81 @@ def profile(request):
     }
     return render(request, 'profile.html', context)
 
+
+# pharmacist profile
+def pharprofile(request):
+    user = request.user
+    print(user)
+    
+    pharprofile = PharProfile.objects.get(user=user)
+    if request.method == 'POST':
+        # Update user fields
+        print('POST')
+        user.first_name = request.POST.get('fname')
+        user.last_name = request.POST.get('lname')
+        
+        # Update user profile fields
+        pharprofile.first_name = request.POST.get('fname')
+        print("First Name:", pharprofile.first_name)
+
+        pharprofile.country = request.POST.get('country')
+        print("Country:", pharprofile.country)
+
+        pharprofile.state = request.POST.get('state')
+        print("State:", pharprofile.state)
+
+        pharprofile.location = request.POST.get('loc')
+        print("Location:", pharprofile.location)
+
+        pharprofile.pin_code = request.POST.get('pin')
+        print("Pin Code:", pharprofile.pin_code)
+
+        pharprofile.gender = request.POST.get('gender')
+        print("Gender:", pharprofile.gender)
+
+        pharprofile.last_name = request.POST.get('lname')
+        print("Last Name:", pharprofile.last_name)
+
+        pharprofile.phone_number = request.POST.get('phno')
+        print("Phone Number:", pharprofile.phone_number)
+        pharprofile.address = request.POST.get('add')
+        print("Address:", pharprofile.address)
+
+        pharprofile.institution = request.POST.get('inst')
+        print("Institution:", pharprofile.institution)
+
+        pharprofile.subject = request.POST.get('sub')
+        print("Subject:", pharprofile.subject)
+
+        pharprofile.degree = request.POST.get('degree')
+        print("Degree:", pharprofile.degree)
+
+        pharprofile.grade = request.POST.get('grade')
+        print("Grade:", pharprofile.grade)
+
+        pharprofile.company_name = request.POST.get('cname')
+        print("Company Name:", pharprofile.company_name)
+
+        pharprofile.job_position = request.POST.get('jobp')
+        print("Job Position:", pharprofile.job_position)
+        
+        pharprofile.year = request.POST.get('yr')
+        print("Year:", pharprofile.job_position)
+
+    
+        pharprofile.save()
+
+         
+        pharprofile.save()
+
+        return redirect('phar_profile')
+    context = {
+        'user': user,
+        'pharprofile': pharprofile
+    }
+    return render(request, 'phar_profile.html', context)
+
+@login_required(login_url='loginadmin') 
 def add_admin_dep(request):
     if request.method == 'POST':
              
@@ -275,13 +357,17 @@ def add_admin_dep(request):
             ob.Dep_name=depp
             ob.Dep_desc=desc
             ob.save()
-            messages.success(request, 'Department created successfully!')
+            # messages.success(request, 'Department created successfully!')
             return redirect('departments')
     
     return render(request,'add_admin_dep.html')
+
+@login_required(login_url='loginadmin') 
 def departments(request):
     deptss=Deps.objects.all()
     return render(request,'departments.html',{'deptss': deptss})
+
+@login_required(login_url='loginadmin') 
 def admin_addphar(request):
     if request.method == 'POST':
             fname=request.POST['fname']
@@ -309,14 +395,16 @@ def admin_addphar(request):
             user.role=role
             ob.save()
             user.save()
-            messages.success(request, 'Pharmacist Staff created successfully!')
+            # messages.success(request, 'Pharmacist Staff created successfully!')
             return redirect('phar')
     
     return render(request,'admin_addphar.html')
+@login_required(login_url='loginadmin') 
 def phar(request):
     phar = Phar.objects.all()
     print(phar)
     return render(request,'phar.html',{'phar': phar})
+@login_required(login_url='loginadmin') 
 def admin_editphar(request, phar_id):
     phar = get_object_or_404(Phar, id=phar_id)
     if request.method == 'POST':
@@ -341,13 +429,13 @@ def admin_editphar(request, phar_id):
         phar.phone=phn
         phar.save()
 
-        messages.success(request, 'Pharmacists created successfully!')
+        # messages.success(request, 'Pharmacists created successfully!')
         return redirect('phar')
     context={'phar' : phar}
     return render(request,'edit_phar.html',context)
 
 
-
+@login_required(login_url='loginadmin') 
 def admin_addrep(request):
     if request.method == 'POST':
             fname=request.POST['fname']
@@ -375,7 +463,7 @@ def admin_addrep(request):
             user.role=role
             ob.save()
             user.save()
-            messages.success(request, 'Recepionists Staff created successfully!')
+            # messages.success(request, 'Recepionists Staff created successfully!')
             return redirect('rep')
     
     return render(request,'admin_addrep.html')
@@ -408,7 +496,7 @@ def dd(request):
                 return redirect('/')
             elif user.role == CustomUser.PHARMACISTS:
                 login(request, user)
-                return redirect('/')
+                return redirect('phar_staff_page')
             else:
                 messages.info(request, "Invalid Role For Login")
         
@@ -442,6 +530,9 @@ def cc(request):
                  
                 user_profile = DoctorProfile(user=user, email=email )
                 user_profile.save()
+
+                pharprofile = PharProfile(user=user, email=email )
+                pharprofile.save()
                 messages.success(request, 'Registration successful. You can now log in.')
                 return redirect('dd')
         else:
@@ -508,42 +599,74 @@ def loggout(request):
     return redirect('/')
 
 
+# from django.http import HttpResponse
+# from django.template.loader import get_template
+# from xhtml2pdf import pisa
+
+# def generate_pdf(request):
+#     template_path = 'departments.html'
+#     deptss = Deps.objects.all()
+#     context = {'deptss': deptss}
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="departments.pdf"'
+
+#     template = get_template(template_path)
+#     html = template.render(context)
+#     pisa_status = pisa.CreatePDF(html, dest=response)
+
+#     if pisa_status.err:
+#         return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
+
+#     return response
+
+
+# # doctors download pdf
+# def generate_pdfs(request):
+#     template_path = 'admin_doctors.html'
+#     doct = Docs.objects.all()
+#     context = {'doct': doct}
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="admin_doctors.pdf"'
+
+#     template = get_template(template_path)
+#     html = template.render(context)
+#     pisa_status = pisa.CreatePDF(html, dest=response)
+
+#     if pisa_status.err:
+#         return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
+
+#     return response
+
+
+
+
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from io import BytesIO
+from .models import Deps  # Import your model
 
 def generate_pdf(request):
-    template_path = 'departments.html'
-    deptss = Deps.objects.all()
-    context = {'deptss': deptss}
+    # Fetch department data from your model
+    deptss = Deps.objects.values('Dep_id','Dep_name','Dep_desc')
 
+    # Load the HTML template
+    template = get_template('departments.html')
+
+    # Render the template with department data
+    html_content = template.render({'deptss': deptss})
+
+    # Create a PDF file-like object
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="departments.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="department_report.pdf"'
 
-    template = get_template(template_path)
-    html = template.render(context)
-    pisa_status = pisa.CreatePDF(html, dest=response)
+    # Generate PDF
+    pdf = pisa.CreatePDF(BytesIO(html_content.encode('UTF-8')), response)
 
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
+    if not pdf.err:
+        return response
 
-    return response
+    return HttpResponse('Error generating PDF: %s' % pdf.err)
 
-
-# doctors download pdf
-def generate_pdfs(request):
-    template_path = 'admin_doctors.html'
-    doct = Docs.objects.all()
-    context = {'doct': doct}
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="admin_doctors.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-    pisa_status = pisa.CreatePDF(html, dest=response)
-
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
-
-    return response

@@ -3,19 +3,23 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None,role=None):
         if not email:
             raise ValueError('User must have an email address')
 
         user = self.model(
             email=self.normalize_email(email),
-        
+            role=role,
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None):
+    def create_superuser(self, email, password=None,):
+        
+        if not password:
+            raise ValueError('Superuser must have a password')
+         
         
         user = self.create_user(
             email=self.normalize_email(email),
@@ -197,7 +201,35 @@ class DoctorProfile(models.Model):
         return self.first_name 
 
 
+class PharProfile(models.Model):
+     
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    first_name = models.CharField(max_length=100, null=True,blank=True)
+    last_name = models.CharField(max_length=100,null=True,blank=True)
+    # birth_date = models.DateField(null=True,blank=True)
+    email = models.EmailField(max_length=100,null=True,blank=True)
+    # profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'),('Others', 'Others')],blank=True,null=True)
+    address = models.CharField(max_length=255,null=True,blank=True)
+    state = models.CharField(max_length=100,null=True,blank=True)
+    country = models.CharField(max_length=100,null=True,blank=True)
+    pin_code = models.CharField(max_length=10,null=True,blank=True)
+    phone_number = models.CharField(max_length=15,null=True,blank=True)
+    institution = models.CharField(max_length=100,null=True,blank=True)
+    subject = models.CharField(max_length=100,null=True,blank=True)
+    # starting_date = models.DateField(null=True,blank=True)
+    # complete_date = models.DateField(null=True,blank=True)
+    degree = models.CharField(max_length=100,null=True,blank=True)
+    grade = models.CharField(max_length=10,null=True,blank=True)
+    company_name = models.CharField(max_length=100,null=True,blank=True)
+    location = models.CharField(max_length=100,null=True,blank=True)
+    job_position = models.CharField(max_length=100,null=True,blank=True)
+    year =  models.CharField(max_length=100,null=True,blank=True)
+    # period_from = models.DateField(null=True,blank=True)
+    # period_to = models.DateField(null=True,blank=True)
 
+    def __str__(self):
+        return self.email 
  
 # Create your models here.
 
