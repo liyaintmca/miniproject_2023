@@ -7,12 +7,12 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-from .models import Docs
+from .models import Docs,Phar
 from .models import Deps
-from .models import Phar
+
 from .models import Rep
 from .models import CustomUser
-from .models import DoctorProfile,PharProfile
+
  
 
 
@@ -50,6 +50,8 @@ def doctors_page(request):
     return render(request,'doctors_page.html')
 def phar_staff_page(request):
     return render(request,'phar_staff_page.html')
+def rep_staff_page(request):
+    return render(request,'rep_staff_page.html')
 def phar_profile(request):
     return render(request,'phar_profile.html')
 def loginadmin(request): 
@@ -72,6 +74,8 @@ def loginadmin(request):
     else:
         return render(request, 'loginadmin.html') 
 # DOCTORS PRINT 
+
+from .models import Docs
 @login_required(login_url='loginadmin')   
 def admin_doctors(request):
     doct = Docs.objects.all()
@@ -81,81 +85,29 @@ def admin_doctors(request):
 @login_required(login_url='loginadmin') 
 def admin_adddoctor(request):
     if request.method == 'POST':
-        fname=request.POST['fname']
-            # uname=request.POST.get['uname']
-        email= request.POST["email"]
-        password=request.POST["password"]
-        dob=request.POST['dob']
-        # gend=request.POST['gender']
-        address=request.POST['address']
-        depp=request.POST['depp']
-        city=request.POST['city']
-        pos=request.POST['pos']
-        phn=request.POST['phn']
-        role=CustomUser.DOCTORS
-        profile_photo = request.FILES.get('profile_photo')
-
- 
-        obj=Docs()
-        user=CustomUser() 
-        obj.Name=fname
-        # obj.username=uname
-        obj.email=email
-        obj.set_password(password)
-        obj.date_of_birth=dob
-        # obj.genders=gend
-        obj.address=address
-        obj.depmnt=depp
-        obj.city=city
-        obj.postal=pos
-        obj.phone=phn
-        obj.Dep_id_id=depp
-        user.email=email
-        user.set_password(password)
-        user.role=role
-        if 'profile_photo' in request.FILES:
-            obj.profile_pic = profile_photo
-            print('got')
-        obj.save()
-        user.save()
-
-        obj.save()
-
-        # messages.success(request, 'Doctor created successfully!')
-        return redirect('admin_doctors')
-    depts = Deps.objects.all()
-    return render(request,'admin_adddoctor.html',{"depts":depts})
-
-@login_required(login_url='loginadmin') 
-def admin_editdoctor(request, doctor_id):
-    doctor = get_object_or_404(Docs, id=doctor_id)
-    depts = Deps.objects.all()
-    if request.method == 'POST':
-        fname=request.POST['fname']
-            # uname=request.POST.get['uname']
-        email= request.POST["email"]
-        dob=request.POST['dob']
-        # gend=request.POST['gender']
-        address=request.POST['address']
-        city=request.POST['city']
-        pos=request.POST['pos']
-        phn=request.POST['phn']
-            
-        doctor.Name=fname
-        # obj.username=uname
-        doctor.email=email
-        doctor.date_of_birth=dob
-        # obj.genders=gend
-        doctor.address=address
-        doctor.city=city
-        doctor.postal=pos
-        doctor.phone=phn
-        doctor.save()
-
-        # messages.success(request, 'Doctor created successfully!')
-        return redirect('admin_doctors')
-    context={'doctor' : doctor, 'depts': depts}
-    return render(request,'edit_doc.html',context)
+        # Retrieve data from the POST request
+        Name= request.POST.get('Name')
+        email= request.POST.get('email')
+        password = request.POST.get('password')
+        phn= request.POST.get('phn')
+        dep_id = request.POST.get('depp')
+        role=CustomUser.DOCTOR
+        print(role)
+        if CustomUser.objects.filter(email=email,role=CustomUser.DOCTOR).exists():
+                messages.info(request, 'Email already exists') 
+                return redirect('admin_adddoctor')
+        else:
+                user = CustomUser.objects.create_user(email=email, password=password)
+                user.role = CustomUser.DOCTOR
+                user.save()
+                doctor = Docs(user=user,Name=Name,Dep_id_id=dep_id,phn=phn)
+                doctor.save()
+                return redirect('admin_doctors')
+    else:
+        depts = Deps.objects.all()
+        context = {  'depts': depts}
+        return render(request, 'admin_adddoctor.html', context)
+        
 
 #delete
 from django.shortcuts import get_object_or_404, redirect
@@ -183,87 +135,39 @@ def profile(request):
     user = request.user
     print(user)
     
-    user_profile = DoctorProfile.objects.get(user=user)
+    user_profile = Docs.objects.get(user=user)
     if request.method == 'POST':
         # Update user fields
         print('POST')
-        user.first_name = request.POST.get('fname')
-        user.last_name = request.POST.get('lname')
+        
         
         # Update user profile fields
-        user_profile.first_name = request.POST.get('fname')
-        print("First Name:", user_profile.first_name)
-
-        user_profile.country = request.POST.get('country')
-        print("Country:", user_profile.country)
-
-        user_profile.state = request.POST.get('state')
-        print("State:", user_profile.state)
-
-        user_profile.location = request.POST.get('loc')
-        print("Location:", user_profile.location)
-
-        user_profile.pin_code = request.POST.get('pin')
-        print("Pin Code:", user_profile.pin_code)
-
-        user_profile.gender = request.POST.get('gender')
-        print("Gender:", user_profile.gender)
-
-        user_profile.last_name = request.POST.get('lname')
-        print("Last Name:", user_profile.last_name)
-
-        user_profile.phone_number = request.POST.get('phno')
-        print("Phone Number:", user_profile.phone_number)
-
-    #     user_profile.birth_date = request.POST.get('dob')
-    #     if user_profile.birth_date:
-    #         parsed_date = datetime.strptime(user_profile.birth_date, '%b. %d, %Y')
-    #         print(parsed_date)
-
-    # # Format the parsed date as "YYYY-MM-DD"
-    #         formatted_date = parsed_date.strftime('%Y-%m-%d')
-    #         print(formatted_date)
-    #     print("Date of Birth:", user_profile.birth_date)
-
+        user_profile.Name = request.POST.get('Name')
+        print("Name:", user_profile.Name)
         user_profile.address = request.POST.get('add')
         print("Address:", user_profile.address)
-
-        user_profile.institution = request.POST.get('inst')
+        user_profile.country = request.POST.get('country')
+        print("Country:", user_profile.country)
+        user_profile.state = request.POST.get('state')
+        print("State:", user_profile.state)
+        user_profile.phn = request.POST.get('phn')
+        print("Phone Number:", user_profile.phn)
+        user_profile.city = request.POST.get('city')
+        print("City:", user_profile.city)
+        user_profile.gender = request.POST.get('gender')
+        print("Gender:", user_profile.gender)
+        user_profile.dob = request.POST.get('dob')
+        print("Birth Day:", user_profile.dob)
+        user_profile.institution = request.POST.get('institution')
         print("Institution:", user_profile.institution)
-
-        user_profile.subject = request.POST.get('sub')
-        print("Subject:", user_profile.subject)
-
-        # user_profile.starting_date = request.POST.get('sd')
-        # print("Starting Date:", user_profile.starting_date)
-
-        # user_profile.complete_date = request.POST.get('cd')
-        # print("Completion Date:", user_profile.complete_date)
-
+        user_profile.subject = request.POST.get('subject')
+        print("Place:", user_profile.subject)
         user_profile.degree = request.POST.get('degree')
         print("Degree:", user_profile.degree)
 
-        user_profile.grade = request.POST.get('grade')
-        print("Grade:", user_profile.grade)
-
-        user_profile.company_name = request.POST.get('cname')
-        print("Company Name:", user_profile.company_name)
-
-        user_profile.job_position = request.POST.get('jobp')
-        print("Job Position:", user_profile.job_position)
-
-        # user_profile.period_from = request.POST.get('periodf')
-        # print("Period From:", user_profile.period_from)
-
-        # user_profile.period_to = request.POST.get('periodt')
-        # print("Period To:", user_profile.period_to)
-
-    
+        user_profile.year = request.POST.get('year')
+        print("Grade:", user_profile.year)
         user_profile.save()
-
-         
-        user_profile.save()
-
         return redirect('profile')
     context = {
         'user': user,
@@ -271,77 +175,58 @@ def profile(request):
     }
     return render(request, 'profile.html', context)
 
+def search_doc(request):
+    if request.method == "GET":
+        # Get the search query from the GET parameters
+        search_query = request.GET.get('Name', '')
 
+        # Perform the search using the 'icontains' filter on the doctor's name
+        doctors = Docs.objects.filter(Name__icontains=search_query)
+
+        context = {
+            'doct': doctors,
+        }
+
+        return render(request, 'admin_doctors.html', context)
 # pharmacist profile
-def pharprofile(request):
+def phar_profile(request):
     user = request.user
     print(user)
     
-    pharprofile = PharProfile.objects.get(user=user)
+    user_profile = Phar.objects.get(user=user)
     if request.method == 'POST':
         # Update user fields
         print('POST')
-        user.first_name = request.POST.get('fname')
-        user.last_name = request.POST.get('lname')
-        
         # Update user profile fields
-        pharprofile.first_name = request.POST.get('fname')
-        print("First Name:", pharprofile.first_name)
-
-        pharprofile.country = request.POST.get('country')
-        print("Country:", pharprofile.country)
-
-        pharprofile.state = request.POST.get('state')
-        print("State:", pharprofile.state)
-
-        pharprofile.location = request.POST.get('loc')
-        print("Location:", pharprofile.location)
-
-        pharprofile.pin_code = request.POST.get('pin')
-        print("Pin Code:", pharprofile.pin_code)
-
-        pharprofile.gender = request.POST.get('gender')
-        print("Gender:", pharprofile.gender)
-
-        pharprofile.last_name = request.POST.get('lname')
-        print("Last Name:", pharprofile.last_name)
-
-        pharprofile.phone_number = request.POST.get('phno')
-        print("Phone Number:", pharprofile.phone_number)
-        pharprofile.address = request.POST.get('add')
-        print("Address:", pharprofile.address)
-
-        pharprofile.institution = request.POST.get('inst')
-        print("Institution:", pharprofile.institution)
-
-        pharprofile.subject = request.POST.get('sub')
-        print("Subject:", pharprofile.subject)
-
-        pharprofile.degree = request.POST.get('degree')
-        print("Degree:", pharprofile.degree)
-
-        pharprofile.grade = request.POST.get('grade')
-        print("Grade:", pharprofile.grade)
-
-        pharprofile.company_name = request.POST.get('cname')
-        print("Company Name:", pharprofile.company_name)
-
-        pharprofile.job_position = request.POST.get('jobp')
-        print("Job Position:", pharprofile.job_position)
-        
-        pharprofile.year = request.POST.get('yr')
-        print("Year:", pharprofile.job_position)
-
-    
-        pharprofile.save()
-
-         
-        pharprofile.save()
-
+        user_profile.Name = request.POST.get('Name')
+        print("Name:", user_profile.Name)
+        user_profile.address = request.POST.get('address')
+        print("Address:", user_profile.address)
+        user_profile.country = request.POST.get('country')
+        print("Country:", user_profile.country)
+        user_profile.state = request.POST.get('state')
+        print("State:", user_profile.state)
+        user_profile.phn = request.POST.get('phn')
+        print("Phone Number:", user_profile.phn)
+        user_profile.city = request.POST.get('city')
+        print("City:", user_profile.city)
+        user_profile.gender = request.POST.get('gender')
+        print("Gender:", user_profile.gender)
+        user_profile.dob = request.POST.get('dob')
+        print("Birth Day:", user_profile.dob)
+        user_profile.institution = request.POST.get('institution')
+        print("Institution:", user_profile.institution)
+        user_profile.subject = request.POST.get('subject')
+        print("Place:", user_profile.subject)
+        user_profile.degree = request.POST.get('degree')
+        print("Degree:", user_profile.degree)
+        user_profile.year = request.POST.get('year')
+        print("Grade:", user_profile.year)
+        user_profile.save()
         return redirect('phar_profile')
     context = {
         'user': user,
-        'pharprofile': pharprofile
+        'user_profile': user_profile
     }
     return render(request, 'phar_profile.html', context)
 
@@ -370,151 +255,180 @@ def departments(request):
 @login_required(login_url='loginadmin') 
 def admin_addphar(request):
     if request.method == 'POST':
-            fname=request.POST['fname']
-             
-            email= request.POST["email"]
-            password=request.POST["password"]
-            dob=request.POST['dob']
-            # gend=request.POST['gender']
-            address=request.POST['address']
-            city=request.POST['city']  
-            phn=request.POST['phn']
-            role=CustomUser.PHARMACISTS
-            ob=Phar() 
-            user=CustomUser() 
-            ob.Name=fname
-             
-            ob.email=email
-            ob.set_password(password)
-            ob.date_of_birth=dob
-            ob.address=address
-            ob.city=city 
-            ob.phone=phn
-            user.email=email
-            user.set_password(password)
-            user.role=role
-            ob.save()
-            user.save()
-            # messages.success(request, 'Pharmacist Staff created successfully!')
-            return redirect('phar')
-    
-    return render(request,'admin_addphar.html')
+        # Retrieve data from the POST request
+        Name= request.POST.get('Name')
+        email= request.POST.get('email')
+        password = request.POST.get('password')
+        phn = request.POST.get('phn')
+        role=CustomUser.PHARMACIST
+        print(role)
+        if CustomUser.objects.filter(email=email,role=CustomUser.PHARMACIST).exists():
+                messages.info(request, 'Email already exists') 
+                return redirect('admin_addphar')
+        else:
+                user = CustomUser.objects.create_user(email=email, password=password)
+                user.role = CustomUser.PHARMACIST
+                user.save()
+                pharmacist = Phar(user=user,Name=Name,phn=phn)
+                pharmacist.save()
+                return redirect('phar')
+    else:
+        return render(request, 'admin_addphar.html')
 @login_required(login_url='loginadmin') 
 def phar(request):
     phar = Phar.objects.all()
     print(phar)
     return render(request,'phar.html',{'phar': phar})
-@login_required(login_url='loginadmin') 
-def admin_editphar(request, phar_id):
-    phar = get_object_or_404(Phar, id=phar_id)
-    if request.method == 'POST':
-        fname=request.POST['fname']
-            # uname=request.POST.get['uname']
-        email= request.POST["email"]
-        dob=request.POST['dob']
-        # gend=request.POST['gender']
-        address=request.POST['address']
-        city=request.POST['city']
-        pos=request.POST['pos']
-        phn=request.POST['phn']
-            
-        phar.Name=fname
-        # obj.username=uname
-        phar.email=email
-        phar.date_of_birth=dob
-        # obj.genders=gend
-        phar.address=address
-        phar.city=city
-        phar.postal=pos
-        phar.phone=phn
-        phar.save()
 
-        # messages.success(request, 'Pharmacists created successfully!')
-        return redirect('phar')
-    context={'phar' : phar}
-    return render(request,'edit_phar.html',context)
+def search_phar(request):
+    if request.method == "GET":
+        # Get the search query from the GET parameters
+        search_query = request.GET.get('Name', '')
+
+        # Perform the search using the 'icontains' filter on the doctor's name
+        pharmacists = Phar.objects.filter(Name__icontains=search_query)
+
+        context = {
+            'phar': pharmacists,
+        }
+
+        return render(request, 'phar.html', context)
+
+
 
 
 @login_required(login_url='loginadmin') 
 def admin_addrep(request):
     if request.method == 'POST':
-            fname=request.POST['fname']
-             
-            email= request.POST["email"]
-            password=request.POST["password"]
-            dob=request.POST['dob']
-            # gend=request.POST['gender']
-            address=request.POST['address']
-            city=request.POST['city']  
-            phn=request.POST['phn']
-            role=CustomUser.RECEPIONISTS
-            ob=Rep() 
-            user=CustomUser() 
-            ob.Name=fname
-             
-            ob.email=email
-            ob.set_password(password)
-            ob.date_of_birth=dob
-            ob.address=address
-            ob.city=city 
-            ob.phone=phn
-            user.email=email
-            user.set_password(password)
-            user.role=role
-            ob.save()
-            user.save()
-            # messages.success(request, 'Recepionists Staff created successfully!')
-            return redirect('rep')
-    
-    return render(request,'admin_addrep.html')
+        # Retrieve data from the POST request
+        Name= request.POST.get('Name')
+        email= request.POST.get('email')
+        password = request.POST.get('password')
+        phn = request.POST.get('phn')
+        role=CustomUser.RECEPTIONIST
+        print(role)
+        if CustomUser.objects.filter(email=email,role=CustomUser.RECEPTIONIST).exists():
+                messages.info(request, 'Email already exists') 
+                return redirect('admin_addrep')
+        else:
+                user = CustomUser.objects.create_user(email=email, password=password)
+                user.role = CustomUser.RECEPTIONIST
+                user.save()
+                recepionist = Rep(user=user,Name=Name,phn=phn)
+                recepionist.save()
+                return redirect('rep')
+    else:
+        return render(request, 'admin_addrep.html')
 def rep(request):
     rep = Rep.objects.all()
     print(rep)
     return render(request,'rep.html',{'rep': rep})
+def search_rep(request):
+    if request.method == "GET":
+        # Get the search query from the GET parameters
+        search_query = request.GET.get('Name', '')
 
+        # Perform the search using the 'icontains' filter on the doctor's name
+        recepionists = Rep.objects.filter(Name__icontains=search_query)
+
+        context = {
+            'rep': recepionists,
+        }
+
+        return render(request, 'rep.html', context)
+def rep_profile(request):
+    user = request.user
+    print(user)
+    
+    user_profile = Rep.objects.get(user=user)
+    if request.method == 'POST':
+        # Update user fields
+        print('POST')
+        # Update user profile fields
+        user_profile.Name = request.POST.get('Name')
+        print("Name:", user_profile.Name)
+        user_profile.address = request.POST.get('address')
+        print("Address:", user_profile.address)
+        user_profile.country = request.POST.get('country')
+        print("Country:", user_profile.country)
+        user_profile.state = request.POST.get('state')
+        print("State:", user_profile.state)
+        user_profile.phn = request.POST.get('phn')
+        print("Phone Number:", user_profile.phn)
+        user_profile.city = request.POST.get('city')
+        print("City:", user_profile.city)
+        user_profile.gender = request.POST.get('gender')
+        print("Gender:", user_profile.gender)
+        user_profile.dob = request.POST.get('dob')
+        print("Birth Day:", user_profile.dob)
+        user_profile.institution = request.POST.get('institution')
+        print("Institution:", user_profile.institution)
+        user_profile.subject = request.POST.get('subject')
+        print("Place:", user_profile.subject)
+        user_profile.degree = request.POST.get('degree')
+        print("Degree:", user_profile.degree)
+        user_profile.year = request.POST.get('year')
+        print("Grade:", user_profile.year)
+        user_profile.save()
+        return redirect('rep_profile')
+    context = {
+        'user': user,
+        'user_profile': user_profile
+    }
+    return render(request, 'rep_profile.html', context)
 # login 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from .models import CustomUser
+
 def dd(request):
     if request.user.is_authenticated:
         # User is authenticated, redirect to another page
         return render(request, 'demo.html') 
      
     if request.method == "POST":
-        email=request.POST['email']
-        password=request.POST['password']
+        email = request.POST['email']
+        password = request.POST['password']
         print(email)
         print(password)
-        user = authenticate(request,email=email, password=password)
+        user = authenticate(request, email=email, password=password)
+        print(user, user)
         if user is not None:
-            if user.role == CustomUser.PATIENTS:
+            print(user, user)
+            if user.role == CustomUser.PATIENT:
+                print(user.email)
                 login(request, user)
                 return redirect('/')
-            elif user.role == CustomUser.DOCTORS:
+            elif user.role == CustomUser.DOCTOR:
                 login(request, user)
+                print(user.email)
                 return redirect('doctors_page')
-            elif user.role == CustomUser.RECEPIONISTS:
+            elif user.role == CustomUser.RECEPTIONIST:
+                print(user.email)
                 login(request, user)
-                return redirect('/')
-            elif user.role == CustomUser.PHARMACISTS:
+                return redirect('rep_staff_page')
+            elif user.role == CustomUser.PHARMACIST:
+                print(user.email)
                 login(request, user)
                 return redirect('phar_staff_page')
             else:
                 messages.info(request, "Invalid Role For Login")
-        
+                return redirect('dd')
         else:
-            messages.info(request, "Invalid  Login")
+            messages.info(request, "Invalid Login")
             return redirect('dd')
     else:
-        return render(request, 'dd.html')    
+        return render(request, 'dd.html')
 
 
 # patient registration
 def cc(request):
     if request.method == "POST":
         email = request.POST['email']
-        # phone_Number = request.POST['phoneNumber']
         password = request.POST['password']
         confirm_password = request.POST['confirmPassword']
-        role = User.PATIENTS
+        # role = User.PATIENTS
 
         if password == confirm_password:
             # if User.objects.filter(username=username).exists():
@@ -525,14 +439,14 @@ def cc(request):
                 messages.info(request, 'Email already exists') 
                 return redirect('cc')
             else:
-                user = User.objects.create_user(email=email, password=password,role=role)
-                # user.role =2
-                 
-                user_profile = DoctorProfile(user=user, email=email )
-                user_profile.save()
+                user = User.objects.create_user(email=email, password=password )
+                user.role =2
+                user.save()
+                # user_profile = Docs(user=user, email=email )
+                # user_profile.save()
 
-                pharprofile = PharProfile(user=user, email=email )
-                pharprofile.save()
+                # pharprofile = Phar(user=user, email=email )
+                # pharprofile.save()
                 messages.success(request, 'Registration successful. You can now log in.')
                 return redirect('dd')
         else:
@@ -541,53 +455,6 @@ def cc(request):
     else:
         return render(request, 'cc.html')
     
-
-def search_doc(request):
-    if 'id' in request.GET:
-        id = request.GET['id']
-        # Perform the company name search, for example:
-        print(f"search : {id}")
-        dname = Docs.objects.filter(id__contains=id)
-    else:
-        dname = Docs.objects.all()  # Display all company profiles if no search query
-
-    return render(request, 'admin_doctors.html', {'dname': dname})
-
-
-
-
-
-#######################
- 
-
-# Doctors registration form
-# def reg_doc(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email', None)
-#         password = request.POST.get('password', None)
-#         role = User.DOCTORS
-#         print(email)
-#         print(role)
-#         print(password)
-        
-
-#         if email and role and password:
-#             print("name")
-#             if User.objects.filter(email=email).exists():
-#                 print("already exist")
-#                 error_message = "Email is already registered."
-#                 return render(request, 'dd.html', {'error_message': error_message})
-            
-#             else:
-#                 user = User(email=email, role=role)
-#                 user.set_password(password)  # Set the password securely
-#                 print("password")
-#                 user.save()
-#                 print("saved")
-#                 return redirect('dd')  
-            
-#     return render(request, 'reg_doc.html') 
-
 def check_email_exists(request):
         email = request.GET.get('email')
         data = {'exists': User.objects.filter(email=email).exists()}

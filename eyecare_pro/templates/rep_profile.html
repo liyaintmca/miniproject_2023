@@ -18,21 +18,19 @@
 
 <body style="background-image: url('https://st3.depositphotos.com/9999814/15720/i/450/depositphotos_157206488-stock-photo-male-doctor-in-the-hospital.jpg'); background-size: cover; background-repeat: no-repeat;">
     <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="#">Pharmacist's Dashboard</a>
+        <a class="navbar-brand" href="#">Recepionists's Dashboard</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'phar_staff_page' %}">Profile</a>
+                    <a class="nav-link" href="{% url 'rep_staff_page' %}">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Medicine List</a>
+                    <a class="nav-link" href="#">Appointment</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Billing</a>
-                </li>
+                 
                  
                 {% if user.is_authenticated %}
                 <li class="nav-item">

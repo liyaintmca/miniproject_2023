@@ -67,6 +67,7 @@ ROOT_URLCONF = 'eyecare_pro.urls'
 AUTHENTICATION_BACKENDS = [
    
     'django.contrib.auth.backends.ModelBackend',
+    'eyeapp.backends.CustomEmailBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 
 ]

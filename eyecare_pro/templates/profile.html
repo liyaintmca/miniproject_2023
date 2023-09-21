@@ -73,30 +73,22 @@
                                 <div class="profile-basic">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label>First Name  </label>
+                                            <label> Name:  </label>
                                             <div class="form-group form-focus"> 
-                                                {% comment %} <label class="focus-label">First Name</label> {% endcomment %}
-                                                <input type="text" class="form-control floating" value="{{ user_profile.first_name }} " name="fname">
+                                                 <input type="text" class="form-control floating" value="{{ user_profile.Name }} " name="Name">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label>Last Name</label>
-                                            <div class="form-group form-focus"> 
-                                             
-                                                <input type="text" placeholder="last" class="form-control floating" value="{{ user_profile.last_name }}" name="lname">
-                                            </div>
-                                        </div>
-
+                                         
                                         
-                                          {% comment %} <div class="col-md-6">
+                                        <div class="col-md-6">
                                             <label>Birth Date </label>
                                             <div class="form-group form-focus"> 
                                                  
                                                 <div class="cal-icon"> 
-                                                    <input class="form-control floating datetimepicker" type="text" value="{{ user_profile.birth_date }}" name="dob">
+                                                    <input class="form-control floating datetimepicker" type="text" value="{{ user_profile.dob }}" name="dob">
                                                 </div>
                                             </div>
-                                        </div>   {% endcomment %}
+                                        </div>    
 
 
                                         <div class="col-md-6">
@@ -131,14 +123,13 @@
                                 <label>Address  </label>
                                 <div class="form-group form-focus"> 
                                      
-                                    <input type="text" class="form-control floating" value="{{ user.address }}" name="add">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.address }}" name="add">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>State </label>
                                 <div class="form-group form-focus"> 
-                                     
-                                    <input type="text" class="form-control floating" value="{{ user.state }} " name="state">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.state }} " name="state">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -149,18 +140,21 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label>Pin Code  </label>
+                                <label>City</label>
                                 <div class="form-group form-focus">
                                      
-                                    <input type="text" class="form-control floating" value="{{ user_profile.pin_code }}" name="pin">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.city }}" name="city">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Phone Number</label>
                                 <div class="form-group form-focus"> 
                                     
-                                    <input type="text" class="form-control floating" value="{{ user_profile.phone_number }}" name="phno">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.phn }}" name="phn">
                                 </div>
+                            </div>
+                            <div class="add-more">
+                                <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Add More Institute</a>
                             </div>
                         </div>
                     </div>
@@ -171,34 +165,16 @@
                                 <label>Institution</label>
                                 <div class="form-group form-focus">
                                      
-                                    <input type="text" class="form-control floating" value="{{ user_profile.institution }} " name="inst">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.institution }} " name="institution">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label>Subject</span></label>
+                                <label>Place</span></label>
                                 <div class="form-group form-focus">
                                      
-                                    <input type="text" class="form-control floating" value="{{ user_profile.subject }} " name="sub">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.subject }} " name="subject">
                                 </div>
                             </div>
-                            {% comment %} <div class="col-md-6">
-                                <label>Starting Date</label>
-                                <div class="form-group form-focus">
-                                     
-									<div class="cal-icon">
-										<input type="text" class="form-control floating datetimepicker" value=" " name="sd">
-									</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Complete Date</label>
-                                <div class="form-group form-focus">
-                                     
-									<div class="cal-icon">
-										<input type="text" class="form-control floating datetimepicker" value=" " name="cd">
-									</div>
-                                </div>
-                            </div> {% endcomment %}
                             <div class="col-md-6">
                                 <label>Degree</label>
                                 <div class="form-group form-focus">
@@ -207,10 +183,10 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label>Grade </label>
+                                <label>Year </label>
                                 <div class="form-group form-focus">
                                      
-                                    <input type="text" class="form-control floating" value="{{ user_profile.grade }} " name="grade">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.year }} " name="year">
                                 </div>
                             </div>
                         </div>
@@ -218,53 +194,9 @@
                             <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Add More Institute</a>
                         </div>
                     </div>
-                    <div class="card-box">
-                        <h3 class="card-title">Experience Informations</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Company Name</label>
-                                <div class="form-group form-focus">
-                                    
-                                    <input type="text" class="form-control floating" value="{{ user_profile.company_name }}" name="cname">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Location</label>
-                                <div class="form-group form-focus">
-                                     
-                                    <input type="text" class="form-control floating" value="{{ user_profile.location }} " name="loc">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Job Position </label>
-                                <div class="form-group form-focus">
-                                     
-                                    <input type="text" class="form-control floating" value="{{ user_profile.job_position }} " name="jobp">
-                                </div>
-                            </div>
-                            {% comment %} <div class="col-md-6">
-                                <label>Period From </label>
-                                <div class="form-group form-focus">
-                                     
-									<div class="cal-icon">
-										<input type="text" class="form-control floating datetimepicker" value=" " name="periodf">
-									</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Period To </label>
-                                <div class="form-group form-focus">
-                                     
-									<div class="cal-icon">
-										<input type="text" class="form-control floating datetimepicker" value=" " name="periodt">
-									</div>
-                                </div>
-                            </div> {% endcomment %}
-                        </div>
-                        <div class="add-more">
-                            <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Add More Experience</a>
-                        </div>
-                    </div>
+                     
+                         
+                     
                     <div class="text-center m-t-20">
                         <button class="btn btn-primary submit-btn" type="submit">Save</button>
                     </div>
@@ -487,6 +419,78 @@
     <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
     <script src="{% static 'assets/js/app.js'%}"></script>
+    <script>
+        function validateForm() {
+            var nameField = document.getElementsByName("Name")[0];
+            var cityField = document.getElementsByName("city")[0];
+            var stateField = document.getElementsByName("state")[0];
+            var countryField = document.getElementsByName("country")[0];
+            var institutionField = document.getElementsByName("institution")[0];
+            var subjectField = document.getElementsByName("subject")[0];
+            var degreeField = document.getElementsByName("degree")[0];
+            var yearField = document.getElementsByName("year")[0];
+        
+            var namePattern = /^[A-Za-z\s]+$/;
+            var cityPattern = /^[A-Za-z\s]+$/;
+            var statePattern = /^[A-Za-z\s]+$/;
+            var countryPattern = /^[A-Za-z\s]+$/;
+            var institutionPattern = /^[A-Za-z\s]+$/;
+            var subjectPattern = /^[A-Za-z\s]+$/;
+            var degreePattern = /^[A-Za-z\s]+$/;
+            var yearPattern = /^[0-9]+$/;
+        
+            if (!namePattern.test(nameField.value)) {
+                alert("Name should only contain characters and spaces.");
+                nameField.focus();
+                return false;
+            }
+        
+            if (!cityPattern.test(cityField.value)) {
+                alert("City should only contain characters and spaces.");
+                cityField.focus();
+                return false;
+            }
+        
+            if (!statePattern.test(stateField.value)) {
+                alert("State should only contain characters and spaces.");
+                stateField.focus();
+                return false;
+            }
+        
+            if (!countryPattern.test(countryField.value)) {
+                alert("Country should only contain characters and spaces.");
+                countryField.focus();
+                return false;
+            }
+        
+            if (!institutionPattern.test(institutionField.value)) {
+                alert("Institution should only contain characters and spaces.");
+                institutionField.focus();
+                return false;
+            }
+        
+            if (!subjectPattern.test(subjectField.value)) {
+                alert("Subject should only contain characters and spaces.");
+                subjectField.focus();
+                return false;
+            }
+        
+            if (!degreePattern.test(degreeField.value)) {
+                alert("Degree should only contain characters and spaces.");
+                degreeField.focus();
+                return false;
+            }
+        
+            if (!yearPattern.test(yearField.value)) {
+                alert("Year should only contain numbers.");
+                yearField.focus();
+                return false;
+            }
+        
+            return true;
+        }
+        </script>
+        
 </body>
 
 
