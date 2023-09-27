@@ -42,6 +42,10 @@ urlpatterns = [
     path('blog-single',views.blog_single,name="blog-single"),
     path('contact',views.contact,name="contact"),
     path('loginadmin',views.loginadmin,name="loginadmin"),
+    path('demo',views.demo,name="demo"),
+    path('loginadmin',views.loginadmin,name="loginadmin"),
+    path('dr_timeslots',views.dr_timeslots,name="dr_timeslots"),
+    path('dr_timeslots_shows',views.dr_timeslots_shows, name= 'dr_timeslots_shows'),
     path('doctors_page',views.doctors_page,name="doctors_page"),
     path('profile',views.profile,name="profile"),
     path('admin_doctors',views.admin_doctors,name="admin_doctors"),
@@ -70,7 +74,14 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('check-email-exists/', views.check_email_exists, name='check_email_exists'),
-     path('delete_doctor/<int:doctor_id>/', views.delete_doctor, name='delete_doctor'),
+    path('delete_doctor/<int:doctor_id>/', views.delete_doctor, name='delete_doctor'),
+    path('get_dates/<int:doctor_id>/', views.get_dates, name='get_dates'),
+    path('get_times/<int:doctor_id>/<str:selected_date>/', views.get_times, name='get_times'),
+    path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
+    path('payment/', views.payment, name='payment'),
+
+    # path('get-available-slots/', views.get_available_slots, name='get_available_slots'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

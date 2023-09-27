@@ -1,147 +1,235 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-    <title>Appointment Form</title>
+    <title>Book an Appointment</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
     <style>
-        /* Add your CSS styles here for form styling */
-        /* Example styles for form container, labels, and inputs */
-        .appointment-form {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #E6F7FF; /* Light blue background color */
+        body {
+            background-image: url(' https://www.eye-care-hospital.com/images/slide-2.jpg'); /* Replace with your background image URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff; /* Text color */
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.7); /* Background color with transparency */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
         }
 
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
+        .form-label {
             font-weight: bold;
         }
 
-        input[type="text"],
-        input[type="date"],
-        input[type="tel"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.1); /* Input field background color with transparency */
+            color: #fff; /* Input text color */
         }
 
-        input[type="radio"] {
-            margin-right: 10px;
+        .btn-primary {
+            background-color: #007bff; /* Primary button color */
+            border-color: #007bff;
         }
 
-        #allergy_details {
-            display: none; /* Hide the allergy details text box by default */
-        }
-
-        button[type="submit"] {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .btn-primary:hover {
+            background-color: #0056b3; /* Button color on hover */
         }
     </style>
 </head>
 <body>
-    <div class="appointment-form">
-        <h2>Appointment Request Form</h2>
-        <form action="/submit_appointment" method="post">
+    <div class="container">
+        <h1 class="mt-5">Book an Appointment</h1>
+        <form method="POST" >
             {% csrf_token %}
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address:</label>
+                <input type="text" class="form-control" id="address" name="address" required>
             </div>
 
-            <div class="form-group">
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" required>
+            <div class="mb-3">
+                <label for="place" class="form-label">Place:</label>
+                <input type="text" class="form-control" id="place" name="place" required>
             </div>
 
-            <div class="form-group">
-                <label for="place">Place:</label>
-                <input type="text" id="place" name="place" required>
+            <div class="mb-3">
+                <label for="dob" class="form-label">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob" name="dob" required>
             </div>
-
-            <div class="form-group">
-                <label for="dob">Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required>
-            </div>
-
-            <div class="form-group">
-                <label>Gender:</label>
-                <input type="radio" id="male" name="gender" value="Male">
-                <label for="male">Male</label>
-                <input type="radio" id="female" name="gender" value="Female">
-                <label for="female">Female</label>
-            </div>
-
-            <div class="form-group">
-                <label for="mobile">Mobile Number:</label>
-                <input type="tel" id="mobile" name="mobile" required>
-            </div>
-
-            <div class="form-group">
-                <label for="allergy">Allergy to Any Medicine:</label>
-                <input type="radio" id="allergy_yes" name="allergy" value="Yes">
-                <label for="allergy_yes">Yes</label>
-                <input type="radio" id="allergy_no" name="allergy" value="No">
-                <label for="allergy_no">No</label>
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender:</label>
+                <select class="form-select" id="gender" name="gender">
+                    <option value="Male" {% if user_profile.gender == 'Male' %} selected {% endif %}>Male</option>
+                    <option value="Female" {% if user_profile.gender == 'Female' %} selected {% endif %}>Female</option>
+                    <option value="Others" {% if user_profile.gender == 'Other' %} selected {% endif %}>Others</option>
+                </select>
             </div>
 
              
 
-            <div class="form-group">
-                <label for="reason">Reason for Consultation:</label>
-                <textarea id="reason" name="reason" rows="4" required></textarea>
+            <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile Number:</label>
+                <input type="text" class="form-control" id="mobile" name="mobile" required>
             </div>
 
-            <div class="form-group">
-                <label for="doctor">Select Doctor:</label>
-                <select id="doctor" name="doctor" required>
-                    <option value="Dr. Smith">Dr. Smith</option>
-                    <option value="Dr. Johnson">Dr. Johnson</option>
-                    <!-- Add more doctor options here -->
+
+            <div class="mb-3">
+                <label for="allergy" class="form-label">Do you have allergies?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="allergy" id="allergy_yes" value="Yes" required>
+                    <label class="form-check-label" for="allergy_yes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="allergy" id="allergy_no" value="No" required>
+                    <label class="form-check-label" for="allergy_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="reason" class="form-label">Reason for Consultation:</label>
+                <textarea class="form-control" id="reason" name="reason" required></textarea>
+            </div> 
+            <div class="mb-3">
+                <label for="doctor" class="form-label">Select a Doctor:</label>
+                <select class="form-select" id="doctor" name="doctor" required>
+                    <option value="" disabled>Select a Doctor</option>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.id }}" {% if selected_doctor == doctor.id %} selected {% endif %}>{{ doctor.Name }}</option>
+                    {% endfor %}
                 </select>
             </div>
-
-            <div class="form-group">
-                <label for="appointment_date">Select Date:</label>
-                <input type="date" id="appointment_date" name="appointment_date" required>
-            </div>
-
-            <div class="form-group">
-                <label for="appointment_time">Select Time:</label>
-                <select id="appointment_time" name="appointment_time" required>
-                    <option value="9:00 AM">9:00 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <!-- Add more time options here -->
+    
+            <div class="mb-3">
+                <label for="date" class="form-label">Select a Date:</label>
+                <select class="form-select" id="date" name="date" required>
+                    <option value="" >Select a Date</option>
+                    {% for date in date_options %}
+                        <option value="{{ date.date }}">{{ date.date }}</option>
+                    {% endfor %}
                 </select>
             </div>
-
-            <button type="submit">Submit Appointment Request</button>
+    
+            <div class="mb-3">
+                <label for="time" class="form-label">Select a Time Slot:</label>
+                <select class="form-select" id="time" name="time" required>
+                    <option value="" disabled selected>Select a Time Slot</option>
+                    {% for option in time_options %}
+                        <option value="{{ option.id }}">{{ option.text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            
+                      
+            
+            <button type="submit" class="btn btn-primary">Book Appointment</button>
         </form>
+
+        <!-- Display error messages if needed -->
+        {% if error_message %}
+        <div class="alert alert-danger mt-3">{{ error_message }}</div>
+        {% endif %}
+
+        <!-- Display success messages if needed -->
+        {% if success_message %}
+        <div class="alert alert-success mt-3">{{ success_message }}</div>
+        {% endif %}
     </div>
 
-    <!-- JavaScript to show/hide the allergy details field -->
-    <script>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-         
-    </script>
+    <!-- Include Bootstrap JS (if needed) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Add this script after including jQuery -->
+<!-- Include Bootstrap JS (if needed) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.min.js"></script>
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Add this script after including jQuery -->
+<script>
+    // Function to update the date dropdown based on the selected doctor
+    $("#doctor").change(function() {
+        var selectedDoctor = $(this).val();
+        if (selectedDoctor) {
+            // Send an AJAX request to fetch dates for the selected doctor
+            $.ajax({
+                url: '/get_dates/' + selectedDoctor + '/',  // Replace with your URL
+                type: 'GET',
+                success: function(data) {
+                    // Update the date dropdown with fetched data
+                    $("#date").html(data.date_options);
+                }
+            });
+        } else {
+            // If no doctor is selected, reset the date dropdown
+            $("#date").html('<option value="" disabled selected>Select a Date</option>');
+        }
+    });
+
+     // Function to update the time dropdown based on the selected date
+{% comment %} $("#date").change(function() {
+    var selectedDate = $(this).val();
+    var selectedDoctor = $("#doctor").val();
+    if (selectedDate && selectedDoctor) {
+        // Send an AJAX request to fetch time slots for the selected date and doctor
+        $.ajax({
+            url: '/get_times/' + selectedDoctor + '/' + selectedDate + '/',  // Replace with your URL
+            type: 'GET',
+            success: function(data) {
+                // Update the time dropdown with fetched data
+                $("#time").html(data.time_options);
+            }
+        });
+    } else {
+        // If no date or doctor is selected, reset the time dropdown
+        $("#time").html('<option value="" disabled selected>Select a Time Slot</option>');
+    }
+}); {% endcomment %}
+$("#date").change(function() {
+    var selectedDate = $(this).val();
+    var selectedDoctor = $("#doctor").val();
+    if (selectedDate && selectedDoctor) {
+        // Send an AJAX request to fetch time slots for the selected date and doctor
+        $.ajax({
+            url: `/get_times/${selectedDoctor}/${selectedDate}/`,  // Use template literals to construct the URL
+            type: 'GET',
+            success: function(data) {
+                // Update the time dropdown with fetched data
+                var timeDropdown = $("#time");
+                timeDropdown.empty();  // Clear existing options
+                timeDropdown.append('<option value="" disabled selected>Select a Time Slot</option>');
+                $.each(data.time_options, function(index, option) {
+                    timeDropdown.append($('<option>', {
+                        value: option.id,
+                        text: option.text
+                    }));
+                });
+            },
+            error: function() {
+                // Handle any AJAX errors here
+                console.log("Error fetching time slots.");
+            }
+        });
+    } else {
+        // If no date or doctor is selected, reset the time dropdown
+        $("#time").html('<option value="" disabled selected>Select a Time Slot</option>');
+    }
+});
+
+
+
+</script>
+
+
+        
+        
 </body>
 </html>

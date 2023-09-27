@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.forms import ValidationError
 from django.shortcuts import render,redirect, get_object_or_404 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
@@ -9,7 +10,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from .models import Docs,Phar
 from .models import Deps
-
 from .models import Rep
 from .models import CustomUser
 
@@ -74,7 +74,8 @@ def loginadmin(request):
     else:
         return render(request, 'loginadmin.html') 
 # DOCTORS PRINT 
-
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import Docs
 @login_required(login_url='loginadmin')   
 def admin_doctors(request):
@@ -102,6 +103,15 @@ def admin_adddoctor(request):
                 user.save()
                 doctor = Docs(user=user,Name=Name,Dep_id_id=dep_id,phn=phn)
                 doctor.save()
+
+                
+                subject = 'Doctor Login Details'
+                message = f'Registered as an Doctor. Your username: {email}, Password: {password}'
+                from_email = settings.EMAIL_HOST_USER  
+                recipient_list = [user.email]  
+
+                send_mail(subject, message, from_email, recipient_list)
+
                 return redirect('admin_doctors')
     else:
         depts = Deps.objects.all()
@@ -164,7 +174,6 @@ def profile(request):
         print("Place:", user_profile.subject)
         user_profile.degree = request.POST.get('degree')
         print("Degree:", user_profile.degree)
-
         user_profile.year = request.POST.get('year')
         print("Grade:", user_profile.year)
         user_profile.save()
@@ -383,9 +392,13 @@ from django.contrib import messages
 from .models import CustomUser
 
 def dd(request):
-    if request.user.is_authenticated:
-        # User is authenticated, redirect to another page
-        return render(request, 'demo.html') 
+    # if request.user.is_authenticated:
+    #     doctors=Docs.objects.all()
+    #     context={
+    #         'doctors':doctors,
+    #     }
+    #     print(doctors)
+    #     return render(request, 'demo.html',context) 
      
     if request.method == "POST":
         email = request.POST['email']
@@ -428,7 +441,7 @@ def cc(request):
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['confirmPassword']
-        # role = User.PATIENTS
+        
 
         if password == confirm_password:
             # if User.objects.filter(username=username).exists():
@@ -439,8 +452,8 @@ def cc(request):
                 messages.info(request, 'Email already exists') 
                 return redirect('cc')
             else:
-                user = User.objects.create_user(email=email, password=password )
-                user.role =2
+                user = User.objects.create_user(email=email, password=password,role=1 )
+                 
                 user.save()
                 # user_profile = Docs(user=user, email=email )
                 # user_profile.save()
@@ -465,46 +478,253 @@ def loggout(request):
     logout(request)
     return redirect('/')
 
+# from django.shortcuts import render, redirect
+# from .models import Slots, Docs, Appointment
+# from django.db.models import Q
+# import datetime  # Import the datetime module
 
-# from django.http import HttpResponse
-# from django.template.loader import get_template
-# from xhtml2pdf import pisa
+# def demo(request):
+#     if request.method == 'POST':
+#         # Get form data
+#         doctor_id = request.POST.get('doctor')
+#         start_time = request.POST.get('start_time')
+#         name = request.POST.get('name')
+#         address = request.POST.get('address')
+#         place = request.POST.get('place')
+#         dob = request.POST.get('dob')
+#         gender = request.POST.get('gender')
+#         mobile = request.POST.get('mobile')
+#         allergy = request.POST.get('allergy')
+#         reason = request.POST.get('reason')
+#         appointment_date = request.POST.get('appointment_date')
 
-# def generate_pdf(request):
-#     template_path = 'departments.html'
-#     deptss = Deps.objects.all()
-#     context = {'deptss': deptss}
+#         doctor = Docs.objects.get(id=doctor_id)
 
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="departments.pdf"'
+#         # Check if the selected time slot is available for the doctor
+#         is_slot_available = Slots.objects.filter(
+#             doctor=doctor,
+#             start_time=start_time
+#         ).exists()
 
-#     template = get_template(template_path)
-#     html = template.render(context)
-#     pisa_status = pisa.CreatePDF(html, dest=response)
+#         if is_slot_available:
+#             # Check if the selected time slot is not booked in the Appointment model
+#             is_slot_booked = Appointment.objects.filter(
+#                 Q(doctor=doctor, date=appointment_date) &
+#                 (Q(slot__start_time__lte=start_time, slot__end_time__gt=start_time) |
+#                  Q(slot__start_time__lt=start_time, slot__end_time__gte=start_time))
+#             ).exists()
 
-#     if pisa_status.err:
-#         return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
+#             if not is_slot_booked:
+#                 # The slot is available and not booked, you can create an appointment instance here
+#                 # You can also update the Slots model to mark it as booked, if necessary
 
-#     return response
+#                 # Example of creating an appointment instance:
+#                 appointment = Appointment(
+#                     name=name,
+#                     address=address,
+#                     place=place,
+#                     dob=dob,
+#                     gender=gender,
+#                     mobile=mobile,
+#                     allergy=allergy,
+#                     reason=reason,
+#                     doctor=doctor,
+#                     user=request.user,  # Assuming you have user authentication
+#                     slot=Slots.objects.get(id=start_time),  # Adjust this to get the correct slot
+#                     date=appointment_date
+#                 )
+#                 appointment.save()
+
+#                 return redirect('appointment_success')  # Redirect to a success page
+#             else:
+#                 # The slot is already booked, handle this case as needed (e.g., show an error message)
+#                 return render(request, 'demo.html', {'doctors': Docs.objects.all(), 'error_message': 'Slot is already booked.'})
+#         else:
+#             # The slot is not available, handle this case as needed (e.g., show an error message)
+#             return render(request, 'demo.html', {'doctors': Docs.objects.all(), 'error_message': 'Slot is not available.'})
+#     else:
+#         doctors = Docs.objects.all()
+
+#         # Filter available slots based on the Appointment model
+#         booked_slots = Appointment.objects.values_list('slot', flat=True).filter(date__gte=datetime.date.today())
+#         available_slots = Slots.objects.filter(doctor__in=doctors).exclude(id__in=booked_slots)
+
+#     return render(request, 'demo.html', {'doctors': doctors, 'available_slots': available_slots})
 
 
-# # doctors download pdf
-# def generate_pdfs(request):
-#     template_path = 'admin_doctors.html'
-#     doct = Docs.objects.all()
-#     context = {'doct': doct}
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Slots, Docs
 
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="admin_doctors.pdf"'
+@login_required
+def dr_timeslots(request):
+    # Check if a 'Docs' object exists for the logged-in user
+    try:
+        logged_in_doctor = Docs.objects.get(user=request.user)
+    except Docs.DoesNotExist:
+        # Handle the case where a 'Docs' object does not exist for the logged-in user
+        # You can redirect or display an error message as needed
+        return render(request, 'error_template.html', {'error_message': 'Doctor profile not found'})
 
-#     template = get_template(template_path)
-#     html = template.render(context)
-#     pisa_status = pisa.CreatePDF(html, dest=response)
+    # Extract the doctor's name from the 'Name' attribute of the 'Docs' object
+    doctor_name = logged_in_doctor.Name
 
-#     if pisa_status.err:
-#         return HttpResponse('We had some errors <pre>' + html.escape(str(pisa_status.err)) + '</pre>')
+    if request.method == 'POST':
+        # Retrieve form data from POST request
+        date = request.POST.get('date')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
 
-#     return response
+        if start_time:
+            # Create and save the time slot associated with the logged-in doctor
+            doctor = logged_in_doctor  # Use the 'logged_in_doctor' from your previous code
+            slot = Slots(doctor=doctor, date=date, start_time=start_time, end_time=end_time)
+            slot.save()
+
+            # Optionally, you can add a success message or redirect to another page
+            return render(request, 'dr_timeslots.html', {'doctor_name': doctor_name, 'success_message': 'Time slot saved successfully'})
+        else:
+            # Handle the case where 'start_time' is not provided
+            # You can render an error message or take appropriate action
+            return render(request, 'dr_timeslots.html', {'doctor_name': doctor_name, 'error_message': 'Please provide a valid start time'})
+
+    # Render the template for both GET and POST requests
+    return render(request, 'dr_timeslots.html', {'doctor_name': doctor_name})
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Slots, Docs
+
+@login_required
+def dr_timeslots_shows(request):
+    # Get the logged-in doctor
+    logged_in_doctor = Docs.objects.get(user=request.user)
+
+    # Fetch time slots associated with the logged-in doctor
+    time_slots = Slots.objects.filter(doctor=logged_in_doctor)
+
+    return render(request, 'dr_timeslots_shows.html', {'time_slots': time_slots})
+
+
+from datetime import datetime
+from django.shortcuts import render, redirect
+from .models import Appointment, Docs, CustomUser, Slots
+from django.http import JsonResponse
+
+def demo(request):
+    doctors = Docs.objects.all()  # Replace with your actual doctor model
+
+    # Handle form submission
+    if request.method == 'POST':
+        # Process the form data and save the appointment
+        # You can access form data using request.POST dictionary
+
+        # Example:
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        place = request.POST.get('place')
+        dob = request.POST.get('dob')
+        gender = request.POST.get('gender')
+        mobile = request.POST.get('mobile')
+        allergy = request.POST.get('allergy')
+        reason = request.POST.get('reason')
+        doctor_id = request.POST.get('doctor')
+        date_id = request.POST.get('date')
+        selected_time_slot = request.POST.get('time')
+        print(f"Name: {name}")
+        print(f"Address: {address}")
+        print(f"Place: {place}")
+        print(f"Date of Birth: {dob}")
+        print(f"Gender: {gender}")
+        print(f"Mobile: {mobile}")
+        print(f"Allergy: {allergy}")
+        print(f"Reason: {reason}")
+        print(f"Doctor ID: {doctor_id}")
+        print(f"Date ID: {date_id}")
+        print(f"Selected Time Slot: {selected_time_slot}")
+
+        try:
+            # Split the selected_time_slot into separate start and end times
+            # start_time_str, end_time_str = selected_time_slot.split(' - ')
+
+            # # Convert start_time_str and end_time_str to datetime objects
+            # start_time_obj = datetime.strptime(start_time_str, '%I:%M %p')
+            # end_time_obj = datetime.strptime(end_time_str, '%I:%M %p')
+
+            # # Format the start and end times as strings in HH:MM format
+            # formatted_start_time = start_time_obj.strftime('%H:%M')
+            # formatted_end_time = end_time_obj.strftime('%H:%M')
+
+            # Retrieve the Slots object based on the formatted start and end times
+            slot = Slots.objects.get(id=selected_time_slot)
+
+            # Assuming you have the corresponding models for Doctors, Slots, and CustomUser
+            doctor = Docs.objects.get(id=doctor_id)
+            user = CustomUser.objects.get(id=request.user.id)  # Assuming you're using user authentication
+
+            # Create and save the Appointment object
+            appointment = Appointment(
+                name=name,
+                address=address,
+                place=place,
+                dob=dob,
+                gender=gender,
+                mobile=mobile,
+                allergy=allergy,
+                reason=reason,
+                doctor=doctor,
+                user=user,
+                slot=slot,
+                date=date_id,
+                status=False
+            )
+            appointment.save()
+            return redirect('payment')  # Redirect to a success page
+
+        except Slots.DoesNotExist:
+            # Handle the case where the selected time slot does not exist
+            return render(request, 'demo.html', {'error_message': 'Time slot not found'})
+        except ValueError:
+            # Handle the case where the selected_time_slot is in an invalid format
+            return render(request, 'demo.html', {'error_message': 'Invalid time format'})
+
+    return render(request, 'demo.html', {'doctors': doctors})
+
+
+# from django.http import JsonResponse
+# from .models import Slots
+
+# def get_available_slots(request):
+#     if request.method == 'GET':
+#         doctor_id = request.GET.get('doctor_id')
+        
+#         # Query your Slots model to get available dates and time slots for the selected doctor
+#         slots = Slots.objects.filter(doctor_id=doctor_id)
+
+#         # Create lists to store date and time slot data
+#         dates = []
+#         time_slots = []
+
+#         for slot in slots:
+#             # Assuming you have a 'date_id' and 'slot_id' field in your Slots model
+#             dates.append({'date_id': slot.date_id, 'date': slot.date.strftime('%Y-%m-%d')})
+#             time_slots.append({'slot_id': slot.slot_id, 'start_time': slot.start_time.strftime('%H:%M'), 'end_time': slot.end_time.strftime('%H:%M')})
+
+#         data = {
+#             'dates': dates,
+#             'timeSlots': time_slots,
+#         }
+
+#         return JsonResponse(data)
+
+#     # Handle other HTTP methods or errors as needed
+#     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+
+
+
 
 
 
@@ -537,3 +757,155 @@ def generate_pdf(request):
 
     return HttpResponse('Error generating PDF: %s' % pdf.err)
 
+
+
+
+
+
+
+
+from django.http import JsonResponse
+from .models import Slots
+
+def get_dates(request, doctor_id):
+    try:
+        # Fetch dates for the selected doctor (doctor_id) from your database
+        # Replace the following line with your actual database query logic
+        dates = Slots.objects.filter(doctor_id=doctor_id).values_list('date', flat=True).distinct()
+        
+        # Construct a list of date options in HTML format
+        date_options = ["<option value='{0}'>{0}</option>".format(date.strftime('%Y-%m-%d')) for date in dates]
+    except Slots.DoesNotExist:
+        # Handle the case where no slots are found for the selected doctor
+        date_options = []
+
+    return JsonResponse({"date_options": date_options})
+
+# def get_times(request, doctor_id, selected_date):
+#     try:
+#         # Fetch time slots for the selected doctor (doctor_id) and date (selected_date) from your database
+#         # Replace the following line with your actual database query logic
+#         time_slots = Slots.objects.filter(doctor_id=doctor_id, date=selected_date).values_list('start_time', 'end_time')
+        
+#         # Construct a list of time slot options in HTML format
+#         time_options = ["<option value='{0}'>{0}</option>".format(time_slot[0].strftime('%I:%M %p') + ' - ' + time_slot[1].strftime('%I:%M %p')) for time_slot in time_slots]
+#     except Slots.DoesNotExist:
+#         # Handle the case where no slots are found for the selected doctor and date
+#         time_options = []
+
+#     return JsonResponse({"time_options": time_options})
+from django.http import JsonResponse
+from .models import Slots  # Import your Slots model or adjust the import path accordingly
+
+from django.http import JsonResponse
+from .models import Slots, Appointment
+
+def get_times(request, doctor_id, selected_date):
+    try:
+        # Fetch all time slots for the selected doctor (doctor_id) and date (selected_date) from your database
+        all_time_slots = Slots.objects.filter(doctor_id=doctor_id, date=selected_date)
+
+        # Fetch the time slots that are already booked as appointments
+        booked_time_slots = Appointment.objects.filter(doctor_id=doctor_id, date=selected_date).values_list('slot__id', flat=True)
+
+        # Filter out the free time slots by excluding the booked ones
+        free_time_slots = all_time_slots.exclude(id__in=booked_time_slots)
+
+        # Construct a list of free time slot options in HTML format
+        time_options = [
+            {
+                "id": slot.id,
+                "text": f"{slot.start_time.strftime('%I:%M %p')} - {slot.end_time.strftime('%I:%M %p')}"
+            }
+            for slot in free_time_slots
+        ]
+    except Slots.DoesNotExist:
+        # Handle the case where no slots are found for the selected doctor and date
+        time_options = []
+
+    return JsonResponse({"time_options": time_options})
+
+
+from django.shortcuts import render
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
+
+
+# authorize razorpay client with API Keys.
+razorpay_client = razorpay.Client(
+	auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+
+def payment(request):
+	currency = 'INR'
+	amount = 20000 # Rs. 200
+
+	# Create a Razorpay Order
+	razorpay_order = razorpay_client.order.create(dict(amount=amount,
+													currency=currency,
+													payment_capture='0'))
+
+	# order id of newly created order.
+	razorpay_order_id = razorpay_order['id']
+	callback_url = '/paymenthandler/'
+
+	# we need to pass these details to frontend.
+	context = {}
+	context['razorpay_order_id'] = razorpay_order_id
+	context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+	context['razorpay_amount'] = amount
+	context['currency'] = currency
+	context['callback_url'] = callback_url
+
+	return render(request, 'payment.html', context=context)
+
+
+# we need to csrf_exempt this url as
+# POST request will be made by Razorpay
+# and it won't have the csrf token.
+@csrf_exempt
+def paymenthandler(request):
+
+	# only accept POST request.
+	if request.method == "POST":
+		try:
+		
+			# get the required parameters from post request.
+			payment_id = request.POST.get('razorpay_payment_id', '')
+			razorpay_order_id = request.POST.get('razorpay_order_id', '')
+			signature = request.POST.get('razorpay_signature', '')
+			params_dict = {
+				'razorpay_order_id': razorpay_order_id,
+				'razorpay_payment_id': payment_id,
+				'razorpay_signature': signature
+			}
+
+			# verify the payment signature.
+			result = razorpay_client.utility.verify_payment_signature(
+				params_dict)
+			if result is not None:
+				amount = 20000 # Rs. 200
+				try:
+
+					# capture the payemt
+					razorpay_client.payment.capture(payment_id, amount)
+
+					# render success page on successful caputre of payment
+					return redirect('/')
+				except:
+
+					# if there is an error while capturing payment.
+					return render(request, 'paymentfail.html')
+			else:
+
+				# if signature verification fails.
+				return render(request, 'paymentfail.html')
+		except:
+
+			# if we don't find the required parameters in POST data
+			return HttpResponseBadRequest()
+	else:
+	# if other than POST request is made.
+		return HttpResponseBadRequest()

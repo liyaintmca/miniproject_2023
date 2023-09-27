@@ -82,6 +82,9 @@ class CustomUser(AbstractUser):
     def set_docs_role(self):
         self.role=CustomUser.RECEPTIONIST
         self.save()
+    def set_docs_role(self):
+        self.role=CustomUser.PATIENT
+        self.save()
 class Deps(models.Model):
     Dep_id = models.AutoField(primary_key=True)
     Dep_name = models.CharField(max_length=100)
@@ -150,3 +153,30 @@ class Phar(models.Model):
 
         def __str__(self):
             return self.Name
+        
+class Slots(models.Model):
+    doctor = models.ForeignKey(Docs, on_delete=models.CASCADE)
+    date = models.DateField(null=True,blank=True)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    
+    def __str__(self):
+        return f"Slot for Dr. {self.doctor.Name} on {self.date} at {self.start_time}-{self.end_time}"
+
+class Appointment(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=200)
+    place = models.CharField(max_length=100)
+    dob = models.DateField()
+    gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')], blank=True, null=True)
+    mobile = models.CharField(max_length=15)
+    allergy = models.CharField(max_length=3)
+    reason = models.TextField()
+    doctor = models.ForeignKey(Docs, on_delete=models.CASCADE, related_name='appointments')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    slot = models.ForeignKey(Slots, on_delete=models.CASCADE)
+    date = models.DateField()
+    status=models.BooleanField(default=True)
+    
+    def __str__(self):
+        return f"Appointment with Dr. {self.doctor.Name} on {self.date} at {self.slot.start_time}-{self.slot.end_time}"

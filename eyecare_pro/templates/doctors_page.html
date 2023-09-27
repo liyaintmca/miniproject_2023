@@ -63,7 +63,12 @@
                     <a class="nav-link" href="#">Conference</a>
                 </li>
                  
-                 
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dr_timeslots' %}">Time Slots</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dr_timeslots_shows' %}"> View Time Slots</a>
+                </li>  
 
                 {% if user.is_authenticated %}
 			    <li class="nav-item">
