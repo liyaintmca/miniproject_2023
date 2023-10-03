@@ -17,6 +17,43 @@
 		<script src="assets/js/respond.min.js"></script>
 	<![endif]-->
 </head>
+<style>
+    body {
+        background-image: url('https://dlb7plj1xl6zs.cloudfront.net/wp-content/uploads/2018/11/amanda-dalbjorn-258807-unsplash.png'); /* Replace 'your-background-image.jpg' with the URL of your background image */
+        background-size: cover; /* This property ensures the image covers the entire body element */
+        background-repeat: no-repeat; /* Prevents the background image from repeating */
+        background-attachment: fixed; /* Keeps the background image fixed while scrolling */
+    }
+
+    /* Add styles for the navigation bar */
+        .navbar {
+            background-color: #007bff; /* Blue background color */
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff; /* White text color */
+        }
+
+        /* Add styles for the content area */
+        .content {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Style the profile image */
+        .profile-img {
+            max-width: 100%;
+            border-radius: 50%;
+        }
+
+        /* Add some spacing between elements */
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+</style>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -27,23 +64,35 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'doctors_page' %}">Profile</a>
+                    <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Appointment List</a>
+                    <a class="nav-link" href="{% url 'dr_appointmentlist' user.id %}">Appointment List</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Conference</a>
+                    <a class="nav-link" href="{% url 'doctors_page' %}">Home</a>
                 </li>
                  
-                {% if user.is_authenticated %}
                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dr_timeslots' %}">Time Slots</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dr_timeslots_shows' %}"> View Time Slots</a>
+                </li>  
+
+                {% if user.is_authenticated %}
+			    <li class="nav-item">
                     <a class="nav-link" href="{% url 'loggout' %}">Logout</a>
                 </li>
-                {% endif %}
+				{% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dd' %} ">Login</a>
+                </li>
+				{% endif %}
             </ul>
         </div>
     </nav>
+     
     <div class="main-wrapper">
            
         <div class="page-wrapper">
@@ -153,9 +202,7 @@
                                     <input type="text" class="form-control floating" value="{{ user_profile.phn }}" name="phn">
                                 </div>
                             </div>
-                            <div class="add-more">
-                                <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Add More Institute</a>
-                            </div>
+                             
                         </div>
                     </div>
                     <div class="card-box">
@@ -190,9 +237,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="add-more">
-                            <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Add More Institute</a>
-                        </div>
+                         
                     </div>
                      
                          

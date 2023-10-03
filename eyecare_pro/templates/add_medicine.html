@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Medicine Stock</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Custom CSS for styling -->
+    <style>
+        body {
+            background-image: url('https://i.pinimg.com/736x/92/70/c1/9270c19eb7d37366c20da05e28844248.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .navbar {
+            background-color: black;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: #fff;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Medicine Stock Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'phar_staff_page' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add_medicine' %}">Add Medicine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_medicine' %}">View Stock</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="text-center">Add Medicine Stock</h2>
+    <form id="medicineForm" method="post" action="{% url 'add_medicine' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="medicineName" class="form-label">Medicine Name</label>
+            <input type="text" class="form-control" id="medicineName" name="medicineName" required>
+            <span id="medicineNameError" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="details" class="form-label">Details</label>
+            <textarea class="form-control" id="details" name="details"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="companyName" class="form-label">Company Name</label>
+            <input type="text" class="form-control" id="companyName" name="companyName">
+        </div>
+        <div class="mb-3">
+            <label for="expiryDate" class="form-label">Expiry Date</label>
+            <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+            <span id="expiryDateError" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="contains" class="form-label">Contains</label>
+            <input type="text" class="form-control" id="contains" name="contains">
+        </div>
+        <div class="mb-3">
+            <label for="dosage" class="form-label">Dosage</label>
+            <input type="text" class="form-control" id="dosage" name="dosage">
+            <span id="dosageError" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" id="category" name="category" required>
+                {% for i in medcat %}
+                <option value={{i.MedCatId}}>{{ i.category_name }}</option>
+                {% endfor %}
+            </select>
+            <span id="categoryError" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Stock</button>
+    </form>
+</div>
+
+<!-- Include Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Include jQuery Validation plugin -->
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script>
+    // Add form validation with keyup event
+    $(document).ready(function () {
+        $('#medicineForm').validate({
+            rules: {
+                medicineName: 'required',
+                expiryDate: 'required',
+                category: 'required',
+                companyName: "required",
+                dosage: "required",
+            },
+            messages: {
+                medicineName: 'Please enter medicine name',
+                expiryDate: 'Please select expiry date',
+                category: 'Please select a category',
+                companyName: "Please Enter Company Name",
+                dosage: 'Please Enter Dosage',
+            },
+            errorPlacement: function (error, element) {
+                // Display errors below the input fields
+                error.appendTo($('#' + element.attr('id') + 'Error'));
+            },
+        });
+
+        // Keyup validation for medicineName
+        $('#medicineName').on('keyup', function () {
+            if ($(this).val() === '') {
+                $('#medicineNameError').text('Medicine name is required.');
+            } else {
+                $('#medicineNameError').text('');
+            }
+        });
+
+        // Keyup validation for expiryDate
+        $('#expiryDate').on('keyup', function () {
+            if ($(this).val() === '') {
+                $('#expiryDateError').text('Expiry date is required.');
+            } else {
+                $('#expiryDateError').text('');
+            }
+        });
+
+        // Keyup validation for dosage
+        $('#dosage').on('keyup', function () {
+            if ($(this).val() === '') {
+                $('#dosageError').text('Dosage is required.');
+            } else {
+                $('#dosageError').text('');
+            }
+        });
+
+        // Keyup validation for category
+        $('#category').on('change', function () {
+            if ($(this).val() === '') {
+                $('#categoryError').text('Category is required.');
+            } else {
+                $('#categoryError').text('');
+            }
+        });
+    });
+</script>
+</body>
+</html>

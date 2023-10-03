@@ -46,6 +46,8 @@ urlpatterns = [
     path('loginadmin',views.loginadmin,name="loginadmin"),
     path('dr_timeslots',views.dr_timeslots,name="dr_timeslots"),
     path('dr_timeslots_shows',views.dr_timeslots_shows, name= 'dr_timeslots_shows'),
+    path('dr_appointmentlist/<int:doctor_id>', views.dr_appointmentlist, name='dr_appointmentlist'),
+    path('rep_appointmentlist',views.rep_appointmentlist,name="rep_appointmentlist"),
     path('doctors_page',views.doctors_page,name="doctors_page"),
     path('profile',views.profile,name="profile"),
     path('admin_doctors',views.admin_doctors,name="admin_doctors"),
@@ -74,11 +76,18 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('check-email-exists/', views.check_email_exists, name='check_email_exists'),
-    path('delete_doctor/<int:doctor_id>/', views.delete_doctor, name='delete_doctor'),
+    # path('delete_doctor/<int:doctor_id>/', views.delete_doctor, name='delete_doctor'),
     path('get_dates/<int:doctor_id>/', views.get_dates, name='get_dates'),
     path('get_times/<int:doctor_id>/<str:selected_date>/', views.get_times, name='get_times'),
     path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
     path('payment/', views.payment, name='payment'),
+    path('add_medicine_category', views.add_medicine_category, name='add_medicine_category'),
+    path('view_medicine_category', views.view_medicine_category, name='view_medicine_category'),
+    path('add_medicine', views.add_medicine, name='add_medicine'),
+    path('view_medicine',views.view_medicine,name='view_medicine'),
+    path('delete_medicine_category/<int:medcatid>/',views.delete_medicine_category,name='delete_medicine_category'),
+      
+
 
     # path('get-available-slots/', views.get_available_slots, name='get_available_slots'),
 

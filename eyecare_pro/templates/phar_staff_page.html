@@ -84,7 +84,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Medicines</h5>
                         <p class="card-text">View information about available medicines.</p>
-                        <a href="#" class="btn btn-primary">Go to Medicines</a>
+                        <a href="{% url 'view_medicine' %}" class="btn btn-primary">Go to Medicines</a>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,16 @@
                     <div class="card-body">
                         <h5 class="card-title">Add Stock</h5>
                         <p class="card-text">Add new medicine stock for the opthamology.</p>
-                        <a href="#" class="btn btn-primary">Go to Add Stock</a>
+                        <a href="{% url 'add_medicine' %}" class="btn btn-primary">Go to Add Stock</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Medicine Category</h5>
+                        <p class="card-text">To show the informations about different medicine categories. </p>
+                        <a href="{% url 'view_medicine_category' %}" class="btn btn-primary">Go to Category</a>
                     </div>
                 </div>
             </div>

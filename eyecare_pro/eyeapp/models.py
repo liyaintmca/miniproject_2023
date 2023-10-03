@@ -92,6 +92,33 @@ class Deps(models.Model):
 
     def __str__(self):
         return self.Dep_name
+    
+class MedicineCategory(models.Model):
+    MedCatId = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+ 
+    def __str__(self):
+        return self.category_name
+ 
+from django.db import models
+
+class Medicine(models.Model):
+    medicineName = models.CharField(max_length=100)
+    details = models.TextField()
+    companyName = models.CharField(max_length=100)
+    expiryDate = models.DateField()
+    contains = models.CharField(max_length=100)
+    dosage = models.CharField(max_length=100)
+    MedCatId = models.ForeignKey(MedicineCategory, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+
+
+    def __str__(self):
+        return self.medicineName
+
+   
 class Docs(models.Model):
      
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)

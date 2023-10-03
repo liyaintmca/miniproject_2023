@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Details</title>
+    <!-- Add Bootstrap CSS Link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add Custom CSS for Styling -->
+    <style>
+        body {
+            background-image: url('https://i.pinimg.com/originals/2d/b2/23/2db2230cd29837283681b88a3ea00ce9.png'); /* Replace 'your-background-image.jpg' with the actual path to your background image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            /* Add additional styling for the body here if needed */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Add a semi-transparent white background to the container */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333; /* Change the title text color */
+        }
+
+        /* Increase the width of the table */
+        table {
+            width: 500%;
+        }
+
+        /* Add more custom styling as needed */
+        /* Add styles for the navigation bar */
+        .navbar {
+            background-color: #007bff; /* Blue background color */
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff; /* White text color */
+        }
+
+        /* Add styles for the content area */
+        .content {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Style the profile image */
+        .profile-img {
+            max-width: 100%;
+            border-radius: 50%;
+        }
+
+        /* Add some spacing between elements */
+        .mt-20 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Recepionists's Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'rep_staff_page' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'rep_profile' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'rep_appointmentlist' %}">Appointment List</a>
+                </li>
+                 
+                 
+                  
+
+                {% if user.is_authenticated %}
+			    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'loggout' %}">Logout</a>
+                </li>
+				{% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dd' %} ">Login</a>
+                </li>
+				{% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>Patient Appointment Details</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Place</th>
+                    <th>DoB</th>
+                    <th>Gender</th>
+                    <th>Mobile</th>
+                    <th>Allergy Details</th>
+                    <th>Reason Of Consultation</th>
+                    <th>Doctor</th>
+                    <th>Slot</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in patients %}
+                <tr>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.address }}</td>
+                    <td>{{ i.place }}</td>
+                    <td>{{ i.dob }}</td>
+                    <td>{{ i.gender }}</td>
+                    <td>{{ i.mobile }}</td>
+                    <td>{{ i.allergy }}</td>
+                    <td>{{ i.reason }}</td>
+                    <td>{{ i.doctor }}</td>
+                    <td>{{ i.slot }}</td>
+                    <td>{{ i.date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="11">No patients found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery (optional) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

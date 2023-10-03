@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from .models import Docs,Phar
-from .models import Deps
+from .models import Deps,MedicineCategory
 from .models import Rep
 from .models import CustomUser
 
@@ -120,25 +120,26 @@ def admin_adddoctor(request):
         
 
 #delete
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
+# from django.shortcuts import get_object_or_404, redirect
+# from django.contrib import messages
 
-@login_required(login_url='loginadmin') 
-def delete_doctor(request, doctor_id):
-    doctor = get_object_or_404(Docs, id=doctor_id)
+# @login_required(login_url='loginadmin') 
+# def delete_doctor(request, doctor_id):
+#     doctor = get_object_or_404(Docs, id=doctor_id)
 
-    if request.method == 'POST':
-        # Delete the doctor object
-        doctor.is_active=False
-        doctor.save()
+#     if request.method == 'POST':
+#         # Delete the doctor object
+#         doctor.is_active=False
+#         doctor.save()
 
-        # Add a success message to the session
-        # messages.success(request, 'Doctor deleted successfully!')
+#         # Add a success message to the session
+#         # messages.success(request, 'Doctor deleted successfully!')
 
-        # Redirect to the 'admin_doctors' page (or adjust the URL as needed)
-        return redirect('admin_doctors')
+#         # Redirect to the 'admin_doctors' page (or adjust the URL as needed)
+#         return redirect('admin_doctors')
 
-    return render(request, 'delete_doc.html', {'doctor': doctor})
+#     return render(request, 'delete_doc.html', {'doctor': doctor})
+
 
 # DOCTOR PROFILE INSERT AND EDIT
 def profile(request):
@@ -478,81 +479,7 @@ def loggout(request):
     logout(request)
     return redirect('/')
 
-# from django.shortcuts import render, redirect
-# from .models import Slots, Docs, Appointment
-# from django.db.models import Q
-# import datetime  # Import the datetime module
-
-# def demo(request):
-#     if request.method == 'POST':
-#         # Get form data
-#         doctor_id = request.POST.get('doctor')
-#         start_time = request.POST.get('start_time')
-#         name = request.POST.get('name')
-#         address = request.POST.get('address')
-#         place = request.POST.get('place')
-#         dob = request.POST.get('dob')
-#         gender = request.POST.get('gender')
-#         mobile = request.POST.get('mobile')
-#         allergy = request.POST.get('allergy')
-#         reason = request.POST.get('reason')
-#         appointment_date = request.POST.get('appointment_date')
-
-#         doctor = Docs.objects.get(id=doctor_id)
-
-#         # Check if the selected time slot is available for the doctor
-#         is_slot_available = Slots.objects.filter(
-#             doctor=doctor,
-#             start_time=start_time
-#         ).exists()
-
-#         if is_slot_available:
-#             # Check if the selected time slot is not booked in the Appointment model
-#             is_slot_booked = Appointment.objects.filter(
-#                 Q(doctor=doctor, date=appointment_date) &
-#                 (Q(slot__start_time__lte=start_time, slot__end_time__gt=start_time) |
-#                  Q(slot__start_time__lt=start_time, slot__end_time__gte=start_time))
-#             ).exists()
-
-#             if not is_slot_booked:
-#                 # The slot is available and not booked, you can create an appointment instance here
-#                 # You can also update the Slots model to mark it as booked, if necessary
-
-#                 # Example of creating an appointment instance:
-#                 appointment = Appointment(
-#                     name=name,
-#                     address=address,
-#                     place=place,
-#                     dob=dob,
-#                     gender=gender,
-#                     mobile=mobile,
-#                     allergy=allergy,
-#                     reason=reason,
-#                     doctor=doctor,
-#                     user=request.user,  # Assuming you have user authentication
-#                     slot=Slots.objects.get(id=start_time),  # Adjust this to get the correct slot
-#                     date=appointment_date
-#                 )
-#                 appointment.save()
-
-#                 return redirect('appointment_success')  # Redirect to a success page
-#             else:
-#                 # The slot is already booked, handle this case as needed (e.g., show an error message)
-#                 return render(request, 'demo.html', {'doctors': Docs.objects.all(), 'error_message': 'Slot is already booked.'})
-#         else:
-#             # The slot is not available, handle this case as needed (e.g., show an error message)
-#             return render(request, 'demo.html', {'doctors': Docs.objects.all(), 'error_message': 'Slot is not available.'})
-#     else:
-#         doctors = Docs.objects.all()
-
-#         # Filter available slots based on the Appointment model
-#         booked_slots = Appointment.objects.values_list('slot', flat=True).filter(date__gte=datetime.date.today())
-#         available_slots = Slots.objects.filter(doctor__in=doctors).exclude(id__in=booked_slots)
-
-#     return render(request, 'demo.html', {'doctors': doctors, 'available_slots': available_slots})
-
-
-# views.py
+ 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Slots, Docs
@@ -611,7 +538,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from .models import Appointment, Docs, CustomUser, Slots
 from django.http import JsonResponse
-
+@login_required(login_url='dd')
 def demo(request):
     doctors = Docs.objects.all()  # Replace with your actual doctor model
 
@@ -645,18 +572,7 @@ def demo(request):
         print(f"Selected Time Slot: {selected_time_slot}")
 
         try:
-            # Split the selected_time_slot into separate start and end times
-            # start_time_str, end_time_str = selected_time_slot.split(' - ')
-
-            # # Convert start_time_str and end_time_str to datetime objects
-            # start_time_obj = datetime.strptime(start_time_str, '%I:%M %p')
-            # end_time_obj = datetime.strptime(end_time_str, '%I:%M %p')
-
-            # # Format the start and end times as strings in HH:MM format
-            # formatted_start_time = start_time_obj.strftime('%H:%M')
-            # formatted_end_time = end_time_obj.strftime('%H:%M')
-
-            # Retrieve the Slots object based on the formatted start and end times
+             
             slot = Slots.objects.get(id=selected_time_slot)
 
             # Assuming you have the corresponding models for Doctors, Slots, and CustomUser
@@ -689,45 +605,34 @@ def demo(request):
             # Handle the case where the selected_time_slot is in an invalid format
             return render(request, 'demo.html', {'error_message': 'Invalid time format'})
 
-    return render(request, 'demo.html', {'doctors': doctors})
+    return render(request, 'demo.html', {'doctors': doctors}) 
 
+ 
+from django.shortcuts import render, get_object_or_404
+from .models import Docs, Appointment
+@login_required
+def dr_appointmentlist(request, doctor_id):
+    doctor_idd=Docs.objects.get(user_id=doctor_id)
+    # Retrieve the appointments for the specified doctor
+    patients = Appointment.objects.filter(doctor_id=doctor_idd)
+    print(patients)
+    print(request.user.id)
 
-# from django.http import JsonResponse
-# from .models import Slots
-
-# def get_available_slots(request):
-#     if request.method == 'GET':
-#         doctor_id = request.GET.get('doctor_id')
-        
-#         # Query your Slots model to get available dates and time slots for the selected doctor
-#         slots = Slots.objects.filter(doctor_id=doctor_id)
-
-#         # Create lists to store date and time slot data
-#         dates = []
-#         time_slots = []
-
-#         for slot in slots:
-#             # Assuming you have a 'date_id' and 'slot_id' field in your Slots model
-#             dates.append({'date_id': slot.date_id, 'date': slot.date.strftime('%Y-%m-%d')})
-#             time_slots.append({'slot_id': slot.slot_id, 'start_time': slot.start_time.strftime('%H:%M'), 'end_time': slot.end_time.strftime('%H:%M')})
-
-#         data = {
-#             'dates': dates,
-#             'timeSlots': time_slots,
-#         }
-
-#         return JsonResponse(data)
-
-#     # Handle other HTTP methods or errors as needed
-#     return JsonResponse({'error': 'Invalid request method'}, status=400)
+    # Pass the appointments data to the template
+    return render(request, 'dr_appointmentlist.html', {'doctor': doctor, 'patients': patients})
 
 
 
+from .models import Docs, Appointment
+@login_required
+def rep_appointmentlist(request,  ):
+     
+    patients = Appointment.objects.all()
+    print(patients)
+    print(request.user.id)
 
-
-
-
-
+    # Pass the appointments data to the template
+    return render(request, 'rep_appointmentlist.html', {'doctor': doctor, 'patients': patients})
 
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -840,7 +745,7 @@ razorpay_client = razorpay.Client(
 
 def payment(request):
 	currency = 'INR'
-	amount = 20000 # Rs. 200
+	amount = 50000 # Rs. 200
 
 	# Create a Razorpay Order
 	razorpay_order = razorpay_client.order.create(dict(amount=amount,
@@ -886,12 +791,12 @@ def paymenthandler(request):
 			result = razorpay_client.utility.verify_payment_signature(
 				params_dict)
 			if result is not None:
-				amount = 20000 # Rs. 200
+				amount = 50000 # Rs. 200
 				try:
 
 					# capture the payemt
 					razorpay_client.payment.capture(payment_id, amount)
-
+                    
 					# render success page on successful caputre of payment
 					return redirect('/')
 				except:
@@ -909,3 +814,109 @@ def paymenthandler(request):
 	else:
 	# if other than POST request is made.
 		return HttpResponseBadRequest()
+
+
+from django.shortcuts import render, redirect
+from .models import MedicineCategory
+
+def add_medicine_category(request):
+     if request.method == 'POST':
+         category_name = request.POST['category_name']  # Get the form field values
+         description  = request.POST['description']
+
+         ob = MedicineCategory()
+         ob.category_name = category_name
+         ob.description = description 
+         ob.save()
+                
+                 # Redirect to the view_medicine_category page after successful save
+         return redirect('view_medicine_category')
+        
+    
+     # Render the form page for GET requests
+     return render(request, 'add_medicine_category.html')
+
+
+ 
+
+def view_medicine_category(request):
+    categories = MedicineCategory.objects.filter(is_active=True)
+    return render(request, 'view_medicine_category.html', {'categories': categories})
+
+ 
+
+#delete medicine category
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+
+@login_required(login_url='dd')
+def delete_medicine_category(request, medcatid):
+    ob = get_object_or_404(MedicineCategory, MedCatId=medcatid)  # Replace 'MedicineCategory' with your actual model name
+
+    if request.method == 'POST':
+        # Delete the medicine category object
+        ob.is_active=False
+        ob.save()
+        # request.session['delete_category'] = True
+        return redirect('view_medicine_category')
+
+    return render(request, 'delete_medicine_category.html', {'ob': ob})
+
+from django.shortcuts import render, redirect
+from .models import Medicine
+from django.shortcuts import get_object_or_404
+
+def add_medicine(request):
+    if request.method == 'POST':
+        # Get data from the form
+        medicine_name = request.POST['medicineName']
+        details = request.POST['details']
+        company_name = request.POST['companyName']
+        expiry_date = request.POST['expiryDate']
+        contains = request.POST['contains']
+        dosage = request.POST['dosage']
+        category_id = request.POST['category']  # Assuming the category value is an ID
+
+        # Get the MedicineCategory instance based on the selected category_id
+        category = get_object_or_404(MedicineCategory, pk=category_id)
+
+        # Create and save a Medicine object to the database with the category instance
+        medicine = Medicine(
+            medicineName=medicine_name,
+            details=details,
+            companyName=company_name,
+            expiryDate=expiry_date,
+            contains=contains,
+            dosage=dosage,
+            MedCatId=category,  # Use the category instance
+        )
+        medicine.save()
+
+        return redirect('view_medicine')  # Redirect to a success page or another URL
+
+    medcat = MedicineCategory.objects.all()
+    context = {  'medcat': medcat}
+    return render(request, 'add_medicine.html', context)
+
+
+def view_medicine(request):
+    med = Medicine.objects.all()
+    print(med)
+    return render(request,'view_medicine.html',{'med': med})
+
+@login_required(login_url='dd')
+def delete_medicine(request, id):
+    med  = get_object_or_404(Medicine, id= id)
+
+    if request.method == 'POST':
+        # Set the is_active attribute to False instead of deleting
+        med.is_active = False
+        med.save()
+
+        # Add a success message to the session
+        request.session['delete_medicine'] = True
+
+        # Redirect to the 'ad_ashaworker' page (or adjust the URL as needed)
+        return redirect('add_medicine')
+
+    return render(request, 'delete_medicine.html', {'med':med})

@@ -174,25 +174,7 @@
         }
     });
 
-     // Function to update the time dropdown based on the selected date
-{% comment %} $("#date").change(function() {
-    var selectedDate = $(this).val();
-    var selectedDoctor = $("#doctor").val();
-    if (selectedDate && selectedDoctor) {
-        // Send an AJAX request to fetch time slots for the selected date and doctor
-        $.ajax({
-            url: '/get_times/' + selectedDoctor + '/' + selectedDate + '/',  // Replace with your URL
-            type: 'GET',
-            success: function(data) {
-                // Update the time dropdown with fetched data
-                $("#time").html(data.time_options);
-            }
-        });
-    } else {
-        // If no date or doctor is selected, reset the time dropdown
-        $("#time").html('<option value="" disabled selected>Select a Time Slot</option>');
-    }
-}); {% endcomment %}
+      
 $("#date").change(function() {
     var selectedDate = $(this).val();
     var selectedDoctor = $("#doctor").val();

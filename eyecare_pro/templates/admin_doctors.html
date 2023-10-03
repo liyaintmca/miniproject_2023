@@ -89,31 +89,12 @@
                         </div>
                     </div>
                 </form>
-{% comment %}                 
-                <div class="row">
-                    <div class="col-md-12">
-                        
-                        <form  method="GET" action="{% url 'search_doc' %}">
-                            <div class="input-group">
-                                <a href="{% url 'admin_doctors' %}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i></a>&ensp;&ensp;&ensp;&ensp;
-                                <input type="text" class="form-control" name="Name" placeholder="Search by doctor name" size="8">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div><br><br> {% endcomment %}
-
-
-
-
 
                 <h1>All Doctors</h1>
                 <table class="table">
                     <thead>
                         <tr>
-                            {% comment %} <th>D_ID</th> {% endcomment %}
+                             
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone NO</th>
@@ -123,7 +104,7 @@
                     <tbody>
                         {% for doct in doct %}
                             <tr>
-                                {% comment %} <td>{{ doct.id }}</td> {% endcomment %}
+                                 
                                 <td>{{ doct.Name }}</td>
                                 <td>{{ doct.user.email }}</td>
                                 <td>{{ doct.phn }}</td>
