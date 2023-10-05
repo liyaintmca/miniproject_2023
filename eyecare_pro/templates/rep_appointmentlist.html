@@ -98,8 +98,21 @@
             </ul>
         </div>
     </nav>
+     
     <div class="container mt-5">
         <h1>Patient Appointment Details</h1>
+
+
+        <form id="search-form" method="GET" action="{% url 'search_patient' %}">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="name" placeholder="Search by patient name">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
+                </div>
+            </div>
+        </form>
+
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -133,7 +146,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="11">No patients found.</td>
+                    <td colspan="5">No patients found.</td>
                 </tr>
                 {% endfor %}
             </tbody>

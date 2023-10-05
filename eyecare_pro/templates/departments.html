@@ -55,7 +55,7 @@
                     <ul>
                         <li class="menu-title">Main</li>
                         <li>
-                            <a href="index-2.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                            <a href="{% url 'chart' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>
 						<li>
                             <a href="{% url 'admin_doctors' %}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
@@ -78,10 +78,10 @@
             <div class="content">
                 <div class="row">
                     <div class="col-sm-5 col-5">
-                        <h4 class="page-title">Departments</h4>
+                        <h4 class="page-title" id="deplist">Departments</h4>
                     </div>
                     <div class="col-sm-7 col-7 text-right m-b-30">
-                        <a href="{% url 'add_admin_dep' %}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add Department</a>
+                        <a href="{% url 'add_admin_dep' %}" class="btn btn-primary btn-rounded"><i class="fa fa-plus" id="add_dep"></i> Add Department</a>
                     </div>
                 </div>
                 <div class="row">

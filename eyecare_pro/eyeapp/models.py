@@ -135,6 +135,7 @@ class Docs(models.Model):
     subject = models.CharField(max_length=100, null=True, blank=True)
     degree = models.CharField(max_length=100, null=True, blank=True)
     year = models.CharField(max_length=100, null=True, blank=True)
+    reset_password = models.CharField(max_length=128, null=True, blank=True)  # New field for reset password
 
     def __str__(self):
         return self.Name
@@ -156,6 +157,8 @@ class Rep(models.Model):
     subject = models.CharField(max_length=100, null=True, blank=True)
     degree = models.CharField(max_length=100, null=True, blank=True)
     year = models.CharField(max_length=100, null=True, blank=True)
+    reset_password = models.CharField(max_length=128, null=True, blank=True)  # New field for reset password
+
 
 
     def __str__(self):
@@ -176,6 +179,8 @@ class Phar(models.Model):
         subject = models.CharField(max_length=100, null=True, blank=True)
         degree = models.CharField(max_length=100, null=True, blank=True)
         year = models.CharField(max_length=100, null=True, blank=True)
+        reset_password = models.CharField(max_length=128, null=True, blank=True)  # New field for reset password
+
 
 
         def __str__(self):
@@ -203,7 +208,7 @@ class Appointment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     slot = models.ForeignKey(Slots, on_delete=models.CASCADE)
     date = models.DateField()
-    status=models.BooleanField(default=True)
+    status=models.BooleanField(default=False)
     
     def __str__(self):
         return f"Appointment with Dr. {self.doctor.Name} on {self.date} at {self.slot.start_time}-{self.slot.end_time}"

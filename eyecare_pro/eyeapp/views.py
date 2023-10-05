@@ -62,7 +62,7 @@ def loginadmin(request):
         if user is not None:
             login(request, user)
             if user.role==5:
-                return redirect('admin_doctors')
+                return redirect('chart')
             else:
                 print("You are not authorized to access this page.")
                 messages.info(request, "You are not authorized to access this page.")
@@ -142,6 +142,9 @@ def admin_adddoctor(request):
 
 
 # DOCTOR PROFILE INSERT AND EDIT
+
+from django.contrib.auth import update_session_auth_hash 
+
 def profile(request):
     user = request.user
     print(user)
@@ -177,6 +180,22 @@ def profile(request):
         print("Degree:", user_profile.degree)
         user_profile.year = request.POST.get('year')
         print("Grade:", user_profile.year)
+        reset_password = request.POST.get('reset_password')
+        old_password = request.POST.get('old_password')
+
+        if old_password and reset_password and request.POST.get('cpass') == reset_password:
+            if request.user.check_password(old_password):
+                # The old password is correct, set the new password
+                request.user.set_password(reset_password)
+                request.user.save()
+                update_session_auth_hash(request, request.user)  # Update the session to prevent logging out
+            else:
+                messages.error(request, "Incorrect old password. Password not updated.")
+        else:
+            print("Please fill all three password fields correctly.")
+        
+        user_profile.reset_password = reset_password
+
         user_profile.save()
         return redirect('profile')
     context = {
@@ -593,18 +612,22 @@ def demo(request):
                 user=user,
                 slot=slot,
                 date=date_id,
-                status=False
             )
             appointment.save()
-            return redirect('payment')  # Redirect to a success page
-
+            subject = 'Appointment is Successful'
+            message = f'Your appointment for home visit is successful. Your Scheduled date: {date_id}, Your Scheduled Time: {slot} '
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [request.user.email]
+            send_mail(subject, message, from_email, recipient_list)
+            return redirect('payment',appointment_id = appointment.id )  # Redirect to a success page
+            
         except Slots.DoesNotExist:
             # Handle the case where the selected time slot does not exist
             return render(request, 'demo.html', {'error_message': 'Time slot not found'})
         except ValueError:
             # Handle the case where the selected_time_slot is in an invalid format
             return render(request, 'demo.html', {'error_message': 'Invalid time format'})
-
+            
     return render(request, 'demo.html', {'doctors': doctors}) 
 
  
@@ -621,10 +644,26 @@ def dr_appointmentlist(request, doctor_id):
     # Pass the appointments data to the template
     return render(request, 'dr_appointmentlist.html', {'doctor': doctor, 'patients': patients})
 
+from django.shortcuts import render
+from .models import Appointment  # Import your Appointment model
+
+def search_patient_bydoc(request):
+    if request.method == "GET":
+        # Get the search query from the GET parameters
+        search_query = request.GET.get('name', '')
+
+        # Perform the search using the 'icontains' filter on the doctor's name
+        pa = Appointment.objects.filter(name__icontains=search_query)
+
+        context = {
+            'patients': pa,
+        }
+
+        return render(request, 'dr_appointmentlist.html', context)
 
 
 from .models import Docs, Appointment
-@login_required
+@login_required(login_url="dd")
 def rep_appointmentlist(request,  ):
      
     patients = Appointment.objects.all()
@@ -634,35 +673,92 @@ def rep_appointmentlist(request,  ):
     # Pass the appointments data to the template
     return render(request, 'rep_appointmentlist.html', {'doctor': doctor, 'patients': patients})
 
+
+from django.shortcuts import render
+from .models import Appointment  # Import your Appointment model
+
+def search_patient(request):
+    if request.method == "GET":
+        # Get the search query from the GET parameters
+        search_query = request.GET.get('name', '')
+
+        # Perform the search using the 'icontains' filter on the doctor's name
+        pa = Appointment.objects.filter(name__icontains=search_query)
+
+        context = {
+            'patients': pa,
+        }
+
+        return render(request, 'rep_appointmentlist.html', context)
+
+
+
+from django.shortcuts import render
 from django.http import HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+from reportlab.platypus.flowables import KeepInFrame
+
 from io import BytesIO
-from .models import Deps  # Import your model
+
+from .models import Deps  # Replace with your actual model import
 
 def generate_pdf(request):
-    # Fetch department data from your model
-    deptss = Deps.objects.values('Dep_id','Dep_name','Dep_desc')
-
-    # Load the HTML template
-    template = get_template('departments.html')
-
-    # Render the template with department data
-    html_content = template.render({'deptss': deptss})
-
-    # Create a PDF file-like object
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="department_report.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="department_list.pdf"'
 
-    # Generate PDF
-    pdf = pisa.CreatePDF(BytesIO(html_content.encode('UTF-8')), response)
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
 
-    if not pdf.err:
-        return response
+    elements = []
 
-    return HttpResponse('Error generating PDF: %s' % pdf.err)
+    # Header
+    header_text = "Department List"
+    header_style = styles['Heading1']
+    elements.append(Spacer(1, 12))
+    header_paragraph = Paragraph(header_text, header_style)
+    elements.append(header_paragraph)
+    elements.append(Spacer(1, 12))
 
+    # Table data
+    departments = Deps.objects.all()  # Replace with your queryset to fetch department data
+    data = [['Department Name', 'Description']]
 
+    for department in departments:
+        data.append([department.Dep_name, KeepInFrame(inch * 3, inch * 0.5, content=[Paragraph(department.Dep_desc, styles["Normal"])] )])
+
+    table = Table(data)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Vertically align content to middle
+        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),  # Use a specific font for the table
+        ('FONTSIZE', (0, 0), (-1, 0), 12),  # Font size for the table header
+        ('FONTSIZE', (0, 1), (-1, -1), 10),  # Font size for table data
+    ]))
+
+    # Adjust column widths
+    table._argW[0] = 3.0 * inch  # Adjust the width of the first column (Department Name)
+    table._argW[1] = 5.0 * inch  # Adjust the width of the second column (Description)
+
+    elements.append(table)
+
+    # Build the PDF document
+    doc.build(elements)
+    pdf = buffer.getvalue()
+    buffer.close()
+
+    response.write(pdf)
+    return response
 
 
 
@@ -686,19 +782,7 @@ def get_dates(request, doctor_id):
 
     return JsonResponse({"date_options": date_options})
 
-# def get_times(request, doctor_id, selected_date):
-#     try:
-#         # Fetch time slots for the selected doctor (doctor_id) and date (selected_date) from your database
-#         # Replace the following line with your actual database query logic
-#         time_slots = Slots.objects.filter(doctor_id=doctor_id, date=selected_date).values_list('start_time', 'end_time')
-        
-#         # Construct a list of time slot options in HTML format
-#         time_options = ["<option value='{0}'>{0}</option>".format(time_slot[0].strftime('%I:%M %p') + ' - ' + time_slot[1].strftime('%I:%M %p')) for time_slot in time_slots]
-#     except Slots.DoesNotExist:
-#         # Handle the case where no slots are found for the selected doctor and date
-#         time_options = []
-
-#     return JsonResponse({"time_options": time_options})
+ 
 from django.http import JsonResponse
 from .models import Slots  # Import your Slots model or adjust the import path accordingly
 
@@ -743,7 +827,8 @@ razorpay_client = razorpay.Client(
 	auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 
-def payment(request):
+def payment(request,appointment_id):
+    
 	currency = 'INR'
 	amount = 50000 # Rs. 200
 
@@ -799,6 +884,7 @@ def paymenthandler(request):
                     
 					# render success page on successful caputre of payment
 					return redirect('/')
+
 				except:
 
 					# if there is an error while capturing payment.
@@ -843,7 +929,19 @@ def view_medicine_category(request):
     categories = MedicineCategory.objects.filter(is_active=True)
     return render(request, 'view_medicine_category.html', {'categories': categories})
 
- 
+def search_medicine_category(request):
+    if request.method == "GET":
+        # Get the search query from the GET parameters
+        search_query = request.GET.get('category_name', '')
+
+        # Perform the search using the 'icontains' filter on the doctor's name
+        medcats = MedicineCategory.objects.filter(category_name__icontains=search_query)
+
+        context = {
+            'categories': medcats,
+        }
+
+        return render(request, 'view_medicine_category.html', context)
 
 #delete medicine category
 from django.shortcuts import get_object_or_404, redirect
@@ -861,6 +959,45 @@ def delete_medicine_category(request, medcatid):
         return redirect('view_medicine_category')
 
     return render(request, 'delete_medicine_category.html', {'ob': ob})
+
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from io import BytesIO
+from .models import MedicineCategory  # Replace with your actual model
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+
+def generate_medicine_category_pdf(request):
+    categories = MedicineCategory.objects.all()  # Replace with your actual queryset
+
+    context = {
+        'categories': categories,
+    }
+
+    pdf = render_to_pdf('category_pdf_template.html', context)  # Use the simplified template
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'filename="category_report.pdf"'
+        return response
+    return HttpResponse("Error generating PDF", status=400)
+
+
+
+
+
+
+
+
+
 
 from django.shortcuts import render, redirect
 from .models import Medicine
@@ -904,6 +1041,21 @@ def view_medicine(request):
     print(med)
     return render(request,'view_medicine.html',{'med': med})
 
+def search_medicine(request):
+    if request.method == "GET":
+        # Get the search query from the GET parameters
+        search_query = request.GET.get('medicineName', '')
+
+        # Perform the search using the 'icontains' filter on the doctor's name
+        medi = Medicine.objects.filter(medicineName__icontains=search_query)
+
+        context = {
+            'med': medi,
+        }
+
+        return render(request, 'view_medicine.html', context)
+
+
 @login_required(login_url='dd')
 def delete_medicine(request, id):
     med  = get_object_or_404(Medicine, id= id)
@@ -920,3 +1072,120 @@ def delete_medicine(request, id):
         return redirect('add_medicine')
 
     return render(request, 'delete_medicine.html', {'med':med})
+
+# from django.shortcuts import render
+# from django.http import HttpResponse
+# from reportlab.lib.pagesizes import letter
+# from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+# from reportlab.lib import colors
+# from reportlab.lib.styles import getSampleStyleSheet
+# from io import BytesIO
+
+# from .models import Medicine  # Replace with your actual model import
+
+# def generate_pdf(request):
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="medicine_stock.pdf"'
+
+#     buffer = BytesIO()
+#     doc = SimpleDocTemplate(buffer, pagesize=letter)
+#     styles = getSampleStyleSheet()
+    
+#     elements = []
+
+#     # Header
+#     header_text = "Medicine Stock Details"
+#     header_style = styles['Heading1']
+#     elements.append(Paragraph(header_text, header_style))
+
+#     # Table data
+#     med = Medicine.objects.all()  # Replace with your queryset to fetch medicine data
+#     data = [["Medicine Name", "Details", "Company Name", "Expiry Date", "Contains", "Dosage", "Category Name"]]
+
+#     for item in med:
+#         data.append([item.medicineName, item.details, item.companyName, item.expiryDate,
+#                      item.contains, item.dosage, item.MedCatId.category_name])
+
+#     # Define column widths for vertical format
+#     col_widths = [2.5 * inch, 2.5 * inch]
+
+#     # Create a table with column widths
+#     table = Table(data, colWidths=col_widths)
+#     table.setStyle(TableStyle([
+#         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+#         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+#         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+#         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+#         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+#         ('BACKGROUND', (0, 1), (-1, 1), colors.beige),  # Header row background color
+#         ('LINEBELOW', (0, 0), (-1, 0), 1, colors.black),  # Header row separator line
+#         ('GRID', (0, 0), (-1, -1), 1, colors.black),
+#         ('FONTSIZE', (0, 0), (-1, -1), 10),  # Reduce font size
+#     ]))
+
+#     elements.append(table)
+
+#     # Build the PDF document
+#     doc.build(elements)
+#     pdf = buffer.getvalue()
+#     buffer.close()
+
+#     response.write(pdf)
+#     return response
+
+
+
+
+# cart_page_view
+from django.shortcuts import render
+from django.db.models import Count
+from .models import Deps, Docs
+
+def chart(request):
+    departments = Deps.objects.annotate(num_doctors=Count('docs'))
+    department_names = [department.Dep_name for department in departments]
+    num_doctors = [department.num_doctors for department in departments]
+
+    return render(request, 'department_chart.html', {
+        'department_names': department_names,
+        'num_doctors': num_doctors,
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.views import View 
+from xhtml2pdf import pisa  # Import the module for PDF generation
+
+class GeneratePDF(View):
+    def get(self, request, *args, **kwargs):
+        # Fetch the data that you want to include in the PDF, e.g., doctor data
+        doctors = Docs.objects.all()  # Replace with your actual model and query
+
+        # Render the template with the data
+        template = get_template('pdf_template.html')  # Create an HTML template
+        context = {'doctors': doctors}
+        html = template.render(context)
+
+        # Create a PDF response
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'filename="doctor_report.pdf"'
+
+        # Generate the PDF using xhtml2pdf
+        pisa_status = pisa.CreatePDF(
+            html, dest=response, encoding='utf-8')
+
+        if pisa_status.err:
+            return HttpResponse('Error while generating PDF', status=500)
+
+        return response

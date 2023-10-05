@@ -16,7 +16,9 @@
     <![endif]-->
 </head>
 
-<body style="background-image: url('https://st3.depositphotos.com/9999814/15720/i/450/depositphotos_157206488-stock-photo-male-doctor-in-the-hospital.jpg'); background-size: cover; background-repeat: no-repeat;">
+ 
+
+<body style="background-image: url('https://e0.pxfuel.com/wallpapers/237/23/desktop-wallpaper-medical-background-medical-themed.jpg'); background-size: cover; background-repeat: repeat;">
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="#">Pharmacist's Dashboard</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +44,7 @@
             </ul>
         </div>
     </nav>
-    <div class="main-wrapper">
+    <div class="main-wrapper" style="padding-right:200px;">
         <div class="page-wrapper">
             <div class="content">
                 <div class="row">
@@ -183,15 +185,23 @@
                                                     value="{{ user_profile.year }}" name="year">
                                             </div>
                                         </div>
-                                         
-                                        <div class="text-center m-t-20">
-                                            <button class="btn btn-primary submit-btn" type="submit">Save</button>
+                                        <div>
+                                            <label for="address" id="carde" class="form-label text animated zoomIn">Reset Password:</label>
+                                            <hr class=" text animated zoomIn" id="signintext2">
+                                            <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="old_password" placeholder="current password">
+                                            <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="reset_password" style="margin-top:20px;" placeholder="new password">
+                                            <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="cpass" style="margin-top:20px;" placeholder="confirm new password">
+                                            <span id="pspan" class="text-danger" style="margin-left:50%;"></span>
                                         </div>
+                                         
                                     </form>
                                         </div>
                                         <!-- end row -->
                                         </div>
                                         </div>
+                                        </div>
+                                        <div class="text-center m-t-20">
+                                            <button class="btn btn-primary submit-btn" type="submit">Save</button>
                                         </div>
                                     </div>
                                 </div>

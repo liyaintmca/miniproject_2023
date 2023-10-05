@@ -79,7 +79,14 @@
 
 <div class="container">
     <h2 class="text-center">Medicine Stock Details</h2>
-    
+    <form id="search-form" method="GET" action="{% url 'search_medicine' %}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="medicineName" placeholder="Search by medicine name">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
+            </div>
+        </div>
+    </form>
     <table class="table medicine-table">
         <thead>
             <tr>
@@ -115,6 +122,9 @@
         {% endfor %}
         </tbody>
     </table>
+    <div class="text-center">
+        <a href="/generate_pdf/" class="btn btn-primary">Download PDF</a>
+    </div>
 </div>
 
 <!-- Include Bootstrap JS and jQuery -->

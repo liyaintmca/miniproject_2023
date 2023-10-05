@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from eyeapp import views
-from eyeapp.views import index, dd, cc, departments,loggout
+from eyeapp.views import GeneratePDF, index, dd, cc, departments,loggout
 from eyeapp.views import service, contact, about, department,department_single,doctor,admin_doctors,admin_adddoctor,appointment,blog_sidebar,blog_single, loggout
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -66,10 +66,8 @@ urlpatterns = [
     path('departments',views.departments,name="departments"),
     path('add_admin_dep',views.add_admin_dep,name="add_admin_dep"),
     path('cc',views.cc,name='cc'),
-    path('dd',views.dd,name='dd'),
-    # path('generate-pdf/', views.generate_pdf, name='generate_pdf'),
-    # path('generate-pdfs/', views.generate_pdfs, name='generate_pdfs'),
-    path('generate_pdf/', views.generate_pdf, name='generate_pdf'),
+    path('dd',views.dd,name='dd'), 
+    path('generate_pdf/', views.generate_pdf, name='generate_pdf'),    
     path('loggout', loggout, name='loggout'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
@@ -80,16 +78,24 @@ urlpatterns = [
     path('get_dates/<int:doctor_id>/', views.get_dates, name='get_dates'),
     path('get_times/<int:doctor_id>/<str:selected_date>/', views.get_times, name='get_times'),
     path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
-    path('payment/', views.payment, name='payment'),
+    path('payment/<int:appointment_id>/', views.payment, name='payment'),
     path('add_medicine_category', views.add_medicine_category, name='add_medicine_category'),
     path('view_medicine_category', views.view_medicine_category, name='view_medicine_category'),
     path('add_medicine', views.add_medicine, name='add_medicine'),
     path('view_medicine',views.view_medicine,name='view_medicine'),
+    # path('generate_pdf/', views.generate_pdf, name='generate_pdf'),
     path('delete_medicine_category/<int:medcatid>/',views.delete_medicine_category,name='delete_medicine_category'),
-      
+    path('search_patient', views.search_patient, name='search_patient'),
+    path('search_patient_bydoc', views.search_patient_bydoc, name='search_patient_bydoc'), 
+    path('search_medicine', views.search_medicine, name='search_medicine'),
+    path('search_medicine_category', views.search_medicine_category, name='search_medicine_category'), 
 
-
+    path('chart', views.chart, name='chart'),
     # path('get-available-slots/', views.get_available_slots, name='get_available_slots'),
+
+    path('generate_pdf/', GeneratePDF.as_view(), name='generate_pdf'),
+    path('generate_medicine_category_pdf/', views.generate_medicine_category_pdf, name='generate_medicine_category_pdf'),
+
 
 ]
 if settings.DEBUG:

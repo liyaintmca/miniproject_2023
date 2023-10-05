@@ -36,7 +36,7 @@
 
         /* Add styles for the content area */
         .content {
-            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            background-color: rgba(255, 255, 255, 0.7); /* Adjust the alpha (fourth) value for transparency */
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
@@ -92,8 +92,8 @@
             </ul>
         </div>
     </nav>
-     
-    <div class="main-wrapper">
+    
+    <div class="main-wrapper" style="padding-right:200px;">
            
         <div class="page-wrapper">
             <div class="content">
@@ -240,222 +240,26 @@
                          
                     </div>
                      
-                         
+                    <div>
+                        <label for="address" id="carde" class="form-label text animated zoomIn">Reset Password:</label>
+                        <hr class=" text animated zoomIn" id="signintext2">
+                        <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="old_password" placeholder="current password">
+                        <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="reset_password" style="margin-top:20px;" placeholder="new password">
+                        <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="cpass" style="margin-top:20px;" placeholder="confirm new password">
+                        <span id="pspan" class="text-danger" style="margin-left:50%;"></span>
+                    </div>
                      
                     <div class="text-center m-t-20">
                         <button class="btn btn-primary submit-btn" type="submit">Save</button>
                     </div>
+                    {% if messages %}
+                            {% for message in messages %}
+                                <p class="text-danger" style="margin-left:">{{ message }}</p>
+                            {% endfor %}
+                    {% endif %}
                 </form>
             </div>
-            {% comment %} <div class="notification-box">
-                <div class="msg-sidebar notifications msg-noti">
-                    <div class="topnav-dropdown-header">
-                        <span>Messages</span>
-                    </div>
-                    <div class="drop-scroll msg-list-scroll" id="msg_list">
-                        <ul class="list-box">
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">R</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author">  </span>
-                                            <span class="message-time"> </span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content"> </span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item new-message">
-                                        <div class="list-left">
-                                            <span class="avatar"></span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author"></span>
-                                            <span class="message-time"> </span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content"> </span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar"></span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author">  </span>
-                                            <span class="message-time"> </span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content"> </span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar"></span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author">Mike Litorus</span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">C</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author"> Catherine Manseau </span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">D</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author"> Domenic Houston </span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">B</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author"> Buster Wigton </span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">R</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author"> Rolland Webber </span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">C</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author"> Claire Mapes </span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">M</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author">Melita Faucher</span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">J</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author">Jeffery Lalor</span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">L</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author">Loren Gatlin</span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="chat.html">
-                                    <div class="list-item">
-                                        <div class="list-left">
-                                            <span class="avatar">T</span>
-                                        </div>
-                                        <div class="list-body">
-                                            <span class="message-author">Tarah Shropshire</span>
-                                            <span class="message-time">12:28 AM</span>
-                                            <div class="clearfix"></div>
-                                            <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="topnav-dropdown-footer">
-                        <a href="chat.html">See all messages</a>
-                    </div>
-                </div>
-            </div> {% endcomment %}
+             
         </div>
     </div>
     <div class="sidebar-overlay" data-reff=""></div>
@@ -466,6 +270,50 @@
     <script src="{% static 'assets/js/app.js'%}"></script>
     <script>
         function validateForm() {
+            function validatePassword() {
+                var oldpassword = $("input[name='old_password']").val().trim();
+                var password = $("input[name='reset_password']").val().trim();
+                var pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+                var valid = true;
+            
+                if (password === oldpassword) {
+                    $("#pspan").html("cannot be the same as the old password").css("color", "red");
+                    valid = false;
+                } else if (password.length < 8) {
+                    $("#pspan").html("At least 8 characters").css("color", "red");
+                    valid = false;
+                } else if (!/[0-9]/.test(password)) {
+                    $("#pspan").html("At least 1 number").css("color", "red");
+                    valid = false;
+                } else if (!/[!@#$%^&*]/.test(password)) {
+                    $("#pspan").html("At least 1 symbol (!@#$%^&*)").css("color", "red");
+                    valid = false;
+                } else if (!/[A-Z]/.test(password)) {
+                    $("#pspan").html("At least 1 capital letter").css("color", "red");
+                    valid = false;
+                } else if (!pattern.test(password)) {
+                    $("#pspan").html("Invalid password").css("color", "red");
+                    valid = false;
+                }
+            
+                if (valid) {
+                    $("#pspan").html("").css("color", "red");
+                }
+            }
+            
+        
+            function validateConfirmPassword() {
+                var password = $("input[name='reset_password']").val();
+                var confirmPassword = $("input[name='cpass']").val().trim();
+        
+                if (confirmPassword === "") {
+                    $("#pspan").html("Enter the password").css("color", "red");
+                } else if (confirmPassword !== password) {
+                    $("#pspan").html("Passwords do not match").css("color", "red");
+                } else {
+                    $("#pspan").html("");
+            }
+            }
             var nameField = document.getElementsByName("Name")[0];
             var cityField = document.getElementsByName("city")[0];
             var stateField = document.getElementsByName("state")[0];
@@ -534,7 +382,7 @@
         
             return true;
         }
-        </script>
+    </script>
         
 </body>
 

@@ -32,12 +32,14 @@
                     <ul>
                         <li class="menu-title">Main</li>
                           <li>
-                            <a href="index-2.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                            <a href="{% url 'chart' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>  
 						<li class="active">
                             <a href=" {% url 'admin_doctors' %}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
                         </li>
                            
+
+                        
                         <li>
                             <a href="{% url 'departments' %}"><i class="fa fa-hospital-o"></i> <span>Departments</span></a>
                         </li>
@@ -91,7 +93,7 @@
                 </form>
 
                 <h1>All Doctors</h1>
-                <table class="table">
+                <table class="table" border="1">
                     <thead>
                         <tr>
                              
@@ -118,9 +120,8 @@
                     </tbody>
                 </table>
 
-                {% comment %} <form method="get" action="{% url 'GeneratePDFView' %}">
-                    <button type="submit" class="btn btn-primary">Generate PDF</button>
-                </form> {% endcomment %}
+                <a href="{% url 'generate_pdf' %}" class="btn btn-primary">Generate PDF</a>
+
                     
             </div>    
         </div>
@@ -137,6 +138,59 @@
     <script src="{% static 'assets/js/moment.min.js'%}"></script>
     <script src="{% static 'assets/js/bootstrap-datetimepicker.min.js'%}"></script>
     <script src="{% static 'assets/js/app.js'%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <script>
+        // Function to generate PDF
+        function generatePDF() {
+            const doc = new jsPDF();
+            const table = document.querySelector('table');
+            const tableHeaders = Array.from(table.querySelectorAll('thead th')).map(header => header.textContent);
+            const tableRows = Array.from(table.querySelectorAll('tbody tr'));
+    
+            // Set header with hospital name
+            doc.setFontSize(18);
+            doc.text("Hospital Name", 10, 10); // Replace "Hospital Name" with your actual hospital name
+    
+            // Create data array for the table
+            const data = [tableHeaders];
+            tableRows.forEach(row => {
+                const rowData = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent);
+                data.push(rowData);
+            });
+    
+            // Set table width and style
+            const tableWidth = 180; // Adjust as needed
+            doc.autoTable({
+                startY: 30, // Adjust the Y position
+                head: [data[0]],
+                body: data.slice(1),
+                margin: { top: 20, left: 10, right: 10, bottom: 10 },
+                theme: 'grid',
+                styles: { fontSize: 10, cellPadding: 2, overflow: 'linebreak' },
+                columnStyles: {
+                    0: { cellWidth: tableWidth * 0.25 }, // Adjust column widths
+                    1: { cellWidth: tableWidth * 0.25 },
+                    2: { cellWidth: tableWidth * 0.25 },
+                    3: { cellWidth: tableWidth * 0.25 }
+                }
+            });
+    
+            // Add footer with page number
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.text(180, 285, `Page ${i} of ${pageCount}`);
+            }
+    
+            // Save the PDF
+            doc.save('doctor_report.pdf');
+        }
+    
+        // Attach the function to the button click event
+        document.getElementById('generatePDFButton').addEventListener('click', generatePDF);
+    </script>
+    
 </body>
 
 
