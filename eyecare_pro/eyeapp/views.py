@@ -553,10 +553,15 @@ def dr_timeslots_shows(request):
     return render(request, 'dr_timeslots_shows.html', {'time_slots': time_slots})
 
 
+import uuid
+from django.core.mail import send_mail
+from django.conf import settings
 from datetime import datetime
 from django.shortcuts import render, redirect
 from .models import Appointment, Docs, CustomUser, Slots
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
 @login_required(login_url='dd')
 def demo(request):
     doctors = Docs.objects.all()  # Replace with your actual doctor model
@@ -578,25 +583,16 @@ def demo(request):
         doctor_id = request.POST.get('doctor')
         date_id = request.POST.get('date')
         selected_time_slot = request.POST.get('time')
-        print(f"Name: {name}")
-        print(f"Address: {address}")
-        print(f"Place: {place}")
-        print(f"Date of Birth: {dob}")
-        print(f"Gender: {gender}")
-        print(f"Mobile: {mobile}")
-        print(f"Allergy: {allergy}")
-        print(f"Reason: {reason}")
-        print(f"Doctor ID: {doctor_id}")
-        print(f"Date ID: {date_id}")
-        print(f"Selected Time Slot: {selected_time_slot}")
 
         try:
-             
             slot = Slots.objects.get(id=selected_time_slot)
 
             # Assuming you have the corresponding models for Doctors, Slots, and CustomUser
             doctor = Docs.objects.get(id=doctor_id)
             user = CustomUser.objects.get(id=request.user.id)  # Assuming you're using user authentication
+
+            # Generate a token
+            # token = str(uuid.uuid4())
 
             # Create and save the Appointment object
             appointment = Appointment(
@@ -612,23 +608,27 @@ def demo(request):
                 user=user,
                 slot=slot,
                 date=date_id,
+                # token=token  # Save the token with the appointment
             )
             appointment.save()
+
+            # Send a confirmation email with the token
             subject = 'Appointment is Successful'
-            message = f'Your appointment for home visit is successful. Your Scheduled date: {date_id}, Your Scheduled Time: {slot} '
+            message = f'Your appointment for EyeCare Hospital is successful. Your Scheduled date: {date_id}, Your Scheduled Time: {slot},and Your Token Number : {appointment.id}  '
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [request.user.email]
             send_mail(subject, message, from_email, recipient_list)
-            return redirect('payment',appointment_id = appointment.id )  # Redirect to a success page
-            
+
+            return redirect('payment', appointment_id=appointment.id)  # Redirect to a success page
+
         except Slots.DoesNotExist:
             # Handle the case where the selected time slot does not exist
-            return render(request, 'demo.html', {'error_message': 'Time slot not found'})
+            return render(request, 'demo.html', {'doctors': doctors, 'error_message': 'Time slot not found'})
         except ValueError:
             # Handle the case where the selected_time_slot is in an invalid format
-            return render(request, 'demo.html', {'error_message': 'Invalid time format'})
-            
-    return render(request, 'demo.html', {'doctors': doctors}) 
+            return render(request, 'demo.html', {'doctors': doctors, 'error_message': 'Invalid time format'})
+
+    return render(request, 'demo.html', {'doctors': doctors})
 
  
 from django.shortcuts import render, get_object_or_404

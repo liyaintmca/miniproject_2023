@@ -1,4 +1,5 @@
 from datetime import date
+ 
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
@@ -209,6 +210,8 @@ class Appointment(models.Model):
     slot = models.ForeignKey(Slots, on_delete=models.CASCADE)
     date = models.DateField()
     status=models.BooleanField(default=False)
+     
+
     
     def __str__(self):
         return f"Appointment with Dr. {self.doctor.Name} on {self.date} at {self.slot.start_time}-{self.slot.end_time}"
