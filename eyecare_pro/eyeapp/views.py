@@ -251,8 +251,25 @@ def phar_profile(request):
         print("Degree:", user_profile.degree)
         user_profile.year = request.POST.get('year')
         print("Grade:", user_profile.year)
+        reset_password = request.POST.get('reset_password')
+        old_password = request.POST.get('old_password')
+
+
+        if old_password and reset_password and request.POST.get('cpass') == reset_password:
+            if user.check_password(old_password):
+                # The old password is correct, set the new password
+                user.set_password(reset_password)
+                user.save()
+                update_session_auth_hash(request, request.user)  # Update the session to prevent logging out
+            else:
+                messages.error(request, "Incorrect old password. Password not updated.")
+        else:
+            print("Please fill all three password fields correctly.")
+        
+        user_profile.reset_password = reset_password
         user_profile.save()
         return redirect('phar_profile')
+        
     context = {
         'user': user,
         'user_profile': user_profile
@@ -398,6 +415,22 @@ def rep_profile(request):
         print("Degree:", user_profile.degree)
         user_profile.year = request.POST.get('year')
         print("Grade:", user_profile.year)
+        reset_password = request.POST.get('reset_password')
+        old_password = request.POST.get('old_password')
+
+
+        if old_password and reset_password and request.POST.get('cpass') == reset_password:
+            if user.check_password(old_password):
+                # The old password is correct, set the new password
+                user.set_password(reset_password)
+                user.save()
+                update_session_auth_hash(request, request.user)  # Update the session to prevent logging out
+            else:
+                messages.error(request, "Incorrect old password. Password not updated.")
+        else:
+            print("Please fill all three password fields correctly.")
+        
+        user_profile.reset_password = reset_password
         user_profile.save()
         return redirect('rep_profile')
     context = {
@@ -717,6 +750,7 @@ def generate_pdf(request):
     elements = []
 
     # Header
+    
     header_text = "Department List"
     header_style = styles['Heading1']
     elements.append(Spacer(1, 12))

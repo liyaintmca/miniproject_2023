@@ -195,7 +195,11 @@
                                             <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="cpass" style="margin-top:20px;" placeholder="confirm new password">
                                             <span id="pspan" class="text-danger" style="margin-left:50%;"></span>
                                         </div>
-                                         
+                                        {% if messages %}
+                                        {% for message in messages %}
+                                            <p class="text-danger" >{{ message }}</p>
+                                        {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="text-center m-t-20">
                                         <button class="btn btn-primary submit-btn" type="submit">Save</button>
@@ -216,6 +220,63 @@
                         <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
                         <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
                         <script src="{% static 'assets/js/app.js'%}"></script>
+                        <script>
+                            function validateForm() {
+                                // Get form input values
+                                var name = document.forms["yourForm"]["Name"].value;
+                                var email = document.forms["yourForm"]["email"].value;
+                                var gender = document.forms["yourForm"]["gender"].value;
+                                var dob = document.forms["yourForm"]["dob"].value;
+                                var address = document.forms["yourForm"]["address"].value;
+                                var state = document.forms["yourForm"]["state"].value;
+                                var country = document.forms["yourForm"]["country"].value;
+                                var phn = document.forms["yourForm"]["phn"].value;
+                                var city = document.forms["yourForm"]["city"].value;
+                        
+                                // Perform validation checks
+                                if (name === "") {
+                                    alert("Name must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                                if (email === "") {
+                                    alert("Email must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                                if (gender === "") {
+                                    alert("Gender must be selected");
+                                    return false; // Prevent form submission
+                                }
+                                if (dob === "") {
+                                    alert("Date of Birth must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                                if (address === "") {
+                                    alert("Address must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                                if (state === "") {
+                                    alert("State must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                                if (country === "") {
+                                    alert("Country must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                                if (phn === "") {
+                                    alert("Phone Number must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                                if (city === "") {
+                                    alert("City must be filled out");
+                                    return false; // Prevent form submission
+                                }
+                        
+                                // Add more validation checks for other fields as needed
+                        
+                                // If all validations pass, allow form submission
+                                return true;
+                            }
+                        </script>
 </body>
 
 </html>
