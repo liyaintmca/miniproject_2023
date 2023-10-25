@@ -1174,13 +1174,19 @@ from django.db.models import Count
 from .models import Deps, Docs
 
 def chart(request):
+    doctor=Docs.objects.all()
+    dep=Deps.objects.all()
     departments = Deps.objects.annotate(num_doctors=Count('docs'))
     department_names = [department.Dep_name for department in departments]
     num_doctors = [department.num_doctors for department in departments]
+    doc_count = doctor.count()
+    dep_count=dep.count()
 
     return render(request, 'department_chart.html', {
         'department_names': department_names,
         'num_doctors': num_doctors,
+        'doc_count' : doc_count,
+        'dep_count' : dep_count,
     })
 
 

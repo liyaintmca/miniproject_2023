@@ -120,7 +120,7 @@
                     </tbody>
                 </table>
 
-                <a href="{% url 'generate_pdf' %}" class="btn btn-primary">Generate PDF</a>
+                {% comment %} <a href="{% url 'generate_pdf' %}" class="btn btn-primary">Generate PDF</a> {% endcomment %}
 
                     
             </div>    
@@ -140,7 +140,7 @@
     <script src="{% static 'assets/js/app.js'%}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
-    <script>
+    {% comment %} <script>
         // Function to generate PDF
         function generatePDF() {
             const doc = new jsPDF();
@@ -189,7 +189,7 @@
     
         // Attach the function to the button click event
         document.getElementById('generatePDFButton').addEventListener('click', generatePDF);
-    </script>
+    </script> {% endcomment %}
     
 </body>
 

@@ -7,6 +7,73 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
+<style>
+    .dash-widget {
+        background-color: #fff;
+        border-radius: 4px;
+        margin-bottom: 30px;
+        padding: 20px;
+        position: relative;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    }
+    .dash-widget-bg1 {
+        width: 65px;
+        float: left;
+        color: #fff;
+        display: block;
+        font-size: 50px;
+        text-align: center;
+        line-height: 65px;
+        background: #009efb;
+        border-radius: 50%;
+        font-size: 40px;
+        height: 65px;
+    }
+    .dash-widget-bg2 {
+        width: 65px;
+        float: left;
+        color: #fff;
+        display: block;
+        font-size: 50px;
+        text-align: center;
+        line-height: 65px;
+        background: #55ce63;
+        border-radius: 50%;
+        font-size: 40px;
+        height: 65px;
+    }
+    .dash-widget-bg3 {
+        width: 65px;
+        float: left;
+        color: #fff;
+        display: block;
+        font-size: 50px;
+        text-align: center;
+        line-height: 65px;
+        background: #7a92a3;
+        border-radius: 50%;
+        font-size: 40px;
+        height: 65px;
+    }
+    .dash-widget-bg4 {
+        width: 65px;
+        float: left;
+        color: #fff;
+        display: block;
+        font-size: 50px;
+        text-align: center;
+        line-height: 65px;
+        background: #ffbc35;
+        border-radius: 50%;
+        font-size: 40px;
+        height: 65px;
+    }
+    .fa-stethoscope {
+        font-size: 36px; /* Adjust the size as needed */
+        color: #20a8d8; /* Color of the stethoscope icon */
+        /* You can add more styling properties here, like padding, margins, etc. */
+    }
+    </style>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -66,6 +133,7 @@
             </nav>
 
             <!-- Content -->
+             
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <h1 class="mt-4">Welcome to the Admin Dashboard</h1>
                 <p>This dashboard provides an overview of your medical facility.</p>
@@ -98,10 +166,35 @@
                         }
                     });
                 </script>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="dash-widget">
+                                <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                                <div class="dash-widget-info text-right">
+                                    <h3 class="doctor-count">{{ doc_count }}</h3>
+                                    <span class="widget-title1">Doctors <i class="fa fa-check" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="dash-widget">
+                                <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                                <div class="dash-widget-info text-right">
+                                    <h3 class="doctor-count">{{ dep_count }}</h3>
+                                    <span class="widget-title1">Departments <i class="fa fa-check" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </main>
+            
         </div>
     </div>
-
+     
     <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
