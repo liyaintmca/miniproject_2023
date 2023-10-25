@@ -48,8 +48,6 @@ def contact(request):
     return render(request,'contact.html')
 def doctors_page(request):
     return render(request,'doctors_page.html')
-def phar_staff_page(request):
-    return render(request,'phar_staff_page.html')
 def rep_staff_page(request):
     return render(request,'rep_staff_page.html')
 def phar_profile(request):
@@ -1223,3 +1221,13 @@ class GeneratePDF(View):
             return HttpResponse('Error while generating PDF', status=500)
 
         return response
+    
+
+
+ 
+
+
+def phar_staff_page(request): 
+    return render(request, 'phar_staff_page.html')
+ 
+ 

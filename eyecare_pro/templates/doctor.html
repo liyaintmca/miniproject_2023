@@ -6,7 +6,7 @@
   <meta name="description" content="Orbitor,business,company,agency,modern,bootstrap4,tech,software">
   <meta name="author" content="themefisher.com">
 
-  <title>Novena- Health & Care Medical template</title>
+  <title>eyecare</title>
 
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/x-icon" href="{% static '/images/favicon.ico'%}" />
@@ -141,9 +141,9 @@
       <div class="col-12 text-center  mb-5">
 	        <div class="btn-group btn-group-toggle " data-toggle="buttons">
 	          <label class="btn active ">
-	            <input type="radio" name="shuffle-filter" value="all" checked="checked" />All Department
+	            <input type="radio" name="shuffle-filter" value="all" checked="checked" />All Department Doctors
 	          </label>
-	          <label class="btn ">
+	          {% comment %} <label class="btn ">
 	            <input type="radio" name="shuffle-filter" value="cat1" />Cardiology
 	          </label>
 	          <label class="btn">
@@ -160,7 +160,7 @@
 	          </label>
 	          <label class="btn">
 	            <input type="radio" name="shuffle-filter" value="cat6" />Traumatology
-	          </label>
+	          </label> {% endcomment %}
 	        </div>
       </div>
 
@@ -173,8 +173,8 @@
 	               </div>
 	            </div>
                 <div class="content mt-3">
-                	<h4 class="mb-0"><a href="doctor-single.html">Thomas Henry</a></h4>
-                	<p>Cardiology</p>
+                	<h4 class="mb-0"><a href="doctor-single.html">Thomas Zara Jose</a></h4>
+                	<p>Neuro-Ophthalmology</p>
                 </div> 
 	      	</div>
       	</div>
@@ -187,8 +187,8 @@
 		            </div>
 	            </div>
                 <div class="content mt-3">
-                	<h4 class="mb-0"><a href="doctor-single.html">Harrision Samuel</a></h4>
-                	<p>Radiology</p>
+                	<h4 class="mb-0"><a href="doctor-single.html">Maria Thomas</a></h4>
+                	<p>Low Vision Clinic</p>
                 </div> 
 	      	</div>
       </div>
@@ -201,8 +201,8 @@
 		            </div>
 	            </div>
                 <div class="content mt-3">
-                	<h4 class="mb-0"><a href="doctor-single.html">Alexandar James</a></h4>
-                	<p>Dental</p>
+                	<h4 class="mb-0"><a href="doctor-single.html">Robin Jose</a></h4>
+                	<p>Pediatric Ophthalmology</p>
                 </div> 
 	      	</div>
       </div>
@@ -215,13 +215,13 @@
 		            </div>
 	            </div>
                 <div class="content mt-3">
-                	<h4 class="mb-0"><a href="doctor-single.html">Edward john</a></h4>
-                	<p>Pediatry</p>
+                	<h4 class="mb-0"><a href="doctor-single.html">Alex Sammuel</a></h4>
+                	<p>Pediatric Ophthalmology</p>
                 </div> 
 	      	</div>
       </div>
 
-      	<div class="col-lg-3 col-sm-6 col-md-6 mb-4 shuffle-item" data-groups="[&quot;cat5&quot;]">
+      	{% comment %} <div class="col-lg-3 col-sm-6 col-md-6 mb-4 shuffle-item" data-groups="[&quot;cat5&quot;]">
         	<div class="position-relative doctor-inner-box">
 		        <div class="doctor-profile">
 		        	<div class="doctor-img">
@@ -275,9 +275,9 @@
                 	<p>Traumatology</p>
                 </div> 
 	      	</div>
-      </div>
+      </div> {% endcomment %}
 
-      <div class="col-lg-3 col-sm-6 col-md-6 mb-4 shuffle-item illustration" data-groups="[&quot;cat2&quot;]">
+      {% comment %} <div class="col-lg-3 col-sm-6 col-md-6 mb-4 shuffle-item illustration" data-groups="[&quot;cat2&quot;]">
         	<div class="position-relative doctor-inner-box">
 		        <div class="doctor-profile">
 		        	<div class="doctor-img">
@@ -317,7 +317,7 @@
                 	<p>Dental</p>
                 </div> 
 	      	</div>
-        </div>
+        </div> {% endcomment %}
     </div>
   </div>
 </section>

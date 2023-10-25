@@ -95,7 +95,7 @@ urlpatterns = [
 
     path('generate_pdf/', GeneratePDF.as_view(), name='generate_pdf'),
     path('generate_medicine_category_pdf/', views.generate_medicine_category_pdf, name='generate_medicine_category_pdf'),
-
+ 
 
 ]
 if settings.DEBUG:
