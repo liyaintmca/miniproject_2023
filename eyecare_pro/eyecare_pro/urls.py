@@ -96,9 +96,11 @@ urlpatterns = [
     # path('get-available-slots/', views.get_available_slots, name='get_available_slots'),
     path('generate_pdf/', GeneratePDF.as_view(), name='generate_pdf'),
     path('generate_medicine_category_pdf/', views.generate_medicine_category_pdf, name='generate_medicine_category_pdf'),
-    path('blog-sidebar', views.blog_sidebar, name='blog-sidebar'),
-    path('blog-single', views.blog_single, name='blog-single'),
+    path('blog_sidebar/', blog_sidebar, name='blog_sidebar'),
+    path('blog_single/<int:blog_id>/', views.blog_single, name='blog_single'),
     path('admin_add_blog', views.admin_add_blog, name='admin_add_blog'),
+    path('c_blog', views.c_blog, name='c_blog'),
+
  
 
 ]

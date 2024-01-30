@@ -1,20 +1,35 @@
-<!-- templates/admin/admin_add_blog.html -->
+<!-- templates/blog_list.html -->
 <!DOCTYPE html>
-{% load static %}
+{% load static %}  <!-- Include this line at the beginning to load static files -->
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Blog Details</title>
+    <title>Blog List</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Add your custom styles or link your own stylesheet here -->
+    <!-- Add your custom styles or link your own stylesheet here -->
     <style>
+        body {
+            padding: 20px;
+        }
+        .blog-card {
+            border: 4px solid #ddd;
+            padding: 20px;
+            margin-bottom: 100px;
+             
+        }
+        .blog-card img {
+            max-width: 100%;
+            height: auto;
+        }
         body {
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            height: 100vh;
+            height: 200vh;
             margin: 0;
         }
         .navbar {
@@ -30,7 +45,7 @@
             left: 0;
             background-color: #E0E0E0;
             padding-top: 20px;
-            color: white;
+            color: black;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -46,12 +61,17 @@
             margin: 10px 0;
         }
         .content {
-            margin-left: 200px;
-            padding: 20px;
+            margin-left: 300px;
+            padding: 50px;
+        }
+        .container{
+            max-width: 960px;
+            top:100px;
+            margin-center:100px;
         }
     </style>
 </head>
-<body class="bg-light">
+<body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="#">Admin Dashboard</a>
@@ -68,42 +88,23 @@
         <a href="{% url 'c_blog' %}">Current Blogs</a>
     </div>
 
-    <!-- Content -->
-    <div class="content container mt-5">
-        <h1 class="text-center mb-4">Add Blog Details</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" class="form-control" id="title" name="title" required>
+    <div class="container">
+        <h1 class="text-center mb-4">Blog List</h1>
+
+        {% for blog in blogs %}
+            <div class="blog-card">
+                <h2>{{ blog.title }}</h2>
+                <p><strong>Author:</strong> {{ blog.author }}</p>
+                <p><strong>Date:</strong> {{ blog.date }}</p>
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="img-fluid mb-3">
+                <p>{{ blog.description }}</p>
+                <p><strong>Extended Description:</strong> {{ blog.extended_description }}</p>
+                <button type="submit" class="btn btn-primary">Edit Blog</button>
+                <!-- You can display more fields as needed -->
+
+                <!-- Add links or buttons for further actions if necessary -->
             </div>
-            
-            <div class="form-group">
-                <label for="image">Image:</label>
-                <input type="file" class="form-control-file" id="image" name="image" accept="image/*" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" class="form-control" id="date" name="date" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="extended_description">Extended Description:</label>
-                <textarea class="form-control" id="extended_description" name="extended_description" rows="4"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" id="author" name="author" required>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">Add Blog</button>
-        </form>
+        {% endfor %}
     </div>
 
     <!-- Bootstrap JS and dependencies -->
@@ -111,5 +112,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Add your custom scripts or link your own JavaScript files here -->
+
 </body>
 </html>

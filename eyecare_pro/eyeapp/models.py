@@ -249,12 +249,16 @@ class PatientHistory(models.Model):
            return f"Patient History for {self.Appointment}"
 
 
-class Blog(models.Model):
-        title = models.CharField(max_length=200,null=True, blank=True)
-        image = models.ImageField(upload_to='blog_images/',null=True, blank=True)
-        date = models.DateField(null=True, blank=True)
-        description = models.TextField(null=True, blank=True)
-        author = models.CharField(max_length=100,null=True, blank=True)
+from django.db import models
 
-        def __str__(self):
-            return self.title
+class Blog(models.Model):
+    title = models.CharField(max_length=200, null=True, blank=True)
+    image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    author = models.CharField(max_length=100, null=True, blank=True) 
+    extended_description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title
+

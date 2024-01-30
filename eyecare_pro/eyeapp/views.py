@@ -39,8 +39,7 @@ def blog_sidebar(request):
     return render(request,'blog_sidebar.html')
 def blog_single(request):
     return render(request,'blog_single.html')
-def admin_add_blog(request):
-    return render(request,'admin_add_blog.html')
+
 
 from django.shortcuts import render, redirect
 from .models import Appointment, PatientHistory
@@ -101,10 +100,6 @@ def display_patient_profile(request):
      ###############################################################################################################################33
 def appointment(request):
     return render(request,'dd.html')
-def blog_sidebar(request):
-    return render(request,'blog-sidebar.html')
-def blog_single(request):
-    return render(request,'blog-single.html')
 def contact(request):
     return render(request,'contact.html')
 def doctors_page(request):
@@ -1287,14 +1282,68 @@ class GeneratePDF(View):
         if pisa_status.err:
             return HttpResponse('Error while generating PDF', status=500)
 
-        return response
+        return response 
     
-
-
- 
-
-
+    #######################################################################
 def phar_staff_page(request): 
     return render(request, 'phar_staff_page.html')
  
- 
+    ########################################################################
+
+from django.shortcuts import render, redirect
+from .models import Blog
+from django.http import HttpResponse
+
+def admin_add_blog(request):
+    if request.method == 'POST':
+        # Get data from the form
+        title = request.POST['title']
+        image = request.FILES['image']
+        date = request.POST['date']
+        description = request.POST['description']
+        extended_description = request.POST.get('extended_description', '')  # Added line
+        author = request.POST['author']
+
+        # Create a new Blog object
+        new_blog = Blog(
+            title=title,
+            image=image,
+            date=date,
+            description=description,
+            extended_description=extended_description, 
+            author=author
+        )
+
+        # Save the blog to the database
+        new_blog.save()
+
+        # Redirect to a success page or any other page you want
+        return HttpResponse("c_blog")
+
+    return render(request, 'admin_add_blog.html')
+
+
+
+from django.shortcuts import render
+from .models import Blog
+def blog_sidebar(request):
+    blogs = Blog.objects.all()
+    return render(request, 'blog_sidebar.html', {'blogs': blogs}) 
+
+
+# views.py
+def blog_single(request, blog_id):
+    # ... your existing code
+    blog = get_object_or_404(Blog, id=blog_id)
+    return render(request, 'blog_single.html', {'blog': blog})
+
+from django.shortcuts import render
+from .models import Blog
+
+def c_blog(request):
+    # Retrieve all blogs from the database
+    blogs = Blog.objects.all()
+
+    # Pass the blogs to the template for rendering
+    return render(request, 'c_blog.html', {'blogs': blogs})
+
