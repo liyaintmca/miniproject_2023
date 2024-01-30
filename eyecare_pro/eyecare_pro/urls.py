@@ -69,6 +69,7 @@ urlpatterns = [
     path('dd',views.dd,name='dd'), 
     path('generate_pdf/', views.generate_pdf, name='generate_pdf'),    
     path('loggout', loggout, name='loggout'),
+    
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
@@ -89,12 +90,15 @@ urlpatterns = [
     path('search_patient_bydoc', views.search_patient_bydoc, name='search_patient_bydoc'), 
     path('search_medicine', views.search_medicine, name='search_medicine'),
     path('search_medicine_category', views.search_medicine_category, name='search_medicine_category'), 
-
+    path('edit_patient_profile', views.edit_patient_profile, name='edit_patient_profile'), 
+    path('display_patient_profile', views.display_patient_profile, name='display_patient_profile'), 
     path('chart', views.chart, name='chart'),
     # path('get-available-slots/', views.get_available_slots, name='get_available_slots'),
-
     path('generate_pdf/', GeneratePDF.as_view(), name='generate_pdf'),
     path('generate_medicine_category_pdf/', views.generate_medicine_category_pdf, name='generate_medicine_category_pdf'),
+    path('blog-sidebar', views.blog_sidebar, name='blog-sidebar'),
+    path('blog-single', views.blog_single, name='blog-single'),
+    path('admin_add_blog', views.admin_add_blog, name='admin_add_blog'),
  
 
 ]

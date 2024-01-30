@@ -18,6 +18,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
     def create_superuser(self, email, password=None):
         if not password:
             raise ValueError('Superuser must have a password')
@@ -33,6 +34,22 @@ class UserManager(BaseUserManager):
         user.is_superadmin = True
         user.save(using=self._db)
         return user
+
+    # def create_superuser(self, email, password=None):
+    #     if not password:
+    #         raise ValueError('Superuser must have a password')
+        
+    #     user = self.create_user(
+    #         email=self.normalize_email(email),
+    #         password=password,
+    #         role=CustomUser.ADMIN,  # Assign the ADMIN role to superusers
+    #     )
+    #     user.is_admin = True
+    #     user.is_active = True
+    #     user.is_staff = True
+    #     user.is_superadmin = True
+    #     user.save(using=self._db)
+    #     return user
 
 class CustomUser(AbstractUser):
     PATIENT = 1
@@ -215,3 +232,29 @@ class Appointment(models.Model):
     
     def __str__(self):
         return f"Appointment with Dr. {self.doctor.Name} on {self.date} at {self.slot.start_time}-{self.slot.end_time}"
+    
+class PatientHistory(models.Model):
+        Appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='patient_history')
+        previous_surgeries = models.IntegerField(null=True, blank=True)
+        current_medical_conditions = models.TextField(null=True, blank=True)
+        allergies = models.TextField(null=True, blank=True)
+        family_history_eye_diseases = models.TextField(null=True, blank=True)
+        last_eye_examination_date = models.DateField(null=True, blank=True)
+        prescription_details = models.TextField(null=True, blank=True)
+        changes_in_vision = models.TextField(null=True, blank=True)
+        eye_drops_ointments = models.TextField(null=True, blank=True)
+        image = models.ImageField(upload_to='patient_history_images/', null=True, blank=True)
+
+        def __str__(self):
+           return f"Patient History for {self.Appointment}"
+
+
+class Blog(models.Model):
+        title = models.CharField(max_length=200,null=True, blank=True)
+        image = models.ImageField(upload_to='blog_images/',null=True, blank=True)
+        date = models.DateField(null=True, blank=True)
+        description = models.TextField(null=True, blank=True)
+        author = models.CharField(max_length=100,null=True, blank=True)
+
+        def __str__(self):
+            return self.title

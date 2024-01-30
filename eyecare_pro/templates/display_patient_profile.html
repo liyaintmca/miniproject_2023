@@ -1,0 +1,548 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+  
+    <title>EyeCare</title>
+  
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- nice select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
+    <!-- datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+   
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet"><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/select2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap-datetimepicker.min.css' %}">
+    <!--[if lt IE 9]>
+        <script src="assets/js/html5shiv.min.js"></script>
+        <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+  
+  </head>
+
+
+
+<body>
+    <style>
+        body {
+            background: #f2e6dc;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #4ca2cd, #67B26F);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #cdfaf2, #ecdaf7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            padding: 0;
+            margin: 0;
+            font-family: 'Lato', sans-serif;
+            color: black;
+            font-size:18px;
+            
+           
+        }
+        .main-wrapper{
+            margin-right:150px;
+            
+        }
+       
+        /* Add this CSS to your stylesheet */
+        .quote_btn-container .dropdown-toggle {
+            background-color: white;
+            color: #333; /* You can change this color to your preference */
+            border-radius: 50px; /* Adjust the value for more or less roundness */
+            padding: 10px 20px; /* Adjust padding as needed */
+            border: 1px solid #ccc; /* Add a border for better visibility */
+        }
+        
+        /* Style the dropdown menu items */
+        .dropdown-menu a.dropdown-item {
+            color: #333; /* You can change this color to your preference */
+        }
+        
+        .dropdown-menu a.dropdown-item:hover {
+            background-color: #f7f7f7; /* Change color on hover if desired */
+        }
+      
+      .quote_btn-container {
+          margin-bottom:10px; 
+          margin-top:10px; 
+          margin-right:25px; 
+          margin-left:10px; 
+      }
+      
+      
+      .dropdown-menu a.dropdown-item {
+          color: #333;
+      }
+      
+      .dropdown-menu a.dropdown-item:hover {
+          background-color: #f7f7f7;
+      }
+          .profile-photo-container {
+              display: flex;
+              align-items: center;
+          }
+  
+          .profile-photo img {
+              width: 200px;
+              height: 200px; /* Set the width and height to make it square */
+              border-radius: 0; /* Remove border-radius to make it square */
+              border: 3px solid #fff;
+          }
+  
+          .profile-details {
+              display: flex;
+              flex-direction: column;
+              margin-left:50px;
+          }
+          input[type="text"],
+          input[type="date"],
+          input[type="number"]
+           {
+              font-weight: bold;
+              font-size:15px;
+              /* Add any other common styles you want for these input types */
+          }
+ 
+  
+  
+      </style>
+      
+
+    <div class="main-wrapper">
+        
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title" style="font-weight: bold; text-align: center; color: black;">My Profile</h4>
+
+                    </div>
+                  {% comment %} <div class="col-sm-20 col-11 text-right m-b-30">
+                        <a href="{% url 'patient_profile' %}" class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Edit Profile</a>
+                    </div>
+                </div> {% endcomment %}
+                <form method="post" enctype="multipart/form-data" action="{% url 'display_patient_profile' %}">
+                    {% csrf_token %}
+                <div class="card-box">
+                        <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Basic Informations</h3>
+                         
+                        <div class="row">
+                            <div class="col-md-12">
+                                
+                         {% comment %} <div class="profile-photo">
+                                    {% if profile.profile_pic %}
+                                        <img src="{{ profile.profile_pic.url }}" >
+                                    {% else %}
+                                        <img src="/path/to/default/profile_pic.jpg" >
+                                    {% endif %}
+                                    <div class="fileupload btn">
+                                        <input class="upload" name="profile_pic" type="file">
+                                        <span class="btn-text">Edit</span>
+                                    </div>
+                                    <br> <!-- Add this line -->
+                                     
+                                </div>    {% endcomment %}
+
+                               <div class="profile-img-wrap">
+                                    {% if profile.profile_pic %}
+                                    <img class="inline-block" src="{{ profile.profile_pic.url }}" alt="user">
+                                    {% else %}
+                                    <img src="/path/to/default/profile_pic.jpg" >
+                                    {% endif %}
+                                    <div class="fileupload btn">
+                                        <span class="btn-text">edit</span>
+                                        <input class="upload" name="profile_pic" type="file">
+                                    </div>
+                                </div> 
+
+                            </div> 
+
+                                   
+                        <div class="profile-basic">
+                                    <div class="row">
+                                        
+                                        <div class="col-md-6">
+                                            
+                                            <label>Name  </label>
+                                            {% comment %} <div class="form-group form-focus"> 
+                                                
+                                                <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
+                                            </div> {% endcomment %}
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.name }}" name="first_name" disabled>
+                                                <span id="first_name_error" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            
+                                            <label>Address </label>
+                                            {% comment %} <div class="form-group form-focus"> 
+                                                
+                                                <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
+                                            </div> {% endcomment %}
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.address }}" name="first_name" disabled>
+                                                <span id="first_name_error" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            
+                                            <label>Place</label>
+                                            {% comment %} <div class="form-group form-focus"> 
+                                                
+                                                <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
+                                            </div> {% endcomment %}
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.place }}" name="first_name" disabled>
+                                                <span id="first_name_error" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        
+    
+                                        
+
+                                         
+
+                                        <div class="col-md-6">
+                                            <label class="focus-label">Gender</label>
+                                            <div class="form-group form-focus select-focus">
+                                                <select class="select form-control floating" name="gender">
+                                                    <option value="" disabled {% if not appointment.gender %} selected {% endif %} disabled>-Select Gender-</option>
+                                                    <option value="Male" {% if appointment.gender == 'Male' %} selected {% endif %} disabled>Male</option>
+                                                    <option value="Female" {% if appointment.gender == 'Female' %} selected {% endif %} disabled>Female</option>
+                                                </select>
+                                                
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="col-md-6">
+                                            <label>Date of Birth</label>
+                                            <div class="form-group form-focus">
+                                                
+                                               
+                                                <input type="date" id="dob" name="birth_date" {% if appointment.dob %} value="{{ appointment.dob|date:'Y-m-d' }}" {% endif %} disabled class="form-control datetimepicker">
+
+                                              
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Mobile Number</label>
+                                            <div class="form-group form-focus">
+                                                <input type="text" class="form-control floating" id="house_name_input" value="{{ appointment.mobile }}" disabled name="house_name">
+                                                <span id="house_name_error" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-box">
+                        <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Medical History</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Previous eye surgeries or treatments</label>
+                                <div class="form-group form-focus"> 
+                                    <input type="text" class="form-control floating" value="{{ patient_history.previous_surgeries }}" name="previous_surgeries">
+                                    {% comment %} <input type="number" class="form-control floating" value=" " name="house_no"> {% endcomment %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Any current medical conditions</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.current_medical_conditions }}" name="current_medical_conditions">
+                                    <span id="address_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Allergies (especially to medications)</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.allergies }}" name="allergies">
+                                    <span id="address_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Family history of eye diseases</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.family_history_eye_diseases }}" name="family_history_eye_diseases">
+                                    <span id="address_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="card-box">
+                        <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Vision History</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Date of last eye examination</label>
+                                <div class="form-group form-focus"> 
+                                    <input type="text" class="form-control floating" value="{{ patient_history.last_eye_examination_date }}" name="last_eye_examination_date">
+                                    {% comment %} <input type="number" class="form-control floating" value=" " name="house_no"> {% endcomment %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Prescription details for glasses or contact lenses</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.prescription_details }}" name="prescription_details">
+                                    <span id="address_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Any changes in vision (blurriness, double vision, etc.)</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.changes_in_vision }}" name="changes_in_vision">
+                                    <span id="address_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Any eye drops or ointments</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.eye_drops_ointments }}" name="eye_drops_ointments">
+                                    <span id="address_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                     
+               
+                        <div class="text-center m-t-20">
+                        <button class="btn btn-primary submit-btn" type="submit">Save</button>
+                    </div>
+                   
+        </form>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-overlay" data-reff=""></div>
+    <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
+    <script src="{% static 'assets/js/popper.min.js'%}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
+    <script src="{% static 'assets/js/app.js'%}"></script>
+    <script src="{% static 'assets/js/bootstrap-datetimepicker.min.js' %}"></script>
+
+    <div class="sidebar-overlay" data-reff=""></div>
+
+    <script src="{% static 'assets/js/select2.min.js' %}"></script>
+    <script src="{% static 'assets/js/moment.min.js' %}"></script>
+    
+    
+    <script>
+        // Function to perform validation on the "First Name" input
+        const firstnameInput = document.getElementById('first_name_input');
+        const firstNameError = document.getElementById('first_name_error');
+
+        const lastNameInput = document.getElementById('last_name_input');
+        const lastNameError = document.getElementById('last_name_error');
+
+        const houseNameInput = document.getElementById('house_name_input');
+        const houseNameError = document.getElementById('house_name_error');
+    
+        const addressInput = document.getElementById('address_input');
+        const addressError = document.getElementById('address_error');
+
+        
+        const pinCodeInput = document.getElementById('pin_code_input');
+        const pinCodeError = document.getElementById('pin_code_error');
+
+        const phoneInput = document.getElementById('phone_number_input');
+        const phoneError = document.getElementById('phone_number_error');
+
+        
+
+        function validateFirstName() {
+            var firstname = firstnameInput.value;
+            var validCharacters = /^[A-Za-z]+$/; // Regular expression for characters only
+    
+            if (!validCharacters.test(firstname)) {
+                firstNameError.textContent = "Only characters are allowed.";
+                firstnameInput.classList.add('is-invalid');
+                return false; // Validation failed
+            } else {
+                firstNameError.textContent = ""; // Clear the error message
+                firstnameInput.classList.remove('is-invalid');
+                return true; // Validation passed
+            }
+        }
+    
+
+        function validateLastName() {
+            var lastName = lastNameInput.value;
+            var validCharacters = /^[A-Za-z]+$/; // Regular expression for characters only
+        
+            if (!validCharacters.test(lastName)) {
+                lastNameError.textContent = "Only characters are allowed.";
+                lastNameInput.classList.add('is-invalid');
+                return false; // Validation failed
+            } else {
+                lastNameError.textContent = ""; // Clear the error message
+                lastNameInput.classList.remove('is-invalid');
+                return true; // Validation passed
+            }
+        }
+
+        function validateHouseName() {
+            var houseName = houseNameInput.value;
+            var validCharacters = /^[A-Za-z]+$/; // Regular expression for characters only
+    
+            if (!validCharacters.test(houseName)) {
+                houseNameError.textContent = "Only characters are allowed.";
+                houseNameInput.classList.add('is-invalid');
+                return false; // Validation failed
+            } else {
+                houseNameError.textContent = ""; // Clear the error message
+                houseNameInput.classList.remove('is-invalid');
+                return true; // Validation passed
+            }
+        }
+        function validateAddress() {
+            var address = addressInput.value;
+            var validCharacters = /^[A-Za-z,.\s-]+$/;
+
+            if(!validCharacters.test(address)) {
+                addressError.textContent = "Only characters are allowed.";
+                addressInput.classList.add('is-invalid');
+                return false; // Validation failed
+            } else {
+                addressError.textContent = ""; // Clear the error message
+                addressInput.classList.remove('is-invalid');
+                return true; // Validation passed
+            }
+        }
+        function validatePinCode() {
+            var pinCode = pinCodeInput.value;
+            var validPinCode = /^\d{6}$/; // Regular expression for 6-digit numbers
+    
+            if (!validPinCode.test(pinCode)) {
+                pinCodeError.textContent = "Enter a 6-digit pin code.";
+                pinCodeInput.classList.add('is-invalid');
+                return false; // Validation failed
+            } else {
+                pinCodeError.textContent = ""; // Clear the error message
+                pinCodeInput.classList.remove('is-invalid');
+                return true; // Validation passed
+            }
+        }
+
+        function validatePhoneNumber() {
+            var phoneNumber = phoneInput.value;
+            var validPhoneNumber = /^\d{10}$/; // Regular expression for numbers only
+    
+            if (!validPhoneNumber.test(phoneNumber)) {
+                phoneError.textContent = "Only 10 numbers are allowed.";
+                phoneInput.classList.add('is-invalid');
+                return false; // Validation failed
+            } else {
+                phoneError.textContent = ""; // Clear the error message
+                phoneInput.classList.remove('is-invalid');
+                return true; // Validation passed
+            }
+        }
+       
+        function validateAlphabeticInput(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            const inputValue = input.value;
+            const validCharacters = /^[A-Za-z\s]+$/; // Regular expression for alphabetic characters and spaces
+    
+            if (!validCharacters.test(inputValue)) {
+                error.textContent = "Only alphabetic characters and spaces are allowed.";
+                input.classList.add('is-invalid');
+                return false; // Validation failed
+            } else {
+                error.textContent = ""; // Clear the error message
+                input.classList.remove('is-invalid');
+                return true; // Validation passed
+            }
+        }
+        
+        
+        const currentDiagnosisInput = document.getElementById('current_diagnosis_input');
+        const pastMedConditionInput = document.getElementById('past_med_condition_input');
+        const surgicalHistoryInput = document.getElementById('surgical_history_input');
+        const allergiesInput = document.getElementById('allergies_input');
+
+        currentDiagnosisInput.addEventListener('keyup', () => validateAlphabeticInput('current_diagnosis_input', 'current_diagnosis_error'));
+        pastMedConditionInput.addEventListener('keyup', () => validateAlphabeticInput('past_med_condition_input', 'past_med_condition_error'));
+        surgicalHistoryInput.addEventListener('keyup', () => validateAlphabeticInput('surgical_history_input', 'surgical_history_error'));
+        allergiesInput.addEventListener('keyup', () => validateAlphabeticInput('allergies_input', 'allergies_error'));
+        
+       
+        // Attach keyup event listener to the "First Name" input field
+        firstnameInput.addEventListener('keyup', validateFirstName);
+        lastNameInput.addEventListener('keyup', validateLastName);
+        houseNameInput.addEventListener('keyup', validateHouseName);
+        addressInput.addEventListener('keyup', validateAddress);
+        pinCodeInput.addEventListener('keyup', validatePinCode);
+         phoneInput.addEventListener('keyup', validatePhoneNumber);
+
+         
+         
+        const profileForm = document.getElementById('profileform');
+        
+        profileForm.addEventListener('submit', function (event) {
+            const isFirstNameValid = validateFirstName();
+            const isLastNameValid = validateLastName();
+            const isHouseNameValid = validateHouseName();
+            const isAddressValid = validateAddress();
+            const isPinCodeValid = validatePinCode();
+            const isPhoneNumberValid = validatePhoneNumber();
+            
+        const isCurrentDiagnosisValid = validateAlphabeticInput('current_diagnosis_input', 'current_diagnosis_error');
+        const isPastMedConditionValid = validateAlphabeticInput('past_med_condition_input', 'past_med_condition_error');
+        const isSurgicalHistoryValid = validateAlphabeticInput('surgical_history_input', 'surgical_history_error');
+        const isAllergiesValid = validateAlphabeticInput('allergies_input', 'allergies_error');
+
+            
+            if (!isFirstNameValid || !isLastNameValid || !isHouseNameValid || !isAddressValid ||!isPinCodeValid ||!isPhoneNumberValid ||!isCurrentDiagnosisValid 
+            || !isPastMedConditionValid || !isSurgicalHistoryValid || !isAllergiesValid ) {
+                event.preventDefault(); // Prevent form submission if validation failed
+            }
+        });
+    </script>
+    
+    
+</body>
+
+
+<!-- profile23:03-->
+</html>

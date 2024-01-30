@@ -11,10 +11,7 @@ from django.core.files.storage import FileSystemStorage
 from .models import Docs,Phar
 from .models import Deps,MedicineCategory
 from .models import Rep
-from .models import CustomUser
-
- 
-
+from .models import CustomUser, PatientHistory
 
 from django.contrib.auth import get_user_model
  
@@ -38,6 +35,70 @@ def doctor(request):
     return render(request,'doctor.html')
 def doctor_single(request):
     return render(request,'doctor-single.html')
+def blog_sidebar(request):
+    return render(request,'blog_sidebar.html')
+def blog_single(request):
+    return render(request,'blog_single.html')
+def admin_add_blog(request):
+    return render(request,'admin_add_blog.html')
+
+from django.shortcuts import render, redirect
+from .models import Appointment, PatientHistory
+
+def edit_patient_profile(request):
+    user_id = request.user.id  
+    print(user_id)
+
+    try:
+        # Use the user's ID explicitly
+        appointment = Appointment.objects.get(user_id=user_id)
+        # print(appointment)
+
+        # Fetch the corresponding PatientHistory instance associated with the Appointment
+        patient_history = PatientHistory(Appointment=appointment)
+
+    except Appointment.DoesNotExist:
+        # Handle the case where the appointment does not exist for the user
+        # You might want to redirect to an error page or handle it differently
+        return redirect('error_page')  
+
+    except PatientHistory.DoesNotExist:
+        # If no patient history exists for the appointment, create a new one
+        patient_history = PatientHistory(Appointment=appointment)
+
+    if request.method == 'POST':
+        # Retrieve data from the request.POST dictionary and update the patient_history object
+        patient_history.previous_surgeries = request.POST.get('previous_surgeries')
+        patient_history.current_medical_conditions = request.POST.get('current_medical_conditions')  
+        patient_history.allergies = request.POST.get('allergies') 
+        patient_history.family_history_eye_diseases = request.POST.get('family_history_eye_diseases') 
+        patient_history.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
+        patient_history.prescription_details = request.POST.get('prescription_details') 
+        patient_history.changes_in_vision = request.POST.get('changes_in_vision') 
+        patient_history.eye_drops_ointments = request.POST.get('eye_drops_ointments') 
+
+        # # Handle the image upload separately
+        # if 'image' in request.FILES:
+        #     patient_history.image = request.FILES['image']
+        # if previous_surgeries and current_medical_conditions  and allergies  and family_history_eye_diseases and last_eye_examination_date  and prescription_details and changes_in_vision and eye_drops_ointments:
+
+        patient_history.save()
+        # Redirect to a success page or another relevant page after saving
+        return redirect('display_patient_profile')  
+        # else:
+        #     print("invalid")
+
+    return render(request, 'edit_patient_profile.html', {'appointment': appointment, 'patient_history': patient_history})
+
+from django.shortcuts import get_object_or_404
+
+def display_patient_profile(request):
+    # Assuming 'request' is a Django HttpRequest object
+    appointment = get_object_or_404(Appointment, user=request.user)
+    # print(appointment)
+    patient_history = PatientHistory.objects.filter(Appointment=appointment).first()
+    return render(request, 'display_patient_profile.html', {'appointment': appointment,'patient_history':patient_history})
+     ###############################################################################################################################33
 def appointment(request):
     return render(request,'dd.html')
 def blog_sidebar(request):

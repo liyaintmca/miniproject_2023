@@ -6,21 +6,21 @@
   <meta name="description" content="Orbitor,business,company,agency,modern,bootstrap4,tech,software">
   <meta name="author" content="themefisher.com">
 
-  <title>Novena- Health & Care Medical template</title>
+  <title>EYECARE</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+  <link rel="shortcut icon" type="{% static 'image/x-icon" href="/images/favicon.ico'%}" />
 
   <!-- bootstrap.min css -->
-  <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.min.css'%}">
   <!-- Icon Font Css -->
-  <link rel="stylesheet" href="plugins/icofont/icofont.min.css">
+  <link rel="stylesheet" href="{% static 'plugins/icofont/icofont.min.css'%}">
   <!-- Slick Slider  CSS -->
-  <link rel="stylesheet" href="plugins/slick-carousel/slick/slick.css">
-  <link rel="stylesheet" href="plugins/slick-carousel/slick/slick-theme.css">
+  <link rel="stylesheet" href="{% static 'plugins/slick-carousel/slick/slick.css'%}">
+  <link rel="stylesheet" href="{% static 'plugins/slick-carousel/slick/slick-theme.css'%}">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="{% static 'css/style.css'%}">
 
 </head>
 
@@ -49,7 +49,7 @@
 	</div>
 	<nav class="navbar navbar-expand-lg navigation" id="navbar">
 		<div class="container">
-		 	 <a class="navbar-brand" href="index.html">
+		 	 <a class="navbar-brand" href="{% url 'index' %}">
 			  	<img src="images/logo.png" alt="" class="img-fluid">
 			  </a>
 
@@ -60,37 +60,30 @@
 		  <div class="collapse navbar-collapse" id="navbarmain">
 			<ul class="navbar-nav ml-auto">
 			  <li class="nav-item active">
-				<a class="nav-link" href="index.html">Home</a>
+				<a class="nav-link" href="{% url 'index' %}">Home</a>
 			  </li>
-			   <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-			    <li class="nav-item"><a class="nav-link" href="service.html">Services</a></li>
+			   <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+			    <li class="nav-item"><a class="nav-link" href="{% url 'service' %}">Services</a></li>
 
 			    <li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="department.html" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Department <i class="icofont-thin-down"></i></a>
+					<a class="nav-link dropdown-toggle" href="{% url 'department' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Department <i class="icofont-thin-down"></i></a>
 					<ul class="dropdown-menu" aria-labelledby="dropdown02">
-						<li><a class="dropdown-item" href="department.html">Departments</a></li>
-						<li><a class="dropdown-item" href="department-single.html">Department Single</a></li>
+						<li><a class="dropdown-item" href="{% url 'department' %}">Departments</a></li>
+						<li><a class="dropdown-item" href="{% url 'department-single' %}">Department Single</a></li>
 					</ul>
 			  	</li>
-
-			  	<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="doctor.html" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Doctors <i class="icofont-thin-down"></i></a>
-					<ul class="dropdown-menu" aria-labelledby="dropdown03">
-						<li><a class="dropdown-item" href="doctor.html">Doctors</a></li>
-						<li><a class="dropdown-item" href="doctor-single.html">Doctor Single</a></li>
-						<li><a class="dropdown-item" href="appoinment.html">Appoinment</a></li>
-					</ul>
-			  	</li>
+				  <li><a class="nav-link" href=" {% url 'doctor' %}">Doctors</a></li>
+			  	 
 
 			   <li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="blog-sidebar.html" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blog <i class="icofont-thin-down"></i></a>
+					<a class="nav-link dropdown-toggle" href="{% url 'blog-sidebar' %}" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blog <i class="icofont-thin-down"></i></a>
 					<ul class="dropdown-menu" aria-labelledby="dropdown05">
-						<li><a class="dropdown-item" href="blog-sidebar.html">Blog with Sidebar</a></li>
+						<li><a class="dropdown-item" href="{% url 'blog-sidebar' %}">Blog with Sidebar</a></li>
 
-						<li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
+						<li><a class="dropdown-item" href="{% url 'blog-single' %}">Blog Single</a></li>
 					</ul>
 			  	</li>
-			   <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+			   <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
 			</ul>
 		  </div>
 		</div>
@@ -127,12 +120,12 @@
 	<div class="col-lg-12 col-md-12 mb-5">
 		<div class="blog-item">
 			<div class="blog-thumb">
-				<img src="images/blog/blog-1.jpg" alt="" class="img-fluid ">
+				<img src="/static/images/blog/blog-1.jpg" alt="" class="img-fluid ">
 			</div>
 
 			<div class="blog-item-content">
 				<div class="blog-item-meta mb-3 mt-4">
-					<span class="text-muted text-capitalize mr-3"><i class="icofont-comment mr-2"></i>5 Comments</span>
+					 
 					<span class="text-black text-capitalize mr-3"><i class="icofont-calendar mr-1"></i> 28th January</span>
 				</div> 
 
@@ -148,13 +141,12 @@
 	<div class="col-lg-12 col-md-12 mb-5">
 		<div class="blog-item">
 			<div class="blog-thumb">
-				<img src="images/blog/blog-2.jpg" alt="" class="img-fluid">
+				<img src="/static/images/blog/blog-2.jpg" alt="" class="img-fluid">
 			</div>
 
 			<div class="blog-item-content">
 				<div class="blog-item-meta mb-3 mt-4">
-					<span class="text-muted text-capitalize mr-3"><i class="icofont-comment mr-2"></i>5 Comments</span>
-					<span class="text-black text-capitalize mr-3"><i class="icofont-calendar mr-1"></i> 28th January</span>
+ 					<span class="text-black text-capitalize mr-3"><i class="icofont-calendar mr-1"></i> 28th January</span>
 				</div> 
 
 				<h2 class="mt-3 mb-3"><a href="blog-single.html">All test cost 25% in always in our laboratory</a></h2>
@@ -170,12 +162,12 @@
 	<div class="col-lg-12 col-md-12 mb-5">
 		<div class="blog-item">
 			<div class="blog-thumb">
-				<img src="images/blog/blog-4.jpg" alt="" class="img-fluid">
+				<img src="/static/images/blog/blog-4.jpg" alt="" class="img-fluid">
 			</div>
 
 			<div class="blog-item-content">
 				<div class="blog-item-meta mb-3 mt-4">
-					<span class="text-muted text-capitalize mr-3"><i class="icofont-comment mr-2"></i>5 Comments</span>
+					 
 					<span class="text-black text-capitalize mr-3"><i class="icofont-calendar mr-1"></i> 28th January</span>
 				</div> 
 				<h2 class="mt-3 mb-3"><a href="blog-single.html">Get Free consulation from our special surgeon and doctors</a></h2>
