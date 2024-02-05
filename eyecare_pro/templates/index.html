@@ -135,8 +135,10 @@
 			   <li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="{% url 'edit_patient_profile' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PATIENT PORTAL<i class="icofont-thin-down"></i></a>
 				<ul class="dropdown-menu" aria-labelledby="dropdown02">
-					<li><a class="dropdown-item" href="{% url 'department' %}">Departments</a></li>
-					<li><a class="dropdown-item" href=" {% url 'department-single' %}">Department Single</a></li>
+					<li><a class="dropdown-item" href="{% url 'display_patient_profile' %}">My Profile</a></li>
+					<li><a class="dropdown-item" href=" {% url 'department-single' %}">My Appoinments</a></li>
+					<li><a class="dropdown-item" href=" {% url 'my_prescription' %}">My Prescription</a></li>
+
 				</ul>
 			  </li>
 

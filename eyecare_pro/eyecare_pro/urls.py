@@ -100,6 +100,12 @@ urlpatterns = [
     path('blog_single/<int:blog_id>/', views.blog_single, name='blog_single'),
     path('admin_add_blog', views.admin_add_blog, name='admin_add_blog'),
     path('c_blog', views.c_blog, name='c_blog'),
+    path('view_prescription/', views.view_prescription, name='view_prescription'),
+    path('add_prescription', views.add_prescription, name='add_prescription'),
+    path('get_dosages/<int:medicine_id>/', views.get_dosages, name='get_dosages'),
+    path('my_prescription', views.my_prescription, name='my_prescription'),
+
+
 
  
 

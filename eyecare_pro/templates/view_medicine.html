@@ -96,6 +96,7 @@
                 <th scope="col">Expiry Date</th>
                 <th scope="col">Contains</th>
                 <th scope="col">Dosage</th>
+                <th scope="col">Price</th> <!-- Added Price column header -->
                 <th scope="col">Category</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -109,15 +110,15 @@
                 <td>{{ i.expiryDate }}</td>
                 <td>{{ i.contains }}</td>
                 <td>{{ i.dosage }}</td>
+                <td>{{ i.price }}</td> <!-- Display the Price field -->
                 <td>{{ i.MedCatId.category_name }}</td>
                 <td>
                     <button class="btn btn-primary">Edit</button>
- 
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5">No medicine found.</td>
+                <td colspan="6">No medicine found.</td>
             </tr>
         {% endfor %}
         </tbody>

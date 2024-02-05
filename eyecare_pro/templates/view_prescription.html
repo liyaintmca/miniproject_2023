@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy - View Prescriptions</title>
+</head>
+<body>
+    <h1>Prescriptions</h1>
+
+    {% if prescriptions %}
+        <ul>
+            {% for prescription in prescriptions %}
+                <li>
+                    Doctor: {{ prescription.doctor }}
+                    Patient: {{ prescription.patient }}
+                    Medicine: {{ prescription.medicine }}
+                    Dosage: {{ prescription.dosage }}
+                    Date: {{ prescription.date_of_prescription }}
+                    Quantity: {{ prescription.quantity }}
+                    Duration: {{ prescription.duration }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No prescriptions available.</p>
+    {% endif %}
+</body>
+</html>

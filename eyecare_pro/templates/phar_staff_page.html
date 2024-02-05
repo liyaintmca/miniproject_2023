@@ -102,7 +102,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Add Medicine Category</h5>
                         <p class="card-text">Add new medicine Category for the opthamology.</p>
-                        <a href="{% url 'add_medicine_category' %}" class="btn btn-primary" id="add_medcat">Add Medicine Category</a>
+                        <a href="{% url 'add_medicine' %}" class="btn btn-primary" id="add_medcat">Add Medicine Category</a>
                     </div>
                 </div>
             </div>
@@ -115,7 +115,15 @@
                     </div>
                 </div>
             </div>
-             
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Prescription Center</h5>
+                        <p class="card-text">View and manage prescriptions of patients from the doctors.</p>
+                        <a href="{% url 'view_prescription' %}" class="btn btn-primary" id="add_medcat">View Prescriptions</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

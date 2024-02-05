@@ -103,7 +103,9 @@ def appointment(request):
 def contact(request):
     return render(request,'contact.html')
 def doctors_page(request):
-    return render(request,'doctors_page.html')
+    doctor = request.user
+    print(doctor)
+    return render(request,'doctors_page.html', {'doctor': doctor})
 def rep_staff_page(request):
     return render(request,'rep_staff_page.html')
 def phar_profile(request):
@@ -141,37 +143,39 @@ def admin_doctors(request):
 def admin_adddoctor(request):
     if request.method == 'POST':
         # Retrieve data from the POST request
-        Name= request.POST.get('Name')
-        email= request.POST.get('email')
+        Name = request.POST.get('Name')
+        email = request.POST.get('email')
         password = request.POST.get('password')
-        phn= request.POST.get('phn')
+        phn = request.POST.get('phn')
         dep_id = request.POST.get('depp')
-        role=CustomUser.DOCTOR
-        print(role)
-        if CustomUser.objects.filter(email=email,role=CustomUser.DOCTOR).exists():
-                messages.info(request, 'Email already exists') 
-                return redirect('admin_adddoctor')
+        role = CustomUser.DOCTOR
+
+        if CustomUser.objects.filter(email=email, role=CustomUser.DOCTOR).exists():
+            messages.info(request, 'Email already exists')
+            return redirect('admin_adddoctor')
         else:
-                user = CustomUser.objects.create_user(email=email, password=password)
-                user.role = CustomUser.DOCTOR
-                user.save()
-                doctor = Docs(user=user,Name=Name,Dep_id_id=dep_id,phn=phn)
-                doctor.save()
+            user = CustomUser.objects.create_user(email=email, password=password, role=role)
+            doctor = Docs(user=user, Name=Name, Dep_id_id=dep_id, phn=phn)
+            doctor.save()
 
-                
-                subject = 'Doctor Login Details'
-                message = f'Registered as an Doctor. Your username: {email}, Password: {password}'
-                from_email = settings.EMAIL_HOST_USER  
-                recipient_list = [user.email]  
+            subject = 'Doctor Login Details'
+            message = f'Registered as a Doctor. Your username: {email}, Password: {password}'
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
 
+            try:
                 send_mail(subject, message, from_email, recipient_list)
+                messages.success(request, 'Doctor added successfully and email sent.')
+            except Exception as e:
+                messages.error(request, f'Error sending email: {e}')
 
-                return redirect('admin_doctors')
+            return redirect('admin_doctors')
+
     else:
         depts = Deps.objects.all()
-        context = {  'depts': depts}
+        context = {'depts': depts}
         return render(request, 'admin_adddoctor.html', context)
-        
+
 
 #delete
 # from django.shortcuts import get_object_or_404, redirect
@@ -356,22 +360,33 @@ def departments(request):
 def admin_addphar(request):
     if request.method == 'POST':
         # Retrieve data from the POST request
-        Name= request.POST.get('Name')
-        email= request.POST.get('email')
+        Name = request.POST.get('Name')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         phn = request.POST.get('phn')
-        role=CustomUser.PHARMACIST
-        print(role)
-        if CustomUser.objects.filter(email=email,role=CustomUser.PHARMACIST).exists():
-                messages.info(request, 'Email already exists') 
-                return redirect('admin_addphar')
+        role = CustomUser.PHARMACIST
+
+        if CustomUser.objects.filter(email=email, role=CustomUser.PHARMACIST).exists():
+            messages.info(request, 'Email already exists')
+            return redirect('admin_addphar')
         else:
-                user = CustomUser.objects.create_user(email=email, password=password)
-                user.role = CustomUser.PHARMACIST
-                user.save()
-                pharmacist = Phar(user=user,Name=Name,phn=phn)
-                pharmacist.save()
-                return redirect('phar')
+            user = CustomUser.objects.create_user(email=email, password=password, role=role)
+            pharmacist = Phar(user=user, Name=Name, phn=phn)
+            pharmacist.save()
+
+            subject = 'Pharmacist Login Details'
+            message = f'Registered as a Pharmacist. Your username: {email}, Password: {password}'
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+
+            try:
+                send_mail(subject, message, from_email, recipient_list)
+                messages.success(request, 'Pharmacist added successfully and email sent.')
+            except Exception as e:
+                messages.error(request, f'Error sending email: {e}')
+
+            return redirect('phar')
+
     else:
         return render(request, 'admin_addphar.html')
 @login_required(login_url='loginadmin') 
@@ -401,22 +416,33 @@ def search_phar(request):
 def admin_addrep(request):
     if request.method == 'POST':
         # Retrieve data from the POST request
-        Name= request.POST.get('Name')
-        email= request.POST.get('email')
+        Name = request.POST.get('Name')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         phn = request.POST.get('phn')
-        role=CustomUser.RECEPTIONIST
-        print(role)
-        if CustomUser.objects.filter(email=email,role=CustomUser.RECEPTIONIST).exists():
-                messages.info(request, 'Email already exists') 
-                return redirect('admin_addrep')
+        role = CustomUser.RECEPTIONIST
+
+        if CustomUser.objects.filter(email=email, role=CustomUser.RECEPTIONIST).exists():
+            messages.info(request, 'Email already exists')
+            return redirect('admin_addrep')
         else:
-                user = CustomUser.objects.create_user(email=email, password=password)
-                user.role = CustomUser.RECEPTIONIST
-                user.save()
-                recepionist = Rep(user=user,Name=Name,phn=phn)
-                recepionist.save()
-                return redirect('rep')
+            user = CustomUser.objects.create_user(email=email, password=password, role=role)
+            receptionist = Rep(user=user, Name=Name, phn=phn)
+            receptionist.save()
+
+            subject = 'Receptionist Login Details'
+            message = f'Registered as a Receptionist. Your username: {email}, Password: {password}'
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+
+            try:
+                send_mail(subject, message, from_email, recipient_list)
+                messages.success(request, 'Receptionist added successfully and email sent.')
+            except Exception as e:
+                messages.error(request, f'Error sending email: {e}')
+
+            return redirect('rep')
+
     else:
         return render(request, 'admin_addrep.html')
 def rep(request):
@@ -1088,8 +1114,9 @@ def generate_medicine_category_pdf(request):
 
 
 from django.shortcuts import render, redirect
-from .models import Medicine
-from django.shortcuts import get_object_or_404
+from .models import Medicine 
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Medicine, MedicineCategory
 
 def add_medicine(request):
     if request.method == 'POST':
@@ -1100,7 +1127,8 @@ def add_medicine(request):
         expiry_date = request.POST['expiryDate']
         contains = request.POST['contains']
         dosage = request.POST['dosage']
-        category_id = request.POST['category']  # Assuming the category value is an ID
+        price = request.POST['price']
+        category_id = request.POST['category']
 
         # Get the MedicineCategory instance based on the selected category_id
         category = get_object_or_404(MedicineCategory, pk=category_id)
@@ -1113,16 +1141,17 @@ def add_medicine(request):
             expiryDate=expiry_date,
             contains=contains,
             dosage=dosage,
-            MedCatId=category,  # Use the category instance
+            price=price,
+            MedCatId=category,
         )
         medicine.save()
 
         return redirect('view_medicine')  # Redirect to a success page or another URL
 
     medcat = MedicineCategory.objects.all()
-    context = {  'medcat': medcat}
+    print(medcat)
+    context = {'medcat': medcat}
     return render(request, 'add_medicine.html', context)
-
 
 def view_medicine(request):
     med = Medicine.objects.all()
@@ -1347,3 +1376,96 @@ def c_blog(request):
     # Pass the blogs to the template for rendering
     return render(request, 'c_blog.html', {'blogs': blogs})
 
+#########################################################################################
+ 
+from django.shortcuts import render
+from .models import Prescription
+
+def view_prescription(request):
+    # Fetch all prescriptions from the database
+    prescriptions = Prescription.objects.all()
+
+    context = {
+        'prescriptions': prescriptions,
+    }
+
+    return render(request, 'view_prescription.html', context)
+
+
+
+ 
+
+from django.shortcuts import get_object_or_404, render, redirect
+from .models import Docs, Appointment, Medicine, Prescription
+
+from django.http import JsonResponse
+
+def get_dosages(request, medicine_id):
+    dosages = Medicine.objects.get(id=medicine_id).dosage
+    return JsonResponse({'dosage': dosages})
+
+
+def add_prescription(request):
+    doctor = Docs.objects.get(user=request.user)
+    patients = Appointment.objects.filter(doctor=doctor)
+
+    if request.method == 'POST':
+        patient_id = request.POST.get('patient')
+        print(patient_id)
+        appointment = get_object_or_404(Appointment, id=patient_id)
+        print(appointment)
+        medicine_id = request.POST.get('medicine')
+        print(medicine_id)
+
+        # Fetch donation information for the selected medicine
+        donation_info = Medicine.objects.filter(id=medicine_id).first()
+        print(donation_info.dosage)
+        morning = 'morning' in request.POST
+        print(morning)
+        noon = 'noon' in request.POST
+        evening = 'evening' in request.POST
+        date_of_prescription = request.POST.get('date_of_prescription')
+        quantity = request.POST.get('quantity')
+        duration = request.POST.get('duration')
+        dosages = request.POST.get('dosage')
+        print(dosages)
+        prescription = Prescription.objects.create(
+            doctor=doctor,
+            patient_id=patient_id, 
+            medicine_id = medicine_id, # Assuming there is a patient field in the Appointment model
+            appointment=appointment,
+            morning=morning,
+            noon=noon,
+            evening=evening,
+            date_of_prescription=date_of_prescription,
+            quantity=quantity,
+            duration=duration,
+            dosages=dosages,
+        )
+
+        # Additional logic, e.g., sending notifications, updating status, etc.
+
+        return redirect('add_prescription')
+
+    medicines = Medicine.objects.all()
+
+    context = {
+        'doctor': doctor,
+        'patients': patients,
+        'medicines': medicines,
+    }
+
+    return render(request, 'add_prescription.html', context)
+
+
+def my_prescription(request):
+    appointment = Appointment.objects.get(user_id=request.user.id)
+    prescriptions = Prescription.objects.filter(patient_id=appointment.id)
+    print(prescriptions)
+    context ={
+        
+        'appointment':appointment,
+        'prescriptions':prescriptions,
+
+    }
+    return render(request,'my_prescription.html', context)

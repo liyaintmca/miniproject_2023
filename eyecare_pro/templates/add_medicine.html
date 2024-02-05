@@ -87,10 +87,15 @@
             <span id="dosageError" class="text-danger"></span>
         </div>
         <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="text" class="form-control" id="price" name="price" required>
+            <span id="priceError" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
             <label for="category" class="form-label">Category</label>
             <select class="form-select" id="category" name="category" required>
                 {% for i in medcat %}
-                <option value={{i.MedCatId}}>{{ i.category_name }}</option>
+                    <option value="{{i.MedCatId}}">{{i.category_name}}</option>
                 {% endfor %}
             </select>
             <span id="categoryError" class="text-danger"></span>
@@ -112,56 +117,28 @@
                 medicineName: 'required',
                 expiryDate: 'required',
                 category: 'required',
-                companyName: "required",
-                dosage: "required",
+                companyName: 'required',
+                dosage: 'required',
+                price: {
+                    required: true,
+                    number: true,
+                },
             },
             messages: {
                 medicineName: 'Please enter medicine name',
                 expiryDate: 'Please select expiry date',
                 category: 'Please select a category',
-                companyName: "Please Enter Company Name",
-                dosage: 'Please Enter Dosage',
+                companyName: 'Please enter company name',
+                dosage: 'Please enter dosage',
+                price: {
+                    required: 'Please enter the price',
+                    number: 'Please enter a valid number',
+                },
             },
             errorPlacement: function (error, element) {
                 // Display errors below the input fields
                 error.appendTo($('#' + element.attr('id') + 'Error'));
             },
-        });
-
-        // Keyup validation for medicineName
-        $('#medicineName').on('keyup', function () {
-            if ($(this).val() === '') {
-                $('#medicineNameError').text('Medicine name is required.');
-            } else {
-                $('#medicineNameError').text('');
-            }
-        });
-
-        // Keyup validation for expiryDate
-        $('#expiryDate').on('keyup', function () {
-            if ($(this).val() === '') {
-                $('#expiryDateError').text('Expiry date is required.');
-            } else {
-                $('#expiryDateError').text('');
-            }
-        });
-
-        // Keyup validation for dosage
-        $('#dosage').on('keyup', function () {
-            if ($(this).val() === '') {
-                $('#dosageError').text('Dosage is required.');
-            } else {
-                $('#dosageError').text('');
-            }
-        });
-
-        // Keyup validation for category
-        $('#category').on('change', function () {
-            if ($(this).val() === '') {
-                $('#categoryError').text('Category is required.');
-            } else {
-                $('#categoryError').text('');
-            }
         });
     });
 </script>

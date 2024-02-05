@@ -124,14 +124,14 @@ from django.db import models
 
 class Medicine(models.Model):
     medicineName = models.CharField(max_length=100)
-    details = models.TextField()
+    details = models.TextField(null=True, blank=True)
     companyName = models.CharField(max_length=100)
-    expiryDate = models.DateField()
+    expiryDate = models.DateField(null=True, blank=True)
     contains = models.CharField(max_length=100)
     dosage = models.CharField(max_length=100)
     MedCatId = models.ForeignKey(MedicineCategory, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2,null=True, blank=True)  # New field for price
     is_active = models.BooleanField(default=True)
-
 
     def __str__(self):
         return self.medicineName
@@ -262,3 +262,23 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+# models.py
+from django.db import models
+from .models import Docs, Medicine, CustomUser, Appointment
+
+class Prescription(models.Model):
+    doctor = models.ForeignKey(Docs, on_delete=models.CASCADE)
+    patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
+    morning = models.BooleanField(default=False)
+    noon = models.BooleanField(default=False)
+    evening = models.BooleanField(default=False)
+    date_of_prescription = models.DateField()
+    quantity = models.PositiveIntegerField()
+    duration = models.CharField(max_length=100)
+    dosages = models.CharField(max_length=100,null=True, blank=True)
+    # dosage = models.ForeignKey(Medicine, on_delete=models.CASCADE, related_name='prescriptions')
+
+    def __str__(self):
+        return f"Prescription for {self.appointment.name} by Dr. {self.doctor.Name}"

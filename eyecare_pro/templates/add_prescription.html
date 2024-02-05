@@ -1,0 +1,138 @@
+<!-- create_prescription.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Prescription</title>
+    <!-- Bootstrap CSS link (update with the correct path) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Prescription System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'doctors_page' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'add_prescription' %}">Create Prescription</a>
+            </li>
+            <!-- Add more navigation links as needed -->
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Create Prescription</h1>
+
+    <form method="post" action="{% url 'add_prescription' %}" class="mt-3">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="doctor">Doctor:</label>
+            <input type="text" value="{{ doctor.Name }}" class="form-control" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="patient">Patient:</label>
+            <select name="patient" id="patient" class="form-control">
+                {% for appointment in patients %}
+                    <option value="{{ appointment.id }}">{{ appointment.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="medicine">Medicine:</label>
+            <select name="medicine" id="medicine" class="form-control">
+                <option value="Choose Medicine">Choose Medicine</option>
+                {% for medicine in medicines %}
+                    <option value="{{ medicine.id }}">{{ medicine.medicineName }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="morning">Morning:</label>
+            <input type="checkbox" name="morning">
+        </div>
+
+        <div class="form-group">
+            <label for="noon">Noon:</label>
+            <input type="checkbox" name="noon">
+        </div>
+
+        <div class="form-group">
+            <label for="evening">Evening:</label>
+            <input type="checkbox" name="evening">
+        </div>
+
+        <div class="form-group">
+            <label for="date_of_prescription">Date of Prescription:</label>
+            <input type="date" name="date_of_prescription" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="duration">Duration:</label>
+            <input type="text" name="duration" class="form-control">
+        </div>
+
+        <div class="form-group">
+           
+                <label for="dosage">Dosage:</label>
+                <input type="text" name="dosage" id="dosage" class="form-control" readonly>
+            
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Prescription</button>
+    </form>
+</div>
+
+<!-- Bootstrap JS and Popper.js (update with the correct paths) -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#medicine').change(function () {
+            var medicineId = $(this).val();
+            console.log(medicineId);
+            if (medicineId) {
+                $.ajax({
+                    url: '/get_dosages/' + medicineId + '/',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#dosage').val(data.dosage);
+                    }
+                });
+            } else {
+                $('#dosage').val('');
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>
