@@ -213,28 +213,16 @@ class Slots(models.Model):
     def __str__(self):
         return f"Slot for Dr. {self.doctor.Name} on {self.date} at {self.start_time}-{self.end_time}"
 
-class Appointment(models.Model):
-    name = models.CharField(max_length=100)
-    address = models.CharField(max_length=200)
-    place = models.CharField(max_length=100)
-    dob = models.DateField()
-    gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')], blank=True, null=True)
-    mobile = models.CharField(max_length=15)
-    allergy = models.CharField(max_length=3)
-    reason = models.TextField()
-    doctor = models.ForeignKey(Docs, on_delete=models.CASCADE, related_name='appointments')
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    slot = models.ForeignKey(Slots, on_delete=models.CASCADE)
-    date = models.DateField()
-    status=models.BooleanField(default=False)
-     
 
     
-    def __str__(self):
-        return f"Appointment with Dr. {self.doctor.Name} on {self.date} at {self.slot.start_time}-{self.slot.end_time}"
-    
 class PatientHistory(models.Model):
-        Appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='patient_history')
+        name = models.CharField(max_length=100,null=True, blank=True)
+        address = models.CharField(max_length=200,null=True, blank=True)
+        place = models.CharField(max_length=100,null=True, blank=True)
+        dob = models.DateField(null=True, blank=True)
+        gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')], blank=True, null=True)
+        mobile = models.CharField(max_length=15,null=True, blank=True)
+        user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
         previous_surgeries = models.IntegerField(null=True, blank=True)
         current_medical_conditions = models.TextField(null=True, blank=True)
         allergies = models.TextField(null=True, blank=True)
@@ -246,9 +234,23 @@ class PatientHistory(models.Model):
         image = models.ImageField(upload_to='patient_history_images/', null=True, blank=True)
 
         def __str__(self):
-           return f"Patient History for {self.Appointment}"
+           return f"Patient History for {self.name}"
 
+class Appointment(models.Model):
+    patientHistory= models.ForeignKey(PatientHistory, on_delete=models.CASCADE, related_name='patient_history',null=True, blank=True)
 
+    # allergy = models.CharField(max_length=3,null=True, blank=True)
+    reason = models.TextField(null=True, blank=True)
+    doctor = models.ForeignKey(Docs, on_delete=models.CASCADE, related_name='appointments',null=True, blank=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    slot = models.ForeignKey(Slots, on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
+    status=models.BooleanField(default=False,null=True, blank=True)
+     
+
+    
+    def __str__(self):
+        return f"Appointment with Dr. {self.doctor.Name} on {self.date} at {self.slot.start_time}-{self.slot.end_time}"
 from django.db import models
 
 class Blog(models.Model):
@@ -281,4 +283,4 @@ class Prescription(models.Model):
     # dosage = models.ForeignKey(Medicine, on_delete=models.CASCADE, related_name='prescriptions')
 
     def __str__(self):
-        return f"Prescription for {self.appointment.name} by Dr. {self.doctor.Name}"
+        return f"Prescription for {self.appointment.id} by Dr. {self.doctor.Name}"

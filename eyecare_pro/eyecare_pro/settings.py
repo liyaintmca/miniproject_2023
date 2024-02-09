@@ -179,7 +179,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'liyakjoseph28@gmail.com'
-EMAIL_HOST_PASSWORD = 'zyqzyumkmwpeizte'
+EMAIL_HOST_PASSWORD = 'zjnucowizrwolmbu'
 
 RAZOR_KEY_ID = 'rzp_test_KnNpDdiRCli36O'
 RAZOR_KEY_SECRET = 'ToQy2RjttQ1j2PlbrXknCtZB'

@@ -12,360 +12,303 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-  
+
     <title>EyeCare</title>
-  
-  
-    <!-- bootstrap core css -->
+
+    <!-- Bootstrap core CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
-  
-    <!-- fonts style -->
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-  
-    <!--owl slider stylesheet -->
+
+    <!-- Owl Carousel stylesheet -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-  
-    <!-- font awesome style -->
+
+    <!-- Font Awesome -->
     <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
-    <!-- nice select -->
+
+    <!-- Nice Select -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
-    <!-- datepicker -->
+
+    <!-- Datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
-    <!-- Custom styles for this template -->
+
+    <!-- Custom styles -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-   
     <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
 
-    
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet"><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
-    
-
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.min.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    <!-- Select2 CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/select2.min.css' %}">
+    <!-- Bootstrap Datetimepicker CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap-datetimepicker.min.css' %}">
     <!--[if lt IE 9]>
-        <script src="assets/js/html5shiv.min.js"></script>
-        <script src="assets/js/respond.min.js"></script>
+        <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
+        <script src="{% static 'assets/js/respond.min.js' %}"></script>
     <![endif]-->
-  
-  </head>
 
-
-
-<body>
     <style>
         body {
-            background: #f2e6dc;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #4ca2cd, #67B26F);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #cdfaf2, #ecdaf7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: #f2e6dc;
+            /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #4ca2cd, #67B26F);
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #cdfaf2, #ecdaf7);
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
             padding: 0;
             margin: 0;
             font-family: 'Lato', sans-serif;
             color: black;
-            font-size:18px;
-            
-           
+            font-size: 18px;
         }
-        .main-wrapper{
-            margin-right:150px;
-            
+
+        .main-wrapper {
+            margin-right: 150px;
         }
-       
-        /* Add this CSS to your stylesheet */
+
         .quote_btn-container .dropdown-toggle {
             background-color: white;
-            color: #333; /* You can change this color to your preference */
-            border-radius: 50px; /* Adjust the value for more or less roundness */
-            padding: 10px 20px; /* Adjust padding as needed */
-            border: 1px solid #ccc; /* Add a border for better visibility */
+            color: #333;
+            border-radius: 50px;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
         }
-        
-        /* Style the dropdown menu items */
-        .dropdown-menu a.dropdown-item {
-            color: #333; /* You can change this color to your preference */
-        }
-        
-        .dropdown-menu a.dropdown-item:hover {
-            background-color: #f7f7f7; /* Change color on hover if desired */
-        }
-      
-      .quote_btn-container {
-          margin-bottom:10px; 
-          margin-top:10px; 
-          margin-right:25px; 
-          margin-left:10px; 
-      }
-      
-      
-      .dropdown-menu a.dropdown-item {
-          color: #333;
-      }
-      
-      .dropdown-menu a.dropdown-item:hover {
-          background-color: #f7f7f7;
-      }
-          .profile-photo-container {
-              display: flex;
-              align-items: center;
-          }
-  
-          .profile-photo img {
-              width: 200px;
-              height: 200px; /* Set the width and height to make it square */
-              border-radius: 0; /* Remove border-radius to make it square */
-              border: 3px solid #fff;
-          }
-  
-          .profile-details {
-              display: flex;
-              flex-direction: column;
-              margin-left:50px;
-          }
-          input[type="text"],
-          input[type="date"],
-          input[type="number"]
-           {
-              font-weight: bold;
-              font-size:15px;
-              /* Add any other common styles you want for these input types */
-          }
- 
-  
-  
-      </style>
-      
 
+        .dropdown-menu a.dropdown-item {
+            color: #333;
+        }
+
+        .dropdown-menu a.dropdown-item:hover {
+            background-color: #f7f7f7;
+        }
+
+        .quote_btn-container {
+            margin-bottom: 10px;
+            margin-top: 10px;
+            margin-right: 25px;
+            margin-left: 10px;
+        }
+
+        .dropdown-menu a.dropdown-item {
+            color: #333;
+        }
+
+        .dropdown-menu a.dropdown-item:hover {
+            background-color: #f7f7f7;
+        }
+
+        .profile-photo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-photo img {
+            width: 200px;
+            height: 200px;
+            border-radius: 0;
+            border: 3px solid #fff;
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            margin-left: 50px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
+            font-weight: bold;
+            font-size: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">EyeCare</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'edit_patient_profile' %}">Edit Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content -->
     <div class="main-wrapper">
-        
         <div class="page-wrapper">
             <div class="content">
                 <div class="row">
                     <div class="col-sm-12">
                         <h4 class="page-title" style="font-weight: bold; text-align: center; color: black;">My Profile</h4>
-
                     </div>
-                  {% comment %} <div class="col-sm-20 col-11 text-right m-b-30">
-                        <a href="{% url 'patient_profile' %}" class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Edit Profile</a>
-                    </div>
-                </div> {% endcomment %}
-                <form method="post" enctype="multipart/form-data" action="{% url 'display_patient_profile' %}">
+                </div>
+                <form method="post" enctype="multipart/form-data" action="{% url 'display_patient_profile' %}" id="profileform">
                     {% csrf_token %}
-                <div class="card-box">
-                        <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Basic Informations</h3>
-                         
+                    <div class="card-box">
+                        <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Basic Information</h3>
                         <div class="row">
-                            <div class="col-md-12">
-                                
-                         {% comment %} <div class="profile-photo">
-                                    {% if profile.profile_pic %}
-                                        <img src="{{ profile.profile_pic.url }}" >
-                                    {% else %}
-                                        <img src="/path/to/default/profile_pic.jpg" >
-                                    {% endif %}
-                                    <div class="fileupload btn">
-                                        <input class="upload" name="profile_pic" type="file">
-                                        <span class="btn-text">Edit</span>
-                                    </div>
-                                    <br> <!-- Add this line -->
-                                     
-                                </div>    {% endcomment %}
-
-                               <div class="profile-img-wrap">
-                                    {% if profile.profile_pic %}
-                                    <img class="inline-block" src="{{ profile.profile_pic.url }}" alt="user">
-                                    {% else %}
-                                    <img src="/path/to/default/profile_pic.jpg" >
-                                    {% endif %}
-                                    <div class="fileupload btn">
-                                        <span class="btn-text">edit</span>
-                                        <input class="upload" name="profile_pic" type="file">
-                                    </div>
-                                </div> 
-
-                            </div> 
-
-                                   
-                        <div class="profile-basic">
-                                    <div class="row">
-                                        
-                                        <div class="col-md-6">
+                            <div class="col-md-6">
+                                <label>Name:</label>
+                                <input type="text" class="form-control floating" value="{{ p_profile.name }}" name="name" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Address:</label>
+                                <input type="text" class="form-control floating" value="{{ p_profile.address }}" name="address" disabled>
+                            </div>
+                            <div class="col-md-6">
                                             
-                                            <label>Name  </label>
-                                            {% comment %} <div class="form-group form-focus"> 
-                                                
-                                                <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
-                                            </div> {% endcomment %}
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.name }}" name="first_name" disabled>
-                                                <span id="first_name_error" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            
-                                            <label>Address </label>
-                                            {% comment %} <div class="form-group form-focus"> 
-                                                
-                                                <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
-                                            </div> {% endcomment %}
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.address }}" name="first_name" disabled>
-                                                <span id="first_name_error" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            
-                                            <label>Place</label>
-                                            {% comment %} <div class="form-group form-focus"> 
-                                                
-                                                <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
-                                            </div> {% endcomment %}
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.place }}" name="first_name" disabled>
-                                                <span id="first_name_error" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        
-    
-                                        
-
-                                         
-
-                                        <div class="col-md-6">
-                                            <label class="focus-label">Gender</label>
-                                            <div class="form-group form-focus select-focus">
-                                                <select class="select form-control floating" name="gender">
-                                                    <option value="" disabled {% if not appointment.gender %} selected {% endif %} disabled>-Select Gender-</option>
-                                                    <option value="Male" {% if appointment.gender == 'Male' %} selected {% endif %} disabled>Male</option>
-                                                    <option value="Female" {% if appointment.gender == 'Female' %} selected {% endif %} disabled>Female</option>
-                                                </select>
-                                                
-                                            </div>
-                                        </div>
+                                <label>Place</label>
+                                {% comment %} <div class="form-group form-focus"> 
                                     
-                                        <div class="col-md-6">
-                                            <label>Date of Birth</label>
-                                            <div class="form-group form-focus">
-                                                
-                                               
-                                                <input type="date" id="dob" name="birth_date" {% if appointment.dob %} value="{{ appointment.dob|date:'Y-m-d' }}" {% endif %} disabled class="form-control datetimepicker">
+                                    <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
+                                </div> {% endcomment %}
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="first_name_input" value="{{ p_profile.place }}" name="first_name" disabled>
+                                    <span id="first_name_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="focus-label">Gender</label>
+                                <div class="form-group form-focus select-focus">
+                                    <select class="select form-control floating" name="gender">
+                                        <option value="" disabled {% if not p_profile.gender %} selected {% endif %} disabled>-Select Gender-</option>
+                                        <option value="Male" {% if p_profile.gender == 'Male' %} selected {% endif %} disabled>Male</option>
+                                        <option value="Female" {% if p_profile.gender == 'Female' %} selected {% endif %} disabled>Female</option>
+                                    </select>
+                                    
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-6">
+                                <label>Date of Birth</label>
+                                <div class="form-group form-focus">
+                                    
+                                   
+                                    <input type="date" id="dob" name="birth_date" {% if p_profile.dob %} value="{{ p_profile.dob|date:'Y-m-d' }}" {% endif %} disabled class="form-control datetimepicker">
 
-                                              
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Mobile Number</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="house_name_input" value="{{ appointment.mobile }}" disabled name="house_name">
-                                                <span id="house_name_error" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        
+                                  
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Mobile Number</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" id="house_name_input" value="{{ p_profile.mobile }}" disabled name="house_name">
+                                    <span id="house_name_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="card-box">
+                                <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Medical History</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Previous eye surgeries or treatments:</label>
+                                        <input type="text" class="form-control floating" value="{{ p_profile.previous_surgeries }}" name="previous_surgeries" disabled>
                                     </div>
+                                    <div class="col-md-6">
+                                        <label>Any current medical conditions:</label>
+                                        <input type="text" class="form-control floating" value="{{ p_profile.current_medical_conditions }}" name="current_medical_conditions" disabled>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Allergies (especially to medications)</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.allergies }}" disabled name="allergies">
+                                            <span id="address_error" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Family history of eye diseases</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.family_history_eye_diseases }}" disabled name="family_history_eye_diseases">
+                                            <span id="address_error" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card-box">
-                        <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Medical History</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Previous eye surgeries or treatments</label>
-                                <div class="form-group form-focus"> 
-                                    <input type="text" class="form-control floating" value="{{ patient_history.previous_surgeries }}" name="previous_surgeries">
-                                    {% comment %} <input type="number" class="form-control floating" value=" " name="house_no"> {% endcomment %}
+                            <div class="card-box">
+                                <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Vision History</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Date of last eye examination</label>
+                                        <div class="form-group form-focus"> 
+                                            <input type="text" class="form-control floating" value="{{ p_profile.last_eye_examination_date }}" disabled name="last_eye_examination_date">
+                                            {% comment %} <input type="number" class="form-control floating" value=" " name="house_no"> {% endcomment %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Prescription details for glasses or contact lenses</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.prescription_details }}" disabled name="prescription_details">
+                                            <span id="address_error" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Any changes in vision (blurriness, double vision, etc.)</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.changes_in_vision }}" disabled name="changes_in_vision">
+                                            <span id="address_error" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Any eye drops or ointments</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.eye_drops_ointments }}" disabled name="eye_drops_ointments">
+                                            <span id="address_error" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Any current medical conditions</label>
-                                <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.current_medical_conditions }}" name="current_medical_conditions">
-                                    <span id="address_error" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Allergies (especially to medications)</label>
-                                <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.allergies }}" name="allergies">
-                                    <span id="address_error" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Family history of eye diseases</label>
-                                <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.family_history_eye_diseases }}" name="family_history_eye_diseases">
-                                    <span id="address_error" class="text-danger"></span>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    <div class="card-box">
-                        <h3 class="card-title" style="font-weight: bold; font-size:26px; color: black;">Vision History</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Date of last eye examination</label>
-                                <div class="form-group form-focus"> 
-                                    <input type="text" class="form-control floating" value="{{ patient_history.last_eye_examination_date }}" name="last_eye_examination_date">
-                                    {% comment %} <input type="number" class="form-control floating" value=" " name="house_no"> {% endcomment %}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Prescription details for glasses or contact lenses</label>
-                                <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.prescription_details }}" name="prescription_details">
-                                    <span id="address_error" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Any changes in vision (blurriness, double vision, etc.)</label>
-                                <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.changes_in_vision }}" name="changes_in_vision">
-                                    <span id="address_error" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Any eye drops or ointments</label>
-                                <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.eye_drops_ointments }}" name="eye_drops_ointments">
-                                    <span id="address_error" class="text-danger"></span>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                     
-               
-                        <div class="text-center m-t-20">
-                        <button class="btn btn-primary submit-btn" type="submit">Save</button>
-                    </div>
-                   
-        </form>
+                            </div> 
+                </form>
             </div>
-            
         </div>
     </div>
-    <div class="sidebar-overlay" data-reff=""></div>
+
+    <!-- Scripts -->
     <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
     <script src="{% static 'assets/js/popper.min.js'%}"></script>
     <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
     <script src="{% static 'assets/js/app.js'%}"></script>
     <script src="{% static 'assets/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'assets/js/select2.min.js' %}"></script>
+    <script src="{% static 'assets/js/moment.min.js' %}"></script>
+
+    <!-- Additional scripts here -->
 
     <div class="sidebar-overlay" data-reff=""></div>
 
-    <script src="{% static 'assets/js/select2.min.js' %}"></script>
-    <script src="{% static 'assets/js/moment.min.js' %}"></script>
-    
-    
     <script>
         // Function to perform validation on the "First Name" input
         const firstnameInput = document.getElementById('first_name_input');
@@ -539,10 +482,7 @@
             }
         });
     </script>
-    
-    
+
 </body>
 
-
-<!-- profile23:03-->
 </html>

@@ -61,6 +61,32 @@
 
 
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">EyeCare</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'edit_patient_profile' %}">Edit Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <style>
         body {
             background: #f2e6dc;  /* fallback for old browsers */
@@ -205,7 +231,7 @@
                                                 <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
                                             </div> {% endcomment %}
                                             <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.name }}" name="first_name" disabled>
+                                                <input type="text" class="form-control floating" id="first_name_input" value="{{p_profile.name }}" name="name" >
                                                 <span id="first_name_error" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -217,7 +243,7 @@
                                                 <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
                                             </div> {% endcomment %}
                                             <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.address }}" name="first_name" disabled>
+                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ p_profile.address }}" name="address" >
                                                 <span id="first_name_error" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -229,7 +255,7 @@
                                                 <input type="text" id="first_name" class="form-control floating" value="{{ profile.first_name }}" name="first_name">
                                             </div> {% endcomment %}
                                             <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ appointment.place }}" name="first_name" disabled>
+                                                <input type="text" class="form-control floating" id="first_name_input" value="{{ p_profile.place }}" name="place" >
                                                 <span id="first_name_error" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -243,9 +269,9 @@
                                             <label class="focus-label">Gender</label>
                                             <div class="form-group form-focus select-focus">
                                                 <select class="select form-control floating" name="gender">
-                                                    <option value="" disabled {% if not appointment.gender %} selected {% endif %} disabled>-Select Gender-</option>
-                                                    <option value="Male" {% if appointment.gender == 'Male' %} selected {% endif %} disabled>Male</option>
-                                                    <option value="Female" {% if appointment.gender == 'Female' %} selected {% endif %} disabled>Female</option>
+                                                    <option value="" disabled {% if not p_profile.gender %} selected {% endif %} disabled>-Select Gender-</option>
+                                                    <option value="Male" {% if p_profile.gender == 'Male' %} selected {% endif %} >Male</option>
+                                                    <option value="Female" {% if p_profile.gender == 'Female' %} selected {% endif %} >Female</option>
                                                 </select>
                                                 
                                             </div>
@@ -256,7 +282,7 @@
                                             <div class="form-group form-focus">
                                                 
                                                
-                                                <input type="date" id="dob" name="birth_date" {% if appointment.dob %} value="{{ appointment.dob|date:'Y-m-d' }}" {% endif %} disabled class="form-control datetimepicker">
+                                                <input type="date" id="dob" name="dob" {% if p_profile.dob %} value="{{ p_profile.dob|date:'Y-m-d' }}" {% endif %} class="form-control datetimepicker">
 
                                               
                                             </div>
@@ -264,7 +290,7 @@
                                         <div class="col-md-6">
                                             <label>Mobile Number</label>
                                             <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating" id="house_name_input" value="{{ appointment.mobile }}" disabled name="house_name">
+                                                <input type="text" class="form-control floating" id="house_name_input" value="{{ p_profile.mobile }}"  name="mobile">
                                                 <span id="house_name_error" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -280,28 +306,28 @@
                             <div class="col-md-6">
                                 <label>Previous eye surgeries or treatments</label>
                                 <div class="form-group form-focus"> 
-                                    <input type="text" class="form-control floating"  name="previous_surgeries">
+                                    <input type="text" class="form-control floating"  name="previous_surgeries" value="{{p_profile.previous_surgeries}}">
                                     {% comment %} <input type="number" class="form-control floating" value=" " name="house_no"> {% endcomment %}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Any current medical conditions</label>
                                 <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.current_medical_conditions }}" name="current_medical_conditions">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.current_medical_conditions }}" name="current_medical_conditions">
                                     <span id="address_error" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Allergies (especially to medications)</label>
                                 <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.allergies }}" name="allergies">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.allergies }}" name="allergies">
                                     <span id="address_error" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Family history of eye diseases</label>
                                 <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.family_history_eye_diseases }}" name="family_history_eye_diseases">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.family_history_eye_diseases }}" name="family_history_eye_diseases">
                                     <span id="address_error" class="text-danger"></span>
                                 </div>
                             </div>
@@ -314,28 +340,29 @@
                             <div class="col-md-6">
                                 <label>Date of last eye examination</label>
                                 <div class="form-group form-focus"> 
-                                    <input type="text" class="form-control floating" value="{{ patient_history.last_eye_examination_date }}" name="last_eye_examination_date">
+
+                                    <input type="date" id="last_eye_examination_date"  {% if p_profile.last_eye_examination_date %} value="{{ p_profile.last_eye_examination_date|date:'Y-m-d' }}" {% endif %} name="last_eye_examination_date" class="form-control datetimepicker">
                                     {% comment %} <input type="number" class="form-control floating" value=" " name="house_no"> {% endcomment %}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Prescription details for glasses or contact lenses</label>
                                 <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.prescription_details }}" name="prescription_details">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.prescription_details }}" name="prescription_details">
                                     <span id="address_error" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Any changes in vision (blurriness, double vision, etc.)</label>
                                 <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.changes_in_vision }}" name="changes_in_vision">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.changes_in_vision }}" name="changes_in_vision">
                                     <span id="address_error" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Any eye drops or ointments</label>
                                 <div class="form-group form-focus">
-                                    <input type="text" class="form-control floating" id="address_input" value="{{ patient_history.eye_drops_ointments }}" name="eye_drops_ointments">
+                                    <input type="text" class="form-control floating" id="address_input" value="{{ p_profile.eye_drops_ointments }}" name="eye_drops_ointments">
                                     <span id="address_error" class="text-danger"></span>
                                 </div>
                             </div>

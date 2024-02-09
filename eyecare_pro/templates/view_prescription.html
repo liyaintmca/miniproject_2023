@@ -4,26 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pharmacy - View Prescriptions</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding-top: 60px; /* Adjusted for navbar */
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        .prescription-list {
+            margin-top: 20px;
+        }
+        .prescription-item {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+        }
+        .prescription-item:hover {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand {
+            color: #fff;
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-    <h1>Prescriptions</h1>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Pharmacy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'phar_staff_page' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    {% if prescriptions %}
-        <ul>
-            {% for prescription in prescriptions %}
-                <li>
-                    Doctor: {{ prescription.doctor }}
-                    Patient: {{ prescription.patient }}
-                    Medicine: {{ prescription.medicine }}
-                    Dosage: {{ prescription.dosage }}
-                    Date: {{ prescription.date_of_prescription }}
-                    Quantity: {{ prescription.quantity }}
-                    Duration: {{ prescription.duration }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No prescriptions available.</p>
-    {% endif %}
+    <div class="container">
+        <h1>Prescriptions</h1>
+
+        <div class="prescription-list">
+            {% if prescriptions %}
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <ul>
+                            {% for prescription in prescriptions %}
+                            <li class="prescription-item">
+                                <strong>Doctor:</strong> {{ prescription.doctor }}<br>
+                                <strong>Patient:</strong> {{ prescription.patient }}<br>
+                                <strong>Medicine:</strong> {{ prescription.medicine }}<br>
+                                <strong>Date:</strong> {{ prescription.date_of_prescription }}<br>
+                                <strong>Quantity:</strong> {{ prescription.quantity }}<br>
+                                <strong>Duration:</strong> {{ prescription.duration }}<br>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        
+                        
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="alert alert-info" role="alert">
+                            No prescriptions available.
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>

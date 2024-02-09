@@ -39,34 +39,30 @@ def blog_sidebar(request):
     return render(request,'blog_sidebar.html')
 def blog_single(request):
     return render(request,'blog_single.html')
+from django.contrib.auth.decorators import login_required
 
-
-from django.shortcuts import render, redirect
-from .models import Appointment, PatientHistory
-
+@login_required
 def edit_patient_profile(request):
-    user_id = request.user.id  
-    print(user_id)
-
+    user = request.user
+    
+    # Try to get the existing PatientHistory instance for the user
     try:
-        # Use the user's ID explicitly
-        appointment = Appointment.objects.get(user_id=user_id)
-        # print(appointment)
-
-        # Fetch the corresponding PatientHistory instance associated with the Appointment
-        patient_history = PatientHistory(Appointment=appointment)
-
-    except Appointment.DoesNotExist:
-        # Handle the case where the appointment does not exist for the user
-        # You might want to redirect to an error page or handle it differently
-        return redirect('error_page')  
-
+        patient_history = user.patienthistory
     except PatientHistory.DoesNotExist:
-        # If no patient history exists for the appointment, create a new one
-        patient_history = PatientHistory(Appointment=appointment)
-
-    if request.method == 'POST':
-        # Retrieve data from the request.POST dictionary and update the patient_history object
+        # If it doesn't exist, create a new instance
+        patient_history = PatientHistory(user=user)
+    
+    if request.method == "POST":
+        patient_history.name = request.POST.get('name')
+        patient_history.address = request.POST.get('address')
+        patient_history.place = request.POST.get('place')
+        
+        # Parse and update date of birth
+        dob_str = request.POST.get('dob')
+        patient_history.dob = dob_str
+        
+        patient_history.gender = request.POST.get('gender')
+        patient_history.mobile = request.POST.get('mobile')
         patient_history.previous_surgeries = request.POST.get('previous_surgeries')
         patient_history.current_medical_conditions = request.POST.get('current_medical_conditions')  
         patient_history.allergies = request.POST.get('allergies') 
@@ -74,30 +70,153 @@ def edit_patient_profile(request):
         patient_history.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
         patient_history.prescription_details = request.POST.get('prescription_details') 
         patient_history.changes_in_vision = request.POST.get('changes_in_vision') 
-        patient_history.eye_drops_ointments = request.POST.get('eye_drops_ointments') 
-
-        # # Handle the image upload separately
-        # if 'image' in request.FILES:
-        #     patient_history.image = request.FILES['image']
-        # if previous_surgeries and current_medical_conditions  and allergies  and family_history_eye_diseases and last_eye_examination_date  and prescription_details and changes_in_vision and eye_drops_ointments:
-
+        patient_history.eye_drops_ointments = request.POST.get('eye_drops_ointments')
+        
         patient_history.save()
-        # Redirect to a success page or another relevant page after saving
-        return redirect('display_patient_profile')  
-        # else:
-        #     print("invalid")
+        return redirect('display_patient_profile')
+    
+    context = {
+        'user': user,
+        'patient_history': patient_history,
+    }
+    return render(request, 'edit_patient_profile.html', context)
 
-    return render(request, 'edit_patient_profile.html', {'appointment': appointment, 'patient_history': patient_history})
+
+# from django.shortcuts import render, redirect
+# from .models import Appointment, PatientHistory
+# from datetime import datetime
+
+# def edit_patient_profile(request):
+#     user = request.user
+#     p_profile = get_object_or_404(PatientHistory, user=user)
+    
+#     if request.method == "POST":
+#         user.name = request.POST.get('name')
+#         p_profile.address = request.POST.get('address')
+#         p_profile.place = request.POST.get('place')
+        
+#         # Parse and format date of birth
+#         dob_str = request.POST.get('dob')
+#         print(dob_str)
+#         # try:
+#         #     dob = datetime.strptime(dob_str, '%b. %d, %Y')
+#         #     print(dob)
+#         #     p_profile.dob = dob.strftime('%Y-%m-%d')
+#         # except ValueError:
+#         #     # Handle invalid date format here
+#         #     # For example, you can return an error response to the user
+#         #     return HttpResponse("Invalid date of birth format provided", status=400)
+        
+#         p_profile.gender = request.POST.get('gender')
+#         p_profile.mobile = request.POST.get('mobile')
+#         p_profile.previous_surgeries = request.POST.get('previous_surgeries')
+#         p_profile.current_medical_conditions = request.POST.get('current_medical_conditions')  
+#         p_profile.allergies = request.POST.get('allergies') 
+#         p_profile.family_history_eye_diseases = request.POST.get('family_history_eye_diseases') 
+#         p_profile.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
+#         p_profile.prescription_details = request.POST.get('prescription_details') 
+#         p_profile.changes_in_vision = request.POST.get('changes_in_vision') 
+#         p_profile.eye_drops_ointments = request.POST.get('eye_drops_ointments')
+        
+#         p_profile.save()
+#         return redirect('display_patient_profile')
+    
+#     context = {
+#         'user': user,
+#         'p_profile': p_profile,
+#     }
+#     return render(request, 'edit_patient_profile.html', context)
+
+# def edit_patient_profile(request):
+#     user = request.user
+#     print(user)
+#     p_profile=get_object_or_404(PatientHistory, user=user)
+#     if request.method == "POST":
+#         user.name = request.POST.get('name')
+#         p_profile.address = request.POST.get('address')
+#         p_profile.place = request.POST.get('place')
+#         p_profile.dob = request.POST.get('dob')
+
+#         p_profile.gender = request.POST.get('gender')
+#         p_profile.mobile = request.POST.get('mobile')
+#         p_profile.previous_surgeries = request.POST.get('previous_surgeries')
+#         p_profile.current_medical_conditions = request.POST.get('current_medical_conditions')  
+#         p_profile.allergies = request.POST.get('allergies') 
+#         p_profile.family_history_eye_diseases = request.POST.get('family_history_eye_diseases') 
+#         p_profile.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
+#         p_profile.prescription_details = request.POST.get('prescription_details') 
+#         p_profile.changes_in_vision = request.POST.get('changes_in_vision') 
+#         p_profile.eye_drops_ointments = request.POST.get('eye_drops_ointments')
+#         p_profile.save()
+#         return redirect('display_patient_profile')
+#     context={
+#         'user':user,
+#         'p_profile':p_profile,
+#     }
+#     return  render(request, 'edit_patient_profile.html', context)
+
+    # try:
+    #     # Use the user's ID explicitly
+    #     # appointment = Appointment.objects.get(user=user)
+       
+
+    #     # Fetch the corresponding PatientHistory instance associated with the Appointment
+    #     patient_history = PatientHistory(Appointment=appointment)
+
+    # except Appointment.DoesNotExist:
+    #     # Handle the case where the appointment does not exist for the user
+    #     # You might want to redirect to an error page or handle it differently
+    #     return redirect('error_page')  
+
+    # except PatientHistory.DoesNotExist:
+    #     # If no patient history exists for the appointment, create a new one
+    #     patient_history = PatientHistory(Appointment=appointment)
+
+    # if request.method == 'POST':
+    #     # Retrieve data from the request.POST dictionary and update the patient_history object
+    #     patient_history.previous_surgeries = request.POST.get('previous_surgeries')
+    #     patient_history.current_medical_conditions = request.POST.get('current_medical_conditions')  
+    #     patient_history.allergies = request.POST.get('allergies') 
+    #     patient_history.family_history_eye_diseases = request.POST.get('family_history_eye_diseases') 
+    #     patient_history.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
+    #     patient_history.prescription_details = request.POST.get('prescription_details') 
+    #     patient_history.changes_in_vision = request.POST.get('changes_in_vision') 
+    #     patient_history.eye_drops_ointments = request.POST.get('eye_drops_ointments') 
+
+    #     # # Handle the image upload separately
+    #     # if 'image' in request.FILES:
+    #     #     patient_history.image = request.FILES['image']
+    #     # if previous_surgeries and current_medical_conditions  and allergies  and family_history_eye_diseases and last_eye_examination_date  and prescription_details and changes_in_vision and eye_drops_ointments:
+
+    #     patient_history.save()
+    #     # Redirect to a success page or another relevant page after saving
+    #     return redirect('display_patient_profile')  
+    #     # else:
+    #     #     print("invalid")
+
+    # return render(request, 'edit_patient_profile.html', {'appointment': appointment, 'patient_history': patient_history})
 
 from django.shortcuts import get_object_or_404
 
+from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
+
 def display_patient_profile(request):
-    # Assuming 'request' is a Django HttpRequest object
-    appointment = get_object_or_404(Appointment, user=request.user)
-    # print(appointment)
-    patient_history = PatientHistory.objects.filter(Appointment=appointment).first()
-    return render(request, 'display_patient_profile.html', {'appointment': appointment,'patient_history':patient_history})
-     ###############################################################################################################################33
+    try:
+        p_profile = PatientHistory.objects.get(user=request.user)
+        return render(request, 'display_patient_profile.html', {'p_profile': p_profile})
+    except ObjectDoesNotExist:
+        # If no PatientHistory object is found for the user, handle it gracefully
+        # For example, you can redirect the user to a different page or show a message
+        # Redirecting to the home page for demonstration purposes
+        return redirect('index')  # Adjust the URL name as per your project's URL configuration
+
+    # # Assuming 'request' is a Django HttpRequest object
+    # appointment = get_object_or_404(Appointment, user=request.user)
+    # # print(appointment)
+    # patient_history = PatientHistory.objects.filter(Appointment=appointment).first()
+    # return render(request, 'display_patient_profile.html', {'appointment': appointment,'patient_history':patient_history})
+    #  ###############################################################################################################################33
 def appointment(request):
     return render(request,'dd.html')
 def contact(request):
@@ -177,26 +296,6 @@ def admin_adddoctor(request):
         return render(request, 'admin_adddoctor.html', context)
 
 
-#delete
-# from django.shortcuts import get_object_or_404, redirect
-# from django.contrib import messages
-
-# @login_required(login_url='loginadmin') 
-# def delete_doctor(request, doctor_id):
-#     doctor = get_object_or_404(Docs, id=doctor_id)
-
-#     if request.method == 'POST':
-#         # Delete the doctor object
-#         doctor.is_active=False
-#         doctor.save()
-
-#         # Add a success message to the session
-#         # messages.success(request, 'Doctor deleted successfully!')
-
-#         # Redirect to the 'admin_doctors' page (or adjust the URL as needed)
-#         return redirect('admin_doctors')
-
-#     return render(request, 'delete_doc.html', {'doctor': doctor})
 
 
 # DOCTOR PROFILE INSERT AND EDIT
@@ -677,21 +776,20 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='dd')
 def demo(request):
+    user=request.user.id
+    p_profile=PatientHistory.objects.get(user=user)
+    print(p_profile)
     doctors = Docs.objects.all()  # Replace with your actual doctor model
 
     # Handle form submission
     if request.method == 'POST':
-        # Process the form data and save the appointment
-        # You can access form data using request.POST dictionary
-
-        # Example:
         name = request.POST.get('name')
         address = request.POST.get('address')
         place = request.POST.get('place')
         dob = request.POST.get('dob')
         gender = request.POST.get('gender')
         mobile = request.POST.get('mobile')
-        allergy = request.POST.get('allergy')
+        # allergy = request.POST.get('allergy')
         reason = request.POST.get('reason')
         doctor_id = request.POST.get('doctor')
         date_id = request.POST.get('date')
@@ -715,7 +813,7 @@ def demo(request):
                 dob=dob,
                 gender=gender,
                 mobile=mobile,
-                allergy=allergy,
+                # allergy=allergy,
                 reason=reason,
                 doctor=doctor,
                 user=user,
@@ -741,7 +839,7 @@ def demo(request):
             # Handle the case where the selected_time_slot is in an invalid format
             return render(request, 'demo.html', {'doctors': doctors, 'error_message': 'Invalid time format'})
 
-    return render(request, 'demo.html', {'doctors': doctors})
+    return render(request, 'demo.html', {'doctors': doctors,'p_profile':p_profile})
 
  
 from django.shortcuts import render, get_object_or_404
@@ -1391,8 +1489,6 @@ def view_prescription(request):
 
     return render(request, 'view_prescription.html', context)
 
-
-
  
 
 from django.shortcuts import get_object_or_404, render, redirect
@@ -1405,35 +1501,31 @@ def get_dosages(request, medicine_id):
     return JsonResponse({'dosage': dosages})
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Prescription, Appointment, Docs, Medicine
+
 def add_prescription(request):
     doctor = Docs.objects.get(user=request.user)
     patients = Appointment.objects.filter(doctor=doctor)
 
     if request.method == 'POST':
-        patient_id = request.POST.get('patient')
-        print(patient_id)
+        patient_id = request.POST.get('patient')  # Get the patient ID from the form data
         appointment = get_object_or_404(Appointment, id=patient_id)
-        print(appointment)
         medicine_id = request.POST.get('medicine')
-        print(medicine_id)
-
-        # Fetch donation information for the selected medicine
         donation_info = Medicine.objects.filter(id=medicine_id).first()
-        print(donation_info.dosage)
         morning = 'morning' in request.POST
-        print(morning)
         noon = 'noon' in request.POST
         evening = 'evening' in request.POST
         date_of_prescription = request.POST.get('date_of_prescription')
         quantity = request.POST.get('quantity')
         duration = request.POST.get('duration')
         dosages = request.POST.get('dosage')
-        print(dosages)
+        
         prescription = Prescription.objects.create(
             doctor=doctor,
-            patient_id=patient_id, 
-            medicine_id = medicine_id, # Assuming there is a patient field in the Appointment model
+            patient=appointment.user,  # Use appointment's user as the patient
             appointment=appointment,
+            medicine_id=medicine_id,
             morning=morning,
             noon=noon,
             evening=evening,
@@ -1442,8 +1534,6 @@ def add_prescription(request):
             duration=duration,
             dosages=dosages,
         )
-
-        # Additional logic, e.g., sending notifications, updating status, etc.
 
         return redirect('add_prescription')
 
@@ -1458,14 +1548,22 @@ def add_prescription(request):
     return render(request, 'add_prescription.html', context)
 
 
-def my_prescription(request):
-    appointment = Appointment.objects.get(user_id=request.user.id)
-    prescriptions = Prescription.objects.filter(patient_id=appointment.id)
-    print(prescriptions)
-    context ={
-        
-        'appointment':appointment,
-        'prescriptions':prescriptions,
 
+from django.shortcuts import render
+from .models import Prescription, Appointment
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def my_prescription(request):
+    # Get the appointment associated with the logged-in user
+    appointment = Appointment.objects.get(user_id=request.user.id)
+    
+    # Fetch all prescriptions associated with the appointment
+    prescriptions = Prescription.objects.filter(appointment=appointment)
+    
+    context = {
+        'appointment': appointment,
+        'prescriptions': prescriptions,
     }
-    return render(request,'my_prescription.html', context)
+
+    return render(request, 'my_prescription.html', context)
