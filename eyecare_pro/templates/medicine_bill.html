@@ -1,0 +1,42 @@
+<div class="container">
+    <h1>Hospital Name</h1>
+
+    <div class="prescription-list">
+        <!-- Display prescriptions here -->
+    </div>
+
+    <div class="bill-generation">
+        <h2>Generate Bill</h2>
+        <table>
+            <tr>
+                <th>Patient:</th>
+                <td><input type="text" id="patient" name="patient" required></td>
+            </tr>
+            <tr>
+                <th>Doctor:</th>
+                <td><input type="text" id="doctor" name="doctor" required></td>
+            </tr>
+            <tr>
+                <th>Medicine:</th>
+                <td>
+                    <select id="medicine" name="medicine" onchange="updatePrice()">
+                        <!-- Populate with medicine options -->
+                        {% for medicine in medicines %}
+                            <option value="{{ medicine.id }}" data-price="{{ medicine.price }}">{{ medicine.medicineName }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Quantity:</th>
+                <td><input type="number" id="quantity" name="quantity" min="1" value="1" onchange="updatePrice()" required></td>
+            </tr>
+            <tr>
+                <th>Price:</th>
+                <td><span id="price"></span></td>
+            </tr>
+        </table>
+
+        <button type="button" onclick="generateBill()">Generate Bill</button>
+    </div>
+</div>

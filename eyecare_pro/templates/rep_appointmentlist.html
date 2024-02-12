@@ -122,7 +122,7 @@
                     <th>DoB</th>
                     <th>Gender</th>
                     <th>Mobile</th>
-                    <th>Allergy Details</th>
+                     
                     <th>Reason Of Consultation</th>
                     <th>Doctor</th>
                     <th>Slot</th>
@@ -132,13 +132,12 @@
             <tbody>
                 {% for i in patients %}
                 <tr>
-                    <td>{{ i.name }}</td>
-                    <td>{{ i.address }}</td>
-                    <td>{{ i.place }}</td>
-                    <td>{{ i.dob }}</td>
-                    <td>{{ i.gender }}</td>
-                    <td>{{ i.mobile }}</td>
-                    <td>{{ i.allergy }}</td>
+                    <td>{{ i.patientHistory.name }}</td>
+                    <td>{{ i.patientHistory.address }}</td>
+                    <td>{{ i.patientHistory.place }}</td>
+                    <td>{{ i.patientHistory.dob }}</td>
+                    <td>{{ i.patientHistory.gender }}</td>
+                    <td>{{ i.patientHistory.mobile }}</td>
                     <td>{{ i.reason }}</td>
                     <td>{{ i.doctor }}</td>
                     <td>{{ i.slot }}</td>

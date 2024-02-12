@@ -68,44 +68,50 @@
         </div>
     </nav>
 
-    <div class="container">
-        <h1>Prescriptions</h1>
-
-        <div class="prescription-list">
-            {% if prescriptions %}
-                <div class="row">
-                    <div class="col-md-8 offset-md-2">
-                        <ul>
-                            {% for prescription in prescriptions %}
-                            <li class="prescription-item">
-                                <strong>Doctor:</strong> {{ prescription.doctor }}<br>
-                                <strong>Patient:</strong> {{ prescription.patient }}<br>
-                                <strong>Medicine:</strong> {{ prescription.medicine }}<br>
-                                <strong>Date:</strong> {{ prescription.date_of_prescription }}<br>
-                                <strong>Quantity:</strong> {{ prescription.quantity }}<br>
-                                <strong>Duration:</strong> {{ prescription.duration }}<br>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                        
-                        
-                    </div>
-                </div>
-            {% else %}
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                        <div class="alert alert-info" role="alert">
-                            No prescriptions available.
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
+    <div class="prescription-list">
+        <ul id="prescription-list">
+            {% for prescription in prescriptions %}
+                <li class="prescription-item">
+                    <strong>Doctor:</strong> {{ prescription.doctor.Name }}<br>
+                    <strong>Patient:</strong> {{ prescription.patient.email }}<br>
+                    <strong>Medicine:</strong> {{ prescription.medicine.medicineName }}<br>
+                    <strong>Date:</strong> {{ prescription.date_of_prescription }}<br>
+                    <strong>Quantity:</strong> {{ prescription.quantity }}<br>
+                    <strong>Duration:</strong> {{ prescription.duration }}<br>
+                    <strong>Total Amount:</strong><span id="total-amount"></span><br>
+                </li>
+            {% empty %}
+                <li class="alert alert-info">No prescriptions available.</li>
+            {% endfor %}
+        </ul>
     </div>
+    
+    <div id="total-amount"></div>
+    
+    <script>
+        // Calculate total amount
+        let totalAmount = 0;
+        {% for prescription in prescriptions %}
+            totalAmount += {{ prescription.quantity }} * {{ prescription.medicine.price }};
+        {% endfor %}
+        
+        // Display total amount
+        document.getElementById('total-amount').textContent = '' + totalAmount.toFixed(2);
+    </script>
 
     <!-- Bootstrap JS and Popper.js scripts -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        function generateBill(doctor, patient, medicine, quantity) {
+            // Here you can implement the logic to generate the bill using the provided data
+            console.log("Doctor: " + doctor);
+            console.log("Patient: " + patient);
+            console.log("Medicine: " + medicine);
+            console.log("Quantity: " + quantity);
+            // Add further logic to generate the bill as needed
+        }
+    </script>
 </body>
 </html>

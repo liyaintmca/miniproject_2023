@@ -51,7 +51,7 @@
             <label for="patient">Patient:</label>
             <select name="patient" id="patient" class="form-control">
                 {% for appointment in patients %}
-                    <option value="{{ appointment.id }}">{{ appointment.name }}</option>
+                    <option value="{{ appointment.id }}">{{ appointment.patientHistory.name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -131,7 +131,38 @@
             }
         });
     });
+
+
+     
+         
 </script>
+<script>
+    $(document).ready(function () {
+        $('#quantity').on('input', function () {
+            var quantity = $(this).val();
+            var medicineId = $('#medicine').val();
+    
+            // Calculate price based on quantity
+            if (quantity && medicineId) {
+                $.ajax({
+                    url: '/calculate_price/',
+                    type: 'POST',
+                    data: {
+                        'medicine_id': medicineId,
+                        'quantity': quantity,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        $('#price').val(data.price);
+                    }
+                });
+            } else {
+                $('#price').val('');
+            }
+        });
+    });
+    </script>
+    
 
 
 </body>

@@ -780,15 +780,15 @@ def demo(request):
     p_profile=PatientHistory.objects.get(user=user)
     print(p_profile)
     doctors = Docs.objects.all()  # Replace with your actual doctor model
+    
 
     # Handle form submission
     if request.method == 'POST':
-        name = request.POST.get('name')
-        address = request.POST.get('address')
-        place = request.POST.get('place')
-        dob = request.POST.get('dob')
-        gender = request.POST.get('gender')
-        mobile = request.POST.get('mobile')
+        # address = request.POST.get('address')
+        # place = request.POST.get('place')
+        # dob = request.POST.get('dob')
+        # gender = request.POST.get('gender')
+        # mobile = request.POST.get('mobile')
         # allergy = request.POST.get('allergy')
         reason = request.POST.get('reason')
         doctor_id = request.POST.get('doctor')
@@ -807,13 +807,14 @@ def demo(request):
 
             # Create and save the Appointment object
             appointment = Appointment(
-                name=name,
-                address=address,
-                place=place,
-                dob=dob,
-                gender=gender,
-                mobile=mobile,
+                # name=name,
+                # address=address,
+                # place=place,
+                # dob=dob,
+                # gender=gender,
+                # mobile=mobile,
                 # allergy=allergy,
+                patientHistory_id=p_profile.id,
                 reason=reason,
                 doctor=doctor,
                 user=user,
@@ -843,7 +844,7 @@ def demo(request):
 
  
 from django.shortcuts import render, get_object_or_404
-from .models import Docs, Appointment
+from .models import Docs, Appointment,PatientHistory
 @login_required
 def dr_appointmentlist(request, doctor_id):
     doctor_idd=Docs.objects.get(user_id=doctor_id)
@@ -873,11 +874,12 @@ def search_patient_bydoc(request):
         return render(request, 'dr_appointmentlist.html', context)
 
 
-from .models import Docs, Appointment
+from .models import Docs, Appointment,PatientHistory
 @login_required(login_url="dd")
 def rep_appointmentlist(request,  ):
      
-    patients = Appointment.objects.all()
+    patients = PatientHistory.objects.all()
+    patients=Appointment.objects.all()
     print(patients)
     print(request.user.id)
 
@@ -1489,6 +1491,7 @@ def view_prescription(request):
 
     return render(request, 'view_prescription.html', context)
 
+
  
 
 from django.shortcuts import get_object_or_404, render, redirect
@@ -1502,17 +1505,19 @@ def get_dosages(request, medicine_id):
 
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Prescription, Appointment, Docs, Medicine
+from .models import Prescription, Appointment, Docs, Medicine,PatientHistory
+
+import json
+import requests
 
 def add_prescription(request):
     doctor = Docs.objects.get(user=request.user)
     patients = Appointment.objects.filter(doctor=doctor)
-
+    
     if request.method == 'POST':
-        patient_id = request.POST.get('patient')  # Get the patient ID from the form data
+        patient_id = request.POST.get('patient')  
         appointment = get_object_or_404(Appointment, id=patient_id)
         medicine_id = request.POST.get('medicine')
-        donation_info = Medicine.objects.filter(id=medicine_id).first()
         morning = 'morning' in request.POST
         noon = 'noon' in request.POST
         evening = 'evening' in request.POST
@@ -1521,9 +1526,20 @@ def add_prescription(request):
         duration = request.POST.get('duration')
         dosages = request.POST.get('dosage')
         
+        # Calculate the price using calculate_price view via AJAX
+        calculate_price_url = '/calculate_price/'
+        data = {
+            'medicine_id': medicine_id,
+            'quantity': quantity,
+            'csrfmiddlewaretoken': request.POST.get('csrfmiddlewaretoken')  # Include CSRF token
+        }
+        response = requests.post(calculate_price_url, data=data)
+        total_price = json.loads(response.text)['price']
+
+        # Create prescription with calculated total price
         prescription = Prescription.objects.create(
             doctor=doctor,
-            patient=appointment.user,  # Use appointment's user as the patient
+            patient=appointment.user,
             appointment=appointment,
             medicine_id=medicine_id,
             morning=morning,
@@ -1533,6 +1549,7 @@ def add_prescription(request):
             quantity=quantity,
             duration=duration,
             dosages=dosages,
+            total_price=total_price  # Include the calculated total price
         )
 
         return redirect('add_prescription')
@@ -1546,6 +1563,7 @@ def add_prescription(request):
     }
 
     return render(request, 'add_prescription.html', context)
+
 
 
 
@@ -1567,3 +1585,45 @@ def my_prescription(request):
     }
 
     return render(request, 'my_prescription.html', context)
+
+
+
+
+
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa # Import module for PDF generation
+from .models import Prescription, Medicine
+
+def medicine_generate_bill(request, doctor, patient, medicine, quantity):
+    # Retrieve medicine details
+    medicine_obj = Medicine.objects.get(medicineName=medicine)
+    price = medicine_obj.price
+    total_price = price * int(quantity)
+
+    # Prepare data to pass to the template
+    context = {
+        'doctor': doctor,
+        'patient': patient,
+        'medicine': medicine,
+        'quantity': quantity,
+        'total_price': total_price,
+    }
+
+    # Render bill template
+    template = get_template('bill_template.html')
+    html = template.render(context)
+
+    # Create a PDF response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="medicine_bill.pdf"'
+
+    # Generate PDF
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF')
+
+    return response
+

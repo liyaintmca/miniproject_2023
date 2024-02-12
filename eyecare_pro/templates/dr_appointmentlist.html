@@ -86,15 +86,15 @@
                     <div class="col-md-4 col-sm-4 col-lg-3">
                         <div class="profile-widget">
                             <!-- Display patient details here -->
-                            <h4 class="doctor-name text-ellipsis"><a href="profile.html">{{ i.name }}</a></h4>
+                            <h4 class="doctor-name text-ellipsis"><a href="profile.html">{{ i.patientHistory.name }}</a></h4>
                             <div>
                                 <div class="patient-details">
-                                    <p>Address: {{ i.address }}</p>
-                                    <p>Place: {{ i.place }}</p>
-                                    <p>DoB: {{ i.dob }}</p>
-                                    <p>Gender: {{ i.gender }}</p>
-                                    <p>PhNo: {{ i.mobile }}</p>
-                                    <p>Allergy Details: {{ i.allergy }}</p>
+                                    <p>Address: {{ i.patientHistory.address }}</p>
+                                    <p>Place: {{ i.patientHistory.place }}</p>
+                                    <p>DoB: {{ i.patientHistory.dob }}</p>
+                                    <p>Gender: {{ i.patientHistory.gender }}</p>
+                                    <p>PhNo: {{ i.patientHistory.mobile }}</p>
+                                     
                                     <p>Reason Of Consultation: {{ i.reason }}</p>
                                 </div>
                             </div>
