@@ -67,7 +67,6 @@
             </div>
         </div>
     </nav>
-
     <div class="prescription-list">
         <ul id="prescription-list">
             {% for prescription in prescriptions %}
@@ -79,12 +78,18 @@
                     <strong>Quantity: </strong> {{ prescription.quantity }}<br>
                     <strong>Duration:</strong> {{ prescription.duration }}<br>
                     <strong>Total Amount:</strong><span id="total-amount"></span><br>
+                    <!-- Button for PDF generation -->
+                    <button onclick="window.location.href='{% url 'generate_pdf_bill' prescription.id %}'">Download PDF</button>
+
                 </li>
             {% empty %}
                 <li class="alert alert-info">No prescriptions available.</li>
             {% endfor %}
         </ul>
     </div>
+    
+    
+     
     
     <div id="total-amount"></div>
     
@@ -113,5 +118,17 @@
             // Add further logic to generate the bill as needed
         }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+<script>
+    document.getElementById('download-pdf').addEventListener('click', function() {
+        const doc = new jsPDF();
+        doc.text(20, 20, 'Prescription Bill');
+        // Add more content to the PDF as needed
+        
+        // Save the PDF
+        doc.save('prescription_bill.pdf');
+    });
+</script>
+
 </body>
 </html>

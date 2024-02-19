@@ -1591,39 +1591,79 @@ def my_prescription(request):
 
 
 
-from django.shortcuts import render
 from django.http import HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa # Import module for PDF generation
-from .models import Prescription, Medicine
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+from reportlab.lib.styles import ParagraphStyle
 
-def medicine_generate_bill(request, doctor, patient, medicine, quantity):
-    # Retrieve medicine details
-    medicine_obj = Medicine.objects.get(medicineName=medicine)
-    price = medicine_obj.price
-    total_price = price * int(quantity)
+from django.shortcuts import get_object_or_404
+from .models import Prescription
 
-    # Prepare data to pass to the template
-    context = {
-        'doctor': doctor,
-        'patient': patient,
-        'medicine': medicine,
-        'quantity': quantity,
-        'total_price': total_price,
-    }
-
-    # Render bill template
-    template = get_template('bill_template.html')
-    html = template.render(context)
-
-    # Create a PDF response
+def generate_pdf_bill(request, prescription_id):
+    # Fetch prescription object from the database
+    prescription = get_object_or_404(Prescription, pk=prescription_id)
+    
+    # Create a PDF document
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="medicine_bill.pdf"'
-
-    # Generate PDF
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('Error generating PDF')
-
+    response['Content-Disposition'] = f'attachment; filename="prescription_bill_{prescription.id}.pdf"'
+    
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    
+    # Define custom styles
+    title_style = ParagraphStyle(name='TitleStyle', fontName='Times-Bold', fontSize=30, leading=40,al)
+    address_style = ParagraphStyle(name='AddressStyle', fontName='Times-Roman', fontSize=10, leading=20)
+    normal_style = ParagraphStyle(name='NormalStyle', fontName='Times-Roman', fontSize=12, leading=18)
+    
+    # Hospital details
+    hospital_name = "EyeCare Eye Hospital"
+    hospital_address = "Kunnumbhagam, Kanjirapally"
+    hospital_phone = "Phone: 123-456-7890"
+    hospital_details = f"{hospital_name}\n{hospital_address}\n{hospital_phone}"
+    hospital_details_para = Paragraph(hospital_details, title_style)
+    
+     
+    
+    # Prescription details
+    prescription_details = [
+        ["Doctor:", prescription.doctor.Name],
+        ["Patient:", prescription.patient.email],
+        ["Medicine:", prescription.medicine.medicineName],
+        ["Date:", str(prescription.date_of_prescription)],
+        ["Quantity:", str(prescription.quantity)],
+        ["Duration:", str(prescription.duration)],
+        ["Total Amount:", str(prescription.quantity * prescription.medicine.price)]
+    ]
+    
+    # Create table and apply styles
+    table_data = [[Paragraph(cell, normal_style) for cell in row] for row in prescription_details]
+    table = Table(table_data, colWidths=[120, 300])
+    table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                               ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                               ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                               ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                               ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                               ('BACKGROUND', (0, 1), (-1, -1), colors.beige)]))
+    
+    # Footer
+    footer_text_1 = "For any inquiries, contact eyecarehospital@gmail.com"
+    footer_text_2 = "Thank you for visiting and Get well soon"
+    footer_para_1 = Paragraph(footer_text_1, normal_style)
+    footer_para_2 = Paragraph(footer_text_2, normal_style)
+    footer = Table([[footer_para_1], [footer_para_2]], colWidths=[300])
+    
+    # Add elements to the PDF document
+    elements = [
+        hospital_details_para,
+        Spacer(1, 20),  # Spacer for additional space
+        table,
+        Spacer(1, 20),  # Spacer for additional space
+        footer
+    ]
+    doc.build(elements)
+    
     return response
+
+
+
 

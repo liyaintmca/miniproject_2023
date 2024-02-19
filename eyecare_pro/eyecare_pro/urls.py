@@ -104,7 +104,7 @@ urlpatterns = [
     path('add_prescription', views.add_prescription, name='add_prescription'),
     path('get_dosages/<int:medicine_id>/', views.get_dosages, name='get_dosages'),
     path('my_prescription', views.my_prescription, name='my_prescription'),
-    path('medicine_generate_bill/<str:doctor>/<str:patient>/<str:medicine>/<int:quantity>/', views.medicine_generate_bill, name='medicine_generate_bill'),
+    path('generate-pdf-bill/<int:prescription_id>/', views.generate_pdf_bill, name='generate_pdf_bill'),
 
 
 
