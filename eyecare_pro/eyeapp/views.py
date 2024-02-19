@@ -1611,7 +1611,7 @@ def generate_pdf_bill(request, prescription_id):
     doc = SimpleDocTemplate(response, pagesize=letter)
     
     # Define custom styles
-    title_style = ParagraphStyle(name='TitleStyle', fontName='Times-Bold', fontSize=30, leading=40,al)
+    title_style = ParagraphStyle(name='TitleStyle', fontName='Times-Bold', fontSize=30, leading=40)
     address_style = ParagraphStyle(name='AddressStyle', fontName='Times-Roman', fontSize=10, leading=20)
     normal_style = ParagraphStyle(name='NormalStyle', fontName='Times-Roman', fontSize=12, leading=18)
     
