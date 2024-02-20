@@ -12,7 +12,7 @@ from .models import Docs,Phar
 from .models import Deps,MedicineCategory
 from .models import Rep
 from .models import CustomUser, PatientHistory
-
+from textblob import TextBlob
 from django.contrib.auth import get_user_model
  
 # from .forms import DoctorForm
@@ -1527,14 +1527,14 @@ def add_prescription(request):
         dosages = request.POST.get('dosage')
         
         # Calculate the price using calculate_price view via AJAX
-        calculate_price_url = '/calculate_price/'
+        # calculate_price_url = '/calculate_price/'
         data = {
             'medicine_id': medicine_id,
             'quantity': quantity,
             'csrfmiddlewaretoken': request.POST.get('csrfmiddlewaretoken')  # Include CSRF token
         }
-        response = requests.post(calculate_price_url, data=data)
-        total_price = json.loads(response.text)['price']
+        # response = requests.post(calculate_price_url, data=data)
+        # total_price = json.loads(response.text)['price']
 
         # Create prescription with calculated total price
         prescription = Prescription.objects.create(
@@ -1549,7 +1549,7 @@ def add_prescription(request):
             quantity=quantity,
             duration=duration,
             dosages=dosages,
-            total_price=total_price  # Include the calculated total price
+            # total_price=total_price  # Include the calculated total price
         )
 
         return redirect('add_prescription')
@@ -1591,12 +1591,14 @@ def my_prescription(request):
 
 
 
+import os
 from django.http import HttpResponse
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import ParagraphStyle
-
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from .models import Prescription
 
@@ -1606,13 +1608,14 @@ def generate_pdf_bill(request, prescription_id):
     
     # Create a PDF document
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="prescription_bill_{prescription.id}.pdf"'
+    filename = f'prescription_bill_{prescription.id}.pdf'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
     
     doc = SimpleDocTemplate(response, pagesize=letter)
     
     # Define custom styles
-    title_style = ParagraphStyle(name='TitleStyle', fontName='Times-Bold', fontSize=30, leading=40)
-    address_style = ParagraphStyle(name='AddressStyle', fontName='Times-Roman', fontSize=10, leading=20)
+    title_style = ParagraphStyle(name='TitleStyle', fontName='Times-Bold', fontSize=30, leading=40, alignment=1)
+    address_style = ParagraphStyle(name='AddressStyle', fontName='Times-Roman', fontSize=5, leading=20, alignment=1)
     normal_style = ParagraphStyle(name='NormalStyle', fontName='Times-Roman', fontSize=12, leading=18)
     
     # Hospital details
@@ -1621,8 +1624,6 @@ def generate_pdf_bill(request, prescription_id):
     hospital_phone = "Phone: 123-456-7890"
     hospital_details = f"{hospital_name}\n{hospital_address}\n{hospital_phone}"
     hospital_details_para = Paragraph(hospital_details, title_style)
-    
-     
     
     # Prescription details
     prescription_details = [
@@ -1660,10 +1661,22 @@ def generate_pdf_bill(request, prescription_id):
         Spacer(1, 20),  # Spacer for additional space
         footer
     ]
+    
+    # Build the PDF document
     doc.build(elements)
     
+    # Send email to patient with the PDF bill attached
+    email_subject = 'Your Prescription Bill'
+    email_body = 'Please find attached your prescription bill.'
+    from_email = settings.EMAIL_HOST_USER
+    to_email = prescription.patient.email
+    
+    email = EmailMessage(email_subject, email_body, from_email, [to_email])
+    email.attach(filename, response.getvalue(), 'application/pdf')
+    email.send()
+    
+    # Clean up temporary PDF file
+    response.close()
+    
     return response
-
-
-
 

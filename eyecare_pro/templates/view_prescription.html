@@ -77,7 +77,7 @@
                     <strong>Date:</strong> {{ prescription.date_of_prescription }}<br>
                     <strong>Quantity: </strong> {{ prescription.quantity }}<br>
                     <strong>Duration:</strong> {{ prescription.duration }}<br>
-                    <strong>Total Amount:</strong><span id="total-amount"></span><br>
+                    <strong>Total Amount:</strong><span id="total-amount-{{ prescription.id }}"></span><br>
                     <!-- Button for PDF generation -->
                     <button onclick="window.location.href='{% url 'generate_pdf_bill' prescription.id %}'">Download PDF</button>
 
@@ -88,21 +88,35 @@
         </ul>
     </div>
     
-    
-     
-    
-    <div id="total-amount"></div>
+    <div id="total-amount" style="font-size: 18px; font-weight: bold; color: green; text-align: center;">
+       
+    </div>
+
     
     <script>
-        // Calculate total amount
-        let totalAmount = 0;
-        {% for prescription in prescriptions %}
-            totalAmount += {{ prescription.quantity }} * {{ prescription.medicine.price }};
-        {% endfor %}
-        
-        // Display total amount
-        document.getElementById('total-amount').textContent = '' + totalAmount.toFixed(2);
+        let totalAmountDiv = document.getElementById('total-amount');
+        let totalAmountMessage = "Total Amount Received: ";
+        // Calculate total amount for each prescription
+    {% for prescription in prescriptions %}
+    let totalAmount{{ prescription.id }} = {{ prescription.quantity }} * {{ prescription.medicine.price }};
+    document.getElementById('total-amount-{{ prescription.id }}').textContent = totalAmount{{ prescription.id }}.toFixed(2);
+{% endfor %}
+
+// Calculate total price
+let totalPrice = 0;
+{% for prescription in prescriptions %}
+    totalPrice += totalAmount{{ prescription.id }};
+{% endfor %}
+
+// Update total amount message with the total price
+totalAmountDiv.textContent = totalAmountMessage + "Rs " + totalPrice.toFixed(2);
+
+        // Function to generate PDF for a prescription
+        function generatePdf(prescriptionId) {
+            window.location.href = '/generate_pdf_bill/' + prescriptionId;
+        }
     </script>
+    
 
     <!-- Bootstrap JS and Popper.js scripts -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
