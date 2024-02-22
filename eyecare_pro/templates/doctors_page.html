@@ -95,7 +95,11 @@
                 <p>This is your doctor's dashboard. You can manage appointments, view patient details, and more.</p>
                 <a href="#" class="btn btn-primary mt-20">View Appointments</a>
                 <a href="add_prescription " class="btn btn-info mt-20">Add Prescriptions</a>
-                <a href="{% url 'profile' %}" class="btn btn-success mt-20">Profile Settings</a>
+                <a href="{% url 'profile' %}" class="btn btn-success mt-20">Profile Settings</a><br>
+                <a href="{% url 'apply_leave' %}" class="btn btn-primary mt-20">Leave Management</a>
+                {% comment %} <a href="{% url 'leave_details' %}" class="btn btn-primary mt-20">View Leave</a> {% endcomment %}
+
+
             </div>
         </div>
     </div>

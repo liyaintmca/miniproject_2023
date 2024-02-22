@@ -82,120 +82,6 @@ def edit_patient_profile(request):
     return render(request, 'edit_patient_profile.html', context)
 
 
-# from django.shortcuts import render, redirect
-# from .models import Appointment, PatientHistory
-# from datetime import datetime
-
-# def edit_patient_profile(request):
-#     user = request.user
-#     p_profile = get_object_or_404(PatientHistory, user=user)
-    
-#     if request.method == "POST":
-#         user.name = request.POST.get('name')
-#         p_profile.address = request.POST.get('address')
-#         p_profile.place = request.POST.get('place')
-        
-#         # Parse and format date of birth
-#         dob_str = request.POST.get('dob')
-#         print(dob_str)
-#         # try:
-#         #     dob = datetime.strptime(dob_str, '%b. %d, %Y')
-#         #     print(dob)
-#         #     p_profile.dob = dob.strftime('%Y-%m-%d')
-#         # except ValueError:
-#         #     # Handle invalid date format here
-#         #     # For example, you can return an error response to the user
-#         #     return HttpResponse("Invalid date of birth format provided", status=400)
-        
-#         p_profile.gender = request.POST.get('gender')
-#         p_profile.mobile = request.POST.get('mobile')
-#         p_profile.previous_surgeries = request.POST.get('previous_surgeries')
-#         p_profile.current_medical_conditions = request.POST.get('current_medical_conditions')  
-#         p_profile.allergies = request.POST.get('allergies') 
-#         p_profile.family_history_eye_diseases = request.POST.get('family_history_eye_diseases') 
-#         p_profile.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
-#         p_profile.prescription_details = request.POST.get('prescription_details') 
-#         p_profile.changes_in_vision = request.POST.get('changes_in_vision') 
-#         p_profile.eye_drops_ointments = request.POST.get('eye_drops_ointments')
-        
-#         p_profile.save()
-#         return redirect('display_patient_profile')
-    
-#     context = {
-#         'user': user,
-#         'p_profile': p_profile,
-#     }
-#     return render(request, 'edit_patient_profile.html', context)
-
-# def edit_patient_profile(request):
-#     user = request.user
-#     print(user)
-#     p_profile=get_object_or_404(PatientHistory, user=user)
-#     if request.method == "POST":
-#         user.name = request.POST.get('name')
-#         p_profile.address = request.POST.get('address')
-#         p_profile.place = request.POST.get('place')
-#         p_profile.dob = request.POST.get('dob')
-
-#         p_profile.gender = request.POST.get('gender')
-#         p_profile.mobile = request.POST.get('mobile')
-#         p_profile.previous_surgeries = request.POST.get('previous_surgeries')
-#         p_profile.current_medical_conditions = request.POST.get('current_medical_conditions')  
-#         p_profile.allergies = request.POST.get('allergies') 
-#         p_profile.family_history_eye_diseases = request.POST.get('family_history_eye_diseases') 
-#         p_profile.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
-#         p_profile.prescription_details = request.POST.get('prescription_details') 
-#         p_profile.changes_in_vision = request.POST.get('changes_in_vision') 
-#         p_profile.eye_drops_ointments = request.POST.get('eye_drops_ointments')
-#         p_profile.save()
-#         return redirect('display_patient_profile')
-#     context={
-#         'user':user,
-#         'p_profile':p_profile,
-#     }
-#     return  render(request, 'edit_patient_profile.html', context)
-
-    # try:
-    #     # Use the user's ID explicitly
-    #     # appointment = Appointment.objects.get(user=user)
-       
-
-    #     # Fetch the corresponding PatientHistory instance associated with the Appointment
-    #     patient_history = PatientHistory(Appointment=appointment)
-
-    # except Appointment.DoesNotExist:
-    #     # Handle the case where the appointment does not exist for the user
-    #     # You might want to redirect to an error page or handle it differently
-    #     return redirect('error_page')  
-
-    # except PatientHistory.DoesNotExist:
-    #     # If no patient history exists for the appointment, create a new one
-    #     patient_history = PatientHistory(Appointment=appointment)
-
-    # if request.method == 'POST':
-    #     # Retrieve data from the request.POST dictionary and update the patient_history object
-    #     patient_history.previous_surgeries = request.POST.get('previous_surgeries')
-    #     patient_history.current_medical_conditions = request.POST.get('current_medical_conditions')  
-    #     patient_history.allergies = request.POST.get('allergies') 
-    #     patient_history.family_history_eye_diseases = request.POST.get('family_history_eye_diseases') 
-    #     patient_history.last_eye_examination_date = request.POST.get('last_eye_examination_date') 
-    #     patient_history.prescription_details = request.POST.get('prescription_details') 
-    #     patient_history.changes_in_vision = request.POST.get('changes_in_vision') 
-    #     patient_history.eye_drops_ointments = request.POST.get('eye_drops_ointments') 
-
-    #     # # Handle the image upload separately
-    #     # if 'image' in request.FILES:
-    #     #     patient_history.image = request.FILES['image']
-    #     # if previous_surgeries and current_medical_conditions  and allergies  and family_history_eye_diseases and last_eye_examination_date  and prescription_details and changes_in_vision and eye_drops_ointments:
-
-    #     patient_history.save()
-    #     # Redirect to a success page or another relevant page after saving
-    #     return redirect('display_patient_profile')  
-    #     # else:
-    #     #     print("invalid")
-
-    # return render(request, 'edit_patient_profile.html', {'appointment': appointment, 'patient_history': patient_history})
-
 from django.shortcuts import get_object_or_404
 
 from django.shortcuts import render, redirect
@@ -1698,3 +1584,112 @@ def map_sentiment_to_rating(sentiment_score):
     else:
         return 1
 
+########################################## LEAVE MANAGE #####################################################################
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required  # Import login_required decorator
+from django.contrib.auth.models import User
+from .models import Leave, Docs, Rep, Phar
+from datetime import datetime
+
+@login_required
+def apply_leave(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        # Determine the staff member type and retrieve the corresponding staff instance
+        try:
+            staff_member = Docs.objects.get(user=user)
+        except Docs.DoesNotExist:
+            try:
+                staff_member = Rep.objects.get(user=user)
+            except Rep.DoesNotExist:
+                staff_member = Phar.objects.get(user=user)
+        
+        leave_type = request.POST.get('leave_type')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        reason = request.POST.get('reason')
+        
+        # Create a new leave instance
+        leave = Leave.objects.create(
+            docs_member=staff_member if isinstance(staff_member, Docs) else None,
+            rep_member=staff_member if isinstance(staff_member, Rep) else None,
+            phar_member=staff_member if isinstance(staff_member, Phar) else None,
+            leave_type=leave_type,
+            start_date=start_date,
+            end_date=end_date,
+            reason=reason
+        )
+        return redirect('apply_leave')  # Redirect to leave list page after submission
+    else:
+        return render(request, 'apply_leave.html')
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Leave, Docs, Rep, Phar
+
+@login_required
+def view_leave(request):
+    user = request.user
+    staff_member = None
+    
+    # Determine the staff member type and retrieve the corresponding staff instance
+    try:
+        staff_member = Docs.objects.get(user=user)
+    except Docs.DoesNotExist:
+        try:
+            staff_member = Rep.objects.get(user=user)
+        except Rep.DoesNotExist:
+            staff_member = Phar.objects.get(user=user)
+    
+    if staff_member:
+        if isinstance(staff_member, Docs):
+            leaves = Leave.objects.filter(docs_member=staff_member)
+        elif isinstance(staff_member, Rep):
+            leaves = Leave.objects.filter(rep_member=staff_member)
+        elif isinstance(staff_member, Phar):
+            leaves = Leave.objects.filter(phar_member=staff_member)
+    else:
+        leaves = []
+
+    return render(request, 'view_leave.html', {'leaves': leaves})
+
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Leave, Docs, Rep, Phar
+
+@login_required
+def leave_list(request):
+    # Retrieve all leave entries for doctors, receptionists, and pharmacists
+    doctor_leaves = Leave.objects.filter(docs_member__isnull=False)
+    receptionist_leaves = Leave.objects.filter(rep_member__isnull=False)
+    pharmacist_leaves = Leave.objects.filter(phar_member__isnull=False)
+    
+    context = {
+        'doctor_leaves': doctor_leaves,
+        'receptionist_leaves': receptionist_leaves,
+        'pharmacist_leaves': pharmacist_leaves
+    }
+    
+    return render(request, 'leave_list.html', context)
+
+
+from django.http import JsonResponse
+from .models import Leave
+
+def approve_leave(request, leave_id):
+    leave = Leave.objects.get(pk=leave_id)
+    leave.status = 'Approved'
+    leave.save()
+    # Here you can send a notification to the staff if needed
+    return JsonResponse({'message': 'Leave approved successfully'})
+
+def reject_leave(request, leave_id):
+    leave = Leave.objects.get(pk=leave_id)
+    leave.status = 'Rejected'
+    leave.save()
+    # Here you can send a notification to the staff if needed
+    return JsonResponse({'message': 'Leave rejected successfully'})

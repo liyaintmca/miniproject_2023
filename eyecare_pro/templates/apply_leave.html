@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Leave</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom styles here */
+        body {
+            background-image: url(' https://i.pinimg.com/736x/e3/01/3b/e3013b5c4cf9b7e008c4046bc216e8b4.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff; /* Text color */
+        }
+        .navbar {
+            background-color: #333; /* Navbar background color */
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff; /* Navbar text color */
+        }
+        /* Additional styles for form container */
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.7); /* Form container background color with opacity */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+        .form-container h1 {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">EyeCare</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctors_page' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'apply_leave' %}">Apply Leave</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_leave' %}">View Leave</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Apply Leave Form -->
+    <div class="container">
+        <div class="form-container">
+            <h1 class="mt-5">Apply Leave</h1>
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="staff_member">Staff Member:</label>
+                    <input type="text" class="form-control" id="staff_member" value="{{ request.user }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="leave_type">Leave Type:</label>
+                    <select class="form-control" id="leave_type" name="leave_type">
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Vacation">Vacation</option>
+                        <option value="Personal Leave">Personal Leave</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date">
+                </div>
+                <div class="form-group">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date">
+                </div>
+                <div class="form-group">
+                    <label for="reason">Reason:</label>
+                    <textarea class="form-control" id="reason" name="reason" rows="5"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

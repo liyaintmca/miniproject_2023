@@ -106,11 +106,11 @@ urlpatterns = [
     path('my_prescription', views.my_prescription, name='my_prescription'),
     path('generate-pdf-bill/<int:prescription_id>/', views.generate_pdf_bill, name='generate_pdf_bill'),
     path('add_doctor_review/<int:doctor_id>/', views.add_doctor_review, name='add_doctor_review'),
-
-
-
-
-
+    path('apply_leave/', views.apply_leave, name='apply_leave'), 
+    path('view_leave/', views.view_leave, name='view_leave'),
+    path('leave-list/', views.leave_list, name='leave_list'),
+    path('approve-leave/<int:leave_id>/', views.approve_leave, name='approve_leave'),
+    path('reject-leave/<int:leave_id>/', views.reject_leave, name='reject_leave'),
  
 
 ]

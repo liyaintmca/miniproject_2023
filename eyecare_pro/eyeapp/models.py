@@ -300,3 +300,59 @@ class DoctorAgentReview(models.Model):
 
     def __str__(self):
         return f"Review for {self.doctor.Name} by {self.user.email}"
+    
+
+
+from django.db import models
+from .models import Docs, Rep, Phar
+from datetime import datetime
+
+class Leave(models.Model):
+    LEAVE_CHOICES = [
+        ('Sick Leave', 'Sick Leave'),
+        ('Vacation', 'Vacation'),
+        ('Personal Leave', 'Personal Leave'),
+        ('Other', 'Other')
+    ]
+
+    docs_member = models.ForeignKey(Docs, on_delete=models.CASCADE, blank=True, null=True)
+    rep_member = models.ForeignKey(Rep, on_delete=models.CASCADE, blank=True, null=True)
+    phar_member = models.ForeignKey(Phar, on_delete=models.CASCADE, blank=True, null=True)
+    
+    leave_type = models.CharField(max_length=20, choices=LEAVE_CHOICES)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    reason = models.TextField(null=True, blank=True)
+    status = models.CharField(max_length=20, default='Pending',null=True, blank=True)
+
+    def __str__(self):
+        staff_name = ""
+        if self.docs_member:
+            staff_name = self.docs_member.Name
+        elif self.rep_member:
+            staff_name = self.rep_member.Name
+        elif self.phar_member:
+            staff_name = self.phar_member.Name
+
+        return f"{staff_name} - {self.leave_type}"
+
+    def approve_leave(self):
+        self.status = 'Approved'
+        self.save()
+
+    def reject_leave(self):
+        self.status = 'Rejected'
+        self.save()
+
+    def is_pending(self):
+        return self.status == 'Pending'
+
+    def is_approved(self):
+        return self.status == 'Approved'
+
+    def is_rejected(self):
+        return self.status == 'Rejected'
+
+    def is_currently_ongoing(self):
+        today = datetime.now().date()
+        return self.start_date <= today <= self.end_date

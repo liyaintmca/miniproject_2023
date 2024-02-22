@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Leave List</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 56px; /* Adjust based on your navbar height */
+        }
+        .container {
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #343a40;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        thead {
+            background-color: #f8f9fa;
+        }
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+        .btn {
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Admin Dashboard</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'chart' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Leaves</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Staff</a>
+                    </li>
+                    <!-- Add more navbar items as needed -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container">
+        <h1 class="mt-5">Leave List</h1>
+        
+        <!-- Doctors Leave -->
+        <h2 class="mt-5">Doctors Leave</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in doctor_leaves %}
+                    <tr>
+                        <td>{{ leave.docs_member.Name }}</td>
+                        <td>{{ leave.leave_type }}</td>
+                        <td>{{ leave.start_date }}</td>
+                        <td>{{ leave.end_date }}</td>
+                        <td>{{ leave.reason }}</td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-approve" data-leave-id="{{ leave.id }}">Approve</button>
+                            <button type="button" class="btn btn-danger btn-reject" data-leave-id="{{ leave.id }}">Reject</button>
+                
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Receptionists Leave -->
+        <h2 class="mt-5">Receptionists Leave</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in receptionist_leaves %}
+                    <tr>
+                        <td>{{ leave.rep_member.Name }}</td>
+                        <td>{{ leave.leave_type }}</td>
+                        <td>{{ leave.start_date }}</td>
+                        <td>{{ leave.end_date }}</td>
+                        <td>{{ leave.reason }}</td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-approve" data-leave-id="{{ leave.id }}">Approve</button>
+                            <button type="button" class="btn btn-danger btn-reject" data-leave-id="{{ leave.id }}">Reject</button>
+                
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pharmacists Leave -->
+        <h2 class="mt-5">Pharmacists Leave</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in pharmacist_leaves %}
+                    <tr>
+                        <td>{{ leave.phar_member.Name }}</td>
+                        <td>{{ leave.leave_type }}</td>
+                        <td>{{ leave.start_date }}</td>
+                        <td>{{ leave.end_date }}</td>
+                        <td>{{ leave.reason }}</td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-approve" data-leave-id="{{ leave.id }}">Approve</button>
+                            <button type="button" class="btn btn-danger btn-reject" data-leave-id="{{ leave.id }}">Reject</button>
+                
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-approve').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const leaveId = this.dataset.leaveId;
+                fetch(`/approve-leave/${leaveId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        // You can update the UI here if needed
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        });
+
+        document.querySelectorAll('.btn-reject').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const leaveId = this.dataset.leaveId;
+                fetch(`/reject-leave/${leaveId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        // You can update the UI here if needed
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        });
+    });
+</script>
+
+</html>
