@@ -1290,66 +1290,7 @@ def delete_medicine(request, id):
 
     return render(request, 'delete_medicine.html', {'med':med})
 
-# from django.shortcuts import render
-# from django.http import HttpResponse
-# from reportlab.lib.pagesizes import letter
-# from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
-# from reportlab.lib import colors
-# from reportlab.lib.styles import getSampleStyleSheet
-# from io import BytesIO
-
-# from .models import Medicine  # Replace with your actual model import
-
-# def generate_pdf(request):
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="medicine_stock.pdf"'
-
-#     buffer = BytesIO()
-#     doc = SimpleDocTemplate(buffer, pagesize=letter)
-#     styles = getSampleStyleSheet()
-    
-#     elements = []
-
-#     # Header
-#     header_text = "Medicine Stock Details"
-#     header_style = styles['Heading1']
-#     elements.append(Paragraph(header_text, header_style))
-
-#     # Table data
-#     med = Medicine.objects.all()  # Replace with your queryset to fetch medicine data
-#     data = [["Medicine Name", "Details", "Company Name", "Expiry Date", "Contains", "Dosage", "Category Name"]]
-
-#     for item in med:
-#         data.append([item.medicineName, item.details, item.companyName, item.expiryDate,
-#                      item.contains, item.dosage, item.MedCatId.category_name])
-
-#     # Define column widths for vertical format
-#     col_widths = [2.5 * inch, 2.5 * inch]
-
-#     # Create a table with column widths
-#     table = Table(data, colWidths=col_widths)
-#     table.setStyle(TableStyle([
-#         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-#         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-#         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-#         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-#         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-#         ('BACKGROUND', (0, 1), (-1, 1), colors.beige),  # Header row background color
-#         ('LINEBELOW', (0, 0), (-1, 0), 1, colors.black),  # Header row separator line
-#         ('GRID', (0, 0), (-1, -1), 1, colors.black),
-#         ('FONTSIZE', (0, 0), (-1, -1), 10),  # Reduce font size
-#     ]))
-
-#     elements.append(table)
-
-#     # Build the PDF document
-#     doc.build(elements)
-#     pdf = buffer.getvalue()
-#     buffer.close()
-
-#     response.write(pdf)
-#     return response
-
+ 
 
 
 
@@ -1571,20 +1512,37 @@ from django.shortcuts import render
 from .models import Prescription, Appointment
 from django.contrib.auth.decorators import login_required
 
+# @login_required
+# def my_prescription(request):
+#     # Get the appointment associated with the logged-in user
+#     appointment = Appointment.objects.get(user_id=request.user.id)
+    
+#     # Fetch all prescriptions associated with the appointment
+#     prescriptions = Prescription.objects.filter(appointment=appointment)
+    
+#     context = {
+#         'appointment': appointment,
+#         'prescriptions': prescriptions,
+#     }
+#     print(prescriptions.doctor.id)
+#     return render(request, 'my_prescription.html', context)
+
 @login_required
 def my_prescription(request):
-    # Get the appointment associated with the logged-in user
-    appointment = Appointment.objects.get(user_id=request.user.id)
+    # Get the appointments associated with the logged-in user
+    appointments = Appointment.objects.filter(user_id=request.user.id)
     
-    # Fetch all prescriptions associated with the appointment
-    prescriptions = Prescription.objects.filter(appointment=appointment)
+    prescriptions = []
+    for appointment in appointments:
+        # Fetch all prescriptions associated with each appointment
+        prescriptions.extend(Prescription.objects.filter(appointment=appointment))
     
     context = {
-        'appointment': appointment,
         'prescriptions': prescriptions,
     }
 
     return render(request, 'my_prescription.html', context)
+
 
 
 
@@ -1679,4 +1637,64 @@ def generate_pdf_bill(request, prescription_id):
     response.close()
     
     return response
+
+
+
+
+
+ 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from .models import DoctorAgentReview
+# from .utils import analyze_sentiment, map_sentiment_to_rating
+from .models import Docs
+
+@login_required
+def add_doctor_review(request, doctor_id):
+    doctor = get_object_or_404(Docs, id=doctor_id)
+
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        
+        if comment:
+            # Sentiment Analysis using TextBlob
+            sentiment_score = analyze_sentiment(comment)
+
+            # Calculate the rating based on sentiment score
+            rating = map_sentiment_to_rating(sentiment_score)
+
+            # Save the review
+            DoctorAgentReview.objects.create(
+                user=request.user,
+                rating=rating,
+                comment=comment,
+                doctor=doctor
+            )
+            messages.success(request, 'Review added successfully.')
+            return redirect('my_prescription')
+            # Redirect to the reviews page for this doctor or another appropriate page
+            # return redirect('doctor_reviews', doctor_id=doctor_id)
+        else:
+            # Handle invalid form data
+            return HttpResponse("Invalid form data. Comment is required.")
+
+    return render(request, 'add_doctor_review.html', {'doctor': doctor})
+
+def analyze_sentiment(text):
+    analysis = TextBlob(text)
+    sentiment_score = analysis.sentiment.polarity
+    return sentiment_score
+
+def map_sentiment_to_rating(sentiment_score):
+    if sentiment_score >= 0.5:
+        return 5
+    elif sentiment_score >= 0.2:
+        return 4
+    elif sentiment_score >= -0.2:
+        return 3
+    elif sentiment_score >= -0.5:
+        return 2
+    else:
+        return 1
 

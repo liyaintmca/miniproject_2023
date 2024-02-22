@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Docs,Deps,Rep,Phar,Slots,Appointment,MedicineCategory,Medicine,PatientHistory,Blog,Prescription
+from .models import Docs,Deps,Rep,Phar,Slots,Appointment,MedicineCategory,Medicine,PatientHistory,Blog,Prescription,DoctorAgentReview
 from .models import CustomUser
   
 
@@ -16,6 +16,7 @@ admin.site.register(Medicine)
 admin.site.register(Blog)
 admin.site.register(PatientHistory)
 admin.site.register(Prescription)
+admin.site.register(DoctorAgentReview)
 
 
 

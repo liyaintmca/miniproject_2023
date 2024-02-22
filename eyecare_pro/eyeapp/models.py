@@ -284,3 +284,19 @@ class Prescription(models.Model):
 
     def __str__(self):
         return f"Prescription for {self.appointment.id} by Dr. {self.doctor.Name}"
+
+
+
+from django.db import models
+from .models import CustomUser, Docs, PatientHistory
+
+class DoctorAgentReview(models.Model):
+    doctor = models.ForeignKey(Docs, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
+    comment = models.TextField()
+    sentiment = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        return f"Review for {self.doctor.Name} by {self.user.email}"

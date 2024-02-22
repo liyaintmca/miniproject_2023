@@ -29,6 +29,13 @@
         </ul>
     </div>
 </nav>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 <div class="container mt-5">
     <h2>My Prescription</h2>
@@ -50,6 +57,8 @@
                         <th>Quantity</th>
                         <th>Duration</th>
                         <th>Dosage</th>
+                        <th>Add Review</th>
+
                         <!-- Add more fields as needed -->
                     </tr>
                 </thead>
@@ -65,10 +74,70 @@
                             <td>{{ prescription.quantity }}</td>
                             <td>{{ prescription.duration }}</td>
                             <td>{{ prescription.dosages }}</td>
-                        </tr>
-                    {% endfor %}
+                            <td>
+    <!-- Button to trigger the modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal{{ prescription.id }}">
+        Submit Review for {{ prescription.doctor.Name }}
+    </button>
+</td>
+</tr>
+
+    <!-- Modal -->
+    <div class="modal fade" id="reviewModal{{ prescription.id }}" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel{{ prescription.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reviewModalLabel{{ prescription.id }}">Submit Review for {{ prescription.doctor.Name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="reviewForm{{ prescription.id }}" method="POST" action="{% url 'add_doctor_review' prescription.doctor.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea name="comment" id="comment{{ prescription.id }}" class="form-control" rows="6" placeholder="Your Review"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+                            
+    {% endfor %}
                 </tbody>
             </table>
+            <!-- Modal -->
+{% comment %} <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">Submit Review</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="reviewForm" method="POST" action="{% url 'add_doctor_review' prescriptions.doctor.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <textarea name="comment" id="comment" class="form-control" rows="6" placeholder="Your Review"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> {% endcomment %}
+
         </div>
     </div>
 </div>
