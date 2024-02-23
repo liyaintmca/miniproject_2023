@@ -7,6 +7,8 @@
     <title>Doctor Profile</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         /* Add a background image */
         body {
@@ -43,6 +45,56 @@
         .mt-20 {
             margin-top: 20px;
         }
+
+        /* Styles for the dropdown notifications */
+        .dropdown-menu.notifications {
+            width: 500px; /* Increased width */
+            padding: 30px;
+            left: unset; /* Remove default left positioning */
+            right: 0; /* Align to the right */
+        }
+
+        .dropdown-menu.notifications:before {
+            right: 16px; /* Adjust arrow position */
+            left: unset; /* Remove default left positioning */
+        }
+
+        .topnav-dropdown-header {
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .drop-scroll {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .notification-message {
+            padding: 10px 0;
+            border-bottom: 5px solid #ddd;
+        }
+
+        .noti-details {
+            margin-bottom: 5px;
+        }
+
+        .noti-time {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .topnav-dropdown-footer {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .topnav-dropdown-footer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -62,23 +114,52 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Conference</a>
                 </li>
-                 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'dr_timeslots' %}">Time Slots</a>
                 </li>
-                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dr_timeslots_shows' %}"> View Time Slots</a>
-                </li>  
-
-                {% if user.is_authenticated %}
-			    <li class="nav-item">
-                    <a class="nav-link" href="{% url 'loggout' %}">Logout</a>
-                </li>
-				{% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dd' %} ">Login</a>
+                    <a class="nav-link" href="{% url 'dr_timeslots_shows' %}"> View Time Slots</a>
                 </li>
-				{% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                    </a>
+                    <div class="dropdown-menu notifications" aria-labelledby="notificationDropdown">
+                        <div class="topnav-dropdown-header">
+                            <span>Notifications</span>
+                        </div>
+                        <div class="drop-scroll">
+                            <ul class="notification-list">
+                                {% for notification in notifications %}
+                                <li class="notification-message">
+                                    <a href="{% url 'notification_detail' notification_id=notification.id %}?read={{ notification.is_read }}">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <p class="noti-details {% if not notification.is_read %}font-weight-bold{% endif %}">
+                                                    {{ notification.message }}
+                                                </p>
+                                                <p class="noti-time">{{ notification.timestamp }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="topnav-dropdown-footer">
+                            {% comment %} <a href="{% url 'notificationpage' %}">View all Notifications</a> {% endcomment %}
+                        </div>
+                    </div>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'loggout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dd' %} ">Login</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -98,8 +179,6 @@
                 <a href="{% url 'profile' %}" class="btn btn-success mt-20">Profile Settings</a><br>
                 <a href="{% url 'apply_leave' %}" class="btn btn-primary mt-20">Leave Management</a>
                 {% comment %} <a href="{% url 'leave_details' %}" class="btn btn-primary mt-20">View Leave</a> {% endcomment %}
-
-
             </div>
         </div>
     </div>

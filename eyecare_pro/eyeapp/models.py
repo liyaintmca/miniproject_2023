@@ -356,3 +356,6 @@ class Leave(models.Model):
     def is_currently_ongoing(self):
         today = datetime.now().date()
         return self.start_date <= today <= self.end_date
+
+
+
