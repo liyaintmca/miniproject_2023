@@ -1,4 +1,3 @@
-<!-- File: yourapp/templates/yourapp/my_prescription.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +6,12 @@
     <title>My Prescription</title>
     <!-- Bootstrap CSS link -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* Custom styles for better table appearance */
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
 
@@ -29,116 +34,84 @@
         </ul>
     </div>
 </nav>
-{% if messages %}
+
+ 
+
+<div class="container mt-5">
+    <h2>My Prescription</h2>
+
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Medicine</th>
+                    <th>Morning</th>
+                    <th>Noon</th>
+                    <th>Evening</th>
+                    <th>Doctor Name</th>
+                    <th>Quantity</th>
+                    <th>Duration</th>
+                    <th>Dosage</th>
+                    <th>Add Review</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prescription in prescriptions %}
+                    <tr>
+                        <td>{{ prescription.date_of_prescription }}</td>
+                        <td>{{ prescription.medicine.medicineName }}</td>
+                        <td>{{ prescription.morning }}</td>
+                        <td>{{ prescription.noon }}</td>
+                        <td>{{ prescription.evening }}</td>
+                        <td>{{ prescription.doctor.Name }}</td>
+                        <td>{{ prescription.quantity }}</td>
+                        <td>{{ prescription.duration }}</td>
+                        <td>{{ prescription.dosages }}</td>
+                        <td>
+                            <!-- Button to trigger the modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal{{ prescription.id }}">
+                                Submit Review
+                            </button>
+                            {% if messages %}
     <ul class="messages">
         {% for message in messages %}
             <li class="{{ message.tags }}">{{ message }}</li>
         {% endfor %}
     </ul>
 {% endif %}
-
-<div class="container mt-5">
-    <h2>My Prescription</h2>
-
-    <div class="card mt-4">
-        <div class="card-header">
-            <h4>Prescription Details</h4>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Medicine</th>
-                        <th>Morning</th>
-                        <th>Noon</th>
-                        <th>Evening</th>
-                        <th>Doctor Name</th>
-                        <th>Quantity</th>
-                        <th>Duration</th>
-                        <th>Dosage</th>
-                        <th>Add Review</th>
-
-                        <!-- Add more fields as needed -->
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for prescription in prescriptions %}
-                        <tr>
-                            <td>{{ prescription.date_of_prescription }}</td>
-                            <td>{{ prescription.medicine.medicineName }}</td>
-                            <td>{{ prescription.morning }}</td>
-                            <td>{{ prescription.noon }}</td>
-                            <td>{{ prescription.evening }}</td>
-                            <td>{{ prescription.doctor.Name }}</td>
-                            <td>{{ prescription.quantity }}</td>
-                            <td>{{ prescription.duration }}</td>
-                            <td>{{ prescription.dosages }}</td>
-                            <td>
-    <!-- Button to trigger the modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal{{ prescription.id }}">
-        Submit Review for {{ prescription.doctor.Name }}
-    </button>
-</td>
-</tr>
 
-    <!-- Modal -->
-    <div class="modal fade" id="reviewModal{{ prescription.id }}" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel{{ prescription.id }}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reviewModalLabel{{ prescription.id }}">Submit Review for {{ prescription.doctor.Name }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="reviewForm{{ prescription.id }}" method="POST" action="{% url 'add_doctor_review' prescription.doctor.id %}">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <textarea name="comment" id="comment{{ prescription.id }}" class="form-control" rows="6" placeholder="Your Review"></textarea>
+                    <!-- Modal -->
+                    <div class="modal fade" id="reviewModal{{ prescription.id }}" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel{{ prescription.id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reviewModalLabel{{ prescription.id }}">Submit Review for {{ prescription.doctor.Name }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form id="reviewForm{{ prescription.id }}" method="POST" action="{% url 'add_doctor_review' prescription.doctor.id %}">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <textarea name="comment" id="comment{{ prescription.id }}" class="form-control" rows="6" placeholder="Your Review"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
-                            
-    {% endfor %}
-                </tbody>
-            </table>
-            <!-- Modal -->
-{% comment %} <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reviewModalLabel">Submit Review</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="reviewForm" method="POST" action="{% url 'add_doctor_review' prescriptions.doctor.id %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="form-group">
-                        <textarea name="comment" id="comment" class="form-control" rows="6" placeholder="Your Review"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit Review</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> {% endcomment %}
-
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
