@@ -4,21 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Opening Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Add your custom styles here */
+        body {
+            padding-top: 56px; /* Adjust for fixed navbar */
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            background-color: #fff; /* White background for cards */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #343a40; /* Dark gray background for sidebar */
+            padding-top: 56px; /* Adjust for fixed navbar */
+        }
+        .sidebar a {
+            color: #fff; /* White text color for sidebar links */
+        }
+        .main-content {
+            margin-left: 250px; /* Adjust for sidebar width */
+            padding: 20px;
+        }
+        .navbar {
+            background-color: #fff; /* White background for navbar */
+            border-bottom: 1px solid #dee2e6; /* Border bottom */
+        }
+        .navbar-brand {
+            color: #343a40 !important; /* Dark gray text color for navbar brand */
+        }
+        .btn-primary {
+            background-color: #007bff; /* Blue primary button color */
+            border-color: #007bff; /* Blue border color */
+        }
+        .btn-primary:hover {
+            background-color: #0069d9; /* Darker blue on hover */
+            border-color: #0062cc; /* Darker blue border on hover */
+        }
+    </style>
 </head>
 <body>
-    <h1>Career Opening Details</h1>
-    <p><strong>Job Designation:</strong> {{ career_opening.job_designation }}</p>
-    <p><strong>Qualifications:</strong> {{ career_opening.qualifications }}</p>
-    <p><strong>Experience:</strong> {{ career_opening.experience }}</p>
-    <p><strong>Vacancies:</strong> {{ career_opening.vacancies }}</p>
-    
-    <!-- Button to edit career opening -->
-    {% if career_opening.id %}
-    <a href="{% url 'edit_career_opening' career_opening.id %}">
-        <button>Edit</button>
-    </a>
-{% endif %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+    </nav>
 
-    <!-- You can add more details here if needed -->
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <!-- Add your sidebar links here -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'chart' %}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Career Openings</a>
+            </li>
+            <!-- Add more sidebar links as needed -->
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">Career Opening Details</h1>
+                    <p class="card-text"><strong>Job Designation:</strong> {{ career_opening.job_designation }}</p>
+                    <p class="card-text"><strong>Qualifications:</strong> {{ career_opening.qualifications }}</p>
+                    <p class="card-text"><strong>Experience:</strong> {{ career_opening.experience }}</p>
+                    <p class="card-text"><strong>Vacancies:</strong> {{ career_opening.vacancies }}</p>
+                    <!-- Button to edit career opening -->
+                    {% if career_opening.id %}
+                    <a href="{% url 'edit_career_opening' career_opening.id %}" class="btn btn-primary">Edit</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

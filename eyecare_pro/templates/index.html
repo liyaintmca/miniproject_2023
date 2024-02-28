@@ -108,6 +108,13 @@
 						<li><a class="dropdown-item" href=" {% url 'department-single' %}">Department Single</a></li>
 					</ul>
 			  	</li>
+				  <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="{% url 'career_openings' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Careers <i class="icofont-thin-down"></i></a>
+					<ul class="dropdown-menu" aria-labelledby="dropdown02">
+						<li><a class="dropdown-item" href="{% url 'career_openings' %}">Careers Opening</a></li>
+						<li><a class="dropdown-item" href=" {% url 'department-single' %}">Apply For Jobs</a></li>
+					</ul>
+			  	</li>
 
 			  	{% comment %} <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="{% url 'doctor' %}" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Doctors <i class="icofont-thin-down"></i></a>

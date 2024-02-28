@@ -1753,3 +1753,26 @@ def edit_career_opening(request, career_opening):
         # If it's a GET request, render the edit form with existing data
         return render(request, 'edit_career_opening.html', {'career_opening': career_opening})
 
+
+from django.shortcuts import render
+from .models import CareerOpening
+
+def admin_page(request):
+    # Retrieve all instances of CareerOpening model
+    career_openings = CareerOpening.objects.all()
+    return render(request, 'admin_page.html', {'career_openings': career_openings})
+
+def delete_career_opening(request, career_opening_id):
+    career_opening = get_object_or_404(CareerOpening, id=career_opening_id)
+    if request.method == 'POST':
+        career_opening.delete()
+    return redirect('admin_page')
+
+from django.shortcuts import render
+from .models import CareerOpening
+
+def career_openings(request):
+    career_openings = CareerOpening.objects.all()
+    return render(request, 'career_openings.html', {'career_openings': career_openings})
+
+

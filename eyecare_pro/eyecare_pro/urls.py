@@ -114,6 +114,10 @@ urlpatterns = [
     path('add_career_opening/', views.add_career_opening, name='add_career_opening'),
     path('career_opening_details/<int:id>/', views.career_opening_details, name='career_opening_details'),
     path('edit_career_opening/<int:career_opening>/', views.edit_career_opening, name='edit_career_opening'),
+    path('admin_page/', views.admin_page, name='admin_page'),
+    path('delete/<int:career_opening_id>/', views.delete_career_opening, name='delete_career_opening'),
+    path('career-openings/', views.career_openings, name='career_openings'),
+
 
 
 
