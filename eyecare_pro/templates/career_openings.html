@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,6 +66,7 @@
             background-color: #007bff;
             border-color: #007bff;
             transition: all 0.3s ease;
+            cursor: pointer; /* Added cursor pointer */
         }
         .apply-btn:hover {
             background-color: #0056b3;
@@ -98,17 +101,19 @@
     <div class="container">
         <h1 class="text-center mb-4" style="font-family: 'Poppins', sans-serif;">Career Openings</h1>
         {% if career_openings %}
-            {% for opening in career_openings %}
-                <div class="career-opening">
-                    <h2>{{ opening.job_designation }}</h2>
-                    <p><strong>Qualifications:</strong> {{ opening.qualifications }}</p>
-                    <p><strong>Experience:</strong> {{ opening.experience }}</p>
-                    <button class="btn btn-primary apply-btn">Apply</button>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center">No career openings available at the moment.</p>
-        {% endif %}
+    {% for opening in career_openings %}
+        <div class="career-opening">
+            <h2>{{ opening.job_designation }}</h2>
+            <p><strong>Qualifications:</strong> {{ opening.qualifications }}</p>
+            <p><strong>Experience:</strong> {{ opening.experience }}</p>
+            <!-- Ensure to use opening.id or opening.career_opening_id depending on your object's attribute -->
+            <a href="{% url 'job_application' opening.id %}" class="btn btn-primary apply-btn">Apply</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center">No career openings available at the moment.</p>
+{% endif %}
+
     </div>
 
     <!-- Bootstrap JS -->

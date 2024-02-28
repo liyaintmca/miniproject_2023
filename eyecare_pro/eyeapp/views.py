@@ -1776,3 +1776,48 @@ def career_openings(request):
     return render(request, 'career_openings.html', {'career_openings': career_openings})
 
 
+################job application####################
+
+from django.shortcuts import render, redirect
+from .models import JobApplication, CareerOpening
+from django.http import HttpResponse
+
+def job_application(request, career_opening_id):
+    if request.method == 'POST':
+        # Retrieve career opening based on ID
+        career_opening = CareerOpening.objects.get(id=career_opening_id)
+        
+        # Create a new job application instance
+        job_application = JobApplication(
+            name=request.POST.get('name'),
+            gender=request.POST.get('gender'),
+            dob=request.POST.get('dob'),
+            nationality=request.POST.get('nationality'),
+             address=request.POST.get('address'),
+            phone_number=request.POST.get('phone_number'),
+            email=request.POST.get('email'),
+            qualification=request.POST.get('qualification'),
+            experience=request.POST.get('experience'),
+            resume=request.FILES.get('resume'),
+            photo=request.FILES.get('photo'),
+            linkedin_profile=request.POST.get('linkedin_profile'),
+            job_designation=career_opening
+        )
+        
+        # Save the job application
+        job_application.save()
+        
+        return HttpResponse('Your job application has been submitted successfully.')
+    else:
+        # Retrieve career opening based on ID
+        career_opening = CareerOpening.objects.get(id=career_opening_id)
+        
+        return render(request, 'job_application.html', {'career_opening': career_opening})
+
+
+from django.shortcuts import render
+from .models import JobApplication
+
+def job_application_list(request):
+    job_applications = JobApplication.objects.all()
+    return render(request, 'job_application_list.html', {'job_applications': job_applications})

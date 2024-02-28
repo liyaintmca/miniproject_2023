@@ -117,6 +117,10 @@ urlpatterns = [
     path('admin_page/', views.admin_page, name='admin_page'),
     path('delete/<int:career_opening_id>/', views.delete_career_opening, name='delete_career_opening'),
     path('career-openings/', views.career_openings, name='career_openings'),
+    path('job_application/<int:career_opening_id>/', views.job_application, name='job_application'),
+    path('job_applications/', views.job_application_list, name='job_application_list'),
+
+
 
 
 

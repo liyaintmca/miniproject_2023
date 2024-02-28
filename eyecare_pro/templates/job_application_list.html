@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Job Applications</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        body {
+            background-color: #223a66; /* Background color */
+        }
+        .navbar {
+            background-color: #ffffff !important; /* White navbar background color */
+        }
+        .dashboard-heading {
+            margin-bottom: 30px; /* Add margin bottom to heading */
+            color: #ffffff; /* White text color */
+        }
+        .list-group-item {
+            background-color: #ffffff; /* White background color for job application cards */
+            border: 2px solid #ced4da; /* Border color */
+            border-radius: 10px; /* Border radius */
+            margin-bottom: 20px; /* Add margin bottom between cards */
+        }
+        .list-group-item h5 {
+            color: #007bff; /* Blue heading color */
+            margin-bottom: 10px; /* Add margin bottom to heading */
+        }
+        .list-group-item p {
+            margin-bottom: 5px; /* Add margin bottom to paragraphs */
+        }
+        .download-link {
+            color: #007bff; /* Blue link color */
+            font-weight: bold; /* Bold font weight */
+            text-decoration: none; /* Remove underline */
+        }
+        .download-link:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'chart' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_page' %}">Career</a>
+                </li>
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'loggout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %} ">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container mt-4">
+        <h1 class="dashboard-heading mb-4">Job Applications</h1>
+        <!-- Job Applications -->
+        <div class="row">
+            {% for job_application in job_applications %}
+                <div class="col-md-6">
+                    <div class="list-group-item">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ job_application.name }}</h5>
+                            <p class="card-text"><strong>Gender:</strong> {{ job_application.gender }}</p>
+                            <p class="card-text"><strong>Date of Birth:</strong> {{ job_application.dob }}</p>
+                            <p class="card-text"><strong>Nationality:</strong> {{ job_application.nationality }}</p>
+                            <p class="card-text"><strong>Address:</strong> {{ job_application.address }}</p>
+                            <p class="card-text"><strong>Phone Number:</strong> {{ job_application.phone_number }}</p>
+                            <p class="card-text"><strong>Email:</strong> {{ job_application.email }}</p>
+                            <p class="card-text"><strong>Qualification:</strong> {{ job_application.qualification }}</p>
+                            <p class="card-text"><strong>Experience:</strong> {{ job_application.experience }}</p>
+                            <p class="card-text"><strong>Applied For:</strong> {{ job_application.job_designation }}</p>
+                            <p class="card-text"><strong>Resume:</strong> <a href="{{ job_application.resume.url }}" class="download-link" target="_blank">Download Resume</a></p>
+                            <p class="card-text"><strong>Photo:</strong> <a href="{{ job_application.photo.url }}" class="download-link" target="_blank">View Photo</a></p>
+                            <p class="card-text"><strong>LinkedIn Profile:</strong> <a href="{{ job_application.linkedin_profile }}" class="download-link" target="_blank">{{ job_application.linkedin_profile }}</a></p>
+                            <!-- Add other fields as needed -->
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

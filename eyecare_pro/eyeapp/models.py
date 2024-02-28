@@ -366,5 +366,30 @@ class CareerOpening(models.Model):
 
     def __str__(self):
         return f"{self.job_designation} - {self.vacancies} vacancies available"
+    
+class JobApplication(models.Model):
+    GENDER_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
+    ]
+
+    name = models.CharField(max_length=100,null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES,null=True, blank=True)
+    dob = models.DateField(null=True, blank=True)
+    nationality = models.CharField(max_length=100,null=True, blank=True)
+    address = models.CharField(max_length=255,null=True, blank=True)
+    phone_number = models.CharField(max_length=15,null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    qualification = models.CharField(max_length=255,null=True, blank=True)
+    experience = models.CharField(max_length=100,null=True, blank=True)
+    resume = models.FileField(upload_to='resumes/',null=True, blank=True)
+    photo = models.ImageField(upload_to='photos/',null=True, blank=True)
+    linkedin_profile = models.URLField(null=True, blank=True)
+    job_designation = models.ForeignKey(CareerOpening, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    def __str__(self):
+        return self.name
 
  
