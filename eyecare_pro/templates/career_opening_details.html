@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Opening Details</title>
+</head>
+<body>
+    <h1>Career Opening Details</h1>
+    <p><strong>Job Designation:</strong> {{ career_opening.job_designation }}</p>
+    <p><strong>Qualifications:</strong> {{ career_opening.qualifications }}</p>
+    <p><strong>Experience:</strong> {{ career_opening.experience }}</p>
+    <p><strong>Vacancies:</strong> {{ career_opening.vacancies }}</p>
+    
+    <!-- Button to edit career opening -->
+    {% if career_opening.id %}
+    <a href="{% url 'edit_career_opening' career_opening.id %}">
+        <button>Edit</button>
+    </a>
+{% endif %}
+
+    <!-- You can add more details here if needed -->
+</body>
+</html>

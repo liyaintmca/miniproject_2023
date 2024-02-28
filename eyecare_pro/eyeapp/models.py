@@ -358,4 +358,13 @@ class Leave(models.Model):
         return self.start_date <= today <= self.end_date
 
 
+class CareerOpening(models.Model):
+    job_designation = models.CharField(max_length=100,null=True, blank=True)
+    qualifications = models.TextField(null=True, blank=True)
+    experience = models.CharField(max_length=50,null=True, blank=True)
+    vacancies = models.PositiveIntegerField(default=1,null=True, blank=True)  # Defaulting to 1 vacancy
 
+    def __str__(self):
+        return f"{self.job_designation} - {self.vacancies} vacancies available"
+
+ 

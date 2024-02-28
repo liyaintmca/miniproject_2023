@@ -111,6 +111,12 @@ urlpatterns = [
     path('leave-list/', views.leave_list, name='leave_list'),
     path('approve-leave/<int:leave_id>/', views.approve_leave, name='approve_leave'),
     path('reject-leave/<int:leave_id>/', views.reject_leave, name='reject_leave'),
+    path('add_career_opening/', views.add_career_opening, name='add_career_opening'),
+    path('career_opening_details/<int:id>/', views.career_opening_details, name='career_opening_details'),
+    path('edit_career_opening/<int:career_opening>/', views.edit_career_opening, name='edit_career_opening'),
+
+
+
  
 
 ]

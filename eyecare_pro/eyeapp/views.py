@@ -1693,3 +1693,63 @@ def reject_leave(request, leave_id):
     leave.save()
     # Here you can send a notification to the staff if needed
     return JsonResponse({'message': 'Leave rejected successfully'})
+
+
+
+##############################################CAREER OPENINGS#####################################################
+ 
+
+from django.shortcuts import render, redirect
+from .models import CareerOpening
+
+def add_career_opening(request):
+    if request.method == 'POST':
+        job_designation = request.POST.get('job_designation')
+        qualifications = request.POST.get('qualifications')
+        experience = request.POST.get('experience')
+        vacancies = request.POST.get('vacancies')
+        
+        career_opening = CareerOpening.objects.create(
+            job_designation=job_designation,
+            qualifications=qualifications,
+            experience=experience,
+            vacancies=vacancies
+        )
+        
+        # Redirect to career opening details page with the career_opening's ID
+        return redirect('career_opening_details', id=career_opening.id)
+    return render(request, 'add_career_opening.html')
+ 
+
+from django.shortcuts import render, get_object_or_404
+from .models import CareerOpening
+
+def career_opening_details(request, id):
+    career_opening = get_object_or_404(CareerOpening, id=id)
+    return render(request, 'career_opening_details.html', {'career_opening': career_opening})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import CareerOpening
+
+def edit_career_opening(request, career_opening):
+    career_opening = get_object_or_404(CareerOpening, pk=career_opening)
+    
+    if request.method == 'POST':
+        # If it's a POST request, update the career opening object with the new data
+        job_designation = request.POST.get('job_designation')
+        qualifications = request.POST.get('qualifications')
+        experience = request.POST.get('experience')
+        vacancies = request.POST.get('vacancies')
+        
+        career_opening.job_designation = job_designation
+        career_opening.qualifications = qualifications
+        career_opening.experience = experience
+        career_opening.vacancies = vacancies
+        career_opening.save()
+        
+        # Redirect to the career opening details page
+        return redirect('career_opening_details', id=career_opening.id)
+    else:
+        # If it's a GET request, render the edit form with existing data
+        return render(request, 'edit_career_opening.html', {'career_opening': career_opening})
+

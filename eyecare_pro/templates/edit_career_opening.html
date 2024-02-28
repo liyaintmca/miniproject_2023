@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Career Opening</title>
+</head>
+<body>
+    <h1>Edit Career Opening</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="job_designation">Job Designation:</label><br>
+        <input type="text" id="job_designation" name="job_designation" value="{{ career_opening.job_designation }}"><br>
+        
+        <label for="qualifications">Qualifications:</label><br>
+        <input type="text" id="qualifications" name="qualifications" value="{{ career_opening.qualifications }}"><br>
+        
+        <label for="experience">Experience:</label><br>
+        <input type="text" id="experience" name="experience" value="{{ career_opening.experience }}"><br>
+        
+        <label for="vacancies">Vacancies:</label><br>
+        <input type="number" id="vacancies" name="vacancies" value="{{ career_opening.vacancies }}"><br>
+        
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>
