@@ -728,7 +728,24 @@ def demo(request):
 
     return render(request, 'demo.html', {'doctors': doctors,'p_profile':p_profile})
 
- 
+# from django.shortcuts import render
+# from django.contrib.auth.decorators import login_required
+
+# @login_required
+# def patient_profile_with_appointments(request):
+#     # Assuming you have retrieved the logged-in user object
+#     logged_in_user = request.user
+
+#     # Assuming each user has a corresponding PatientHistory object
+#     patient_history = PatientHistory.objects.get(user=logged_in_user)
+
+#     # Retrieve appointments related to the patient
+#     appointments = Appointment.objects.filter(patientHistory=patient_history)
+
+#     # Render the appointments in the template
+#     return render(request, 'patient_profile_with_appointments.html', {'appointments': appointments})
+
+
 from django.shortcuts import render, get_object_or_404
 from .models import Docs, Appointment,PatientHistory
 @login_required

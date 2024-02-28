@@ -43,6 +43,7 @@ urlpatterns = [
     path('contact',views.contact,name="contact"),
     path('loginadmin',views.loginadmin,name="loginadmin"),
     path('demo',views.demo,name="demo"),
+    # path('patient/appointments/', views.patient_profile_with_appointments, name='patient_appointments'),
     path('loginadmin',views.loginadmin,name="loginadmin"),
     path('dr_timeslots',views.dr_timeslots,name="dr_timeslots"),
     path('dr_timeslots_shows',views.dr_timeslots_shows, name= 'dr_timeslots_shows'),
