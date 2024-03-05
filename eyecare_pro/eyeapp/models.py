@@ -198,6 +198,7 @@ class Phar(models.Model):
         degree = models.CharField(max_length=100, null=True, blank=True)
         year = models.CharField(max_length=100, null=True, blank=True)
         reset_password = models.CharField(max_length=128, null=True, blank=True)  # New field for reset password
+        profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True)  # Field for storing profile picture
 
 
 

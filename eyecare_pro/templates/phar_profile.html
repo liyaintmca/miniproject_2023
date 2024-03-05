@@ -16,9 +16,7 @@
     <![endif]-->
 </head>
 
- 
-
-<body style="background-image: url('https://e0.pxfuel.com/wallpapers/237/23/desktop-wallpaper-medical-background-medical-themed.jpg'); background-size: cover; background-repeat: repeat;">
+<body style="background-image: url('https://i.pinimg.com/736x/53/1c/28/531c2846672f4345bf0fe46d48c1eadc.jpg'); background-size: cover; background-repeat: repeat;">
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="#">Pharmacist's Dashboard</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,224 +55,184 @@
                     <div class="card-box">
                         <h3 class="card-title">Basic Information</h3>
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="profile-img-wrap">
-                                    {% comment %} {% if user.doctorprofile.profile_pic %}
-                                    <img id="propic" src="{{user.doctorprofile.profile_pic.url }}" alt="profile pic"
-                                        class="inline-block" />
-                                    {% else %}
-                                    <img class="inline-block" src="/static/assets/img/user.jpg" alt="user">
-                                    {% endif %} {% endcomment %}
-                                    {% comment %}
-                                    <div class="fileupload btn">
-                                        <span class="btn-text">edit</span>
-                                        <input class="upload" name="profile_pic" type="file">
-                                    </div>
-                                    {% endcomment %}
-                                </div>
-                                <div class="profile-basic">
-                                    <div class="row">
-                                        <!-- Inside your profile page HTML -->
-                                        <div class="col-md-6">
-                                            <label>Name</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.Name }}" name="Name">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Email</label>
-                                            <div class="form-group form-focus">
-                                                <input type="email" class="form-control floating"
-                                                    value="{{ user.email }}" name="email">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Gender</label>
-                                            <div class="form-group form-focus select-focus">
-                                                <select class="select form-control floating" name="gender">
-                                                    <option value="Male" {% if user_profile.gender == 'Male' %}
-                                                        selected {% endif %}>Male</option>
-                                                    <option value="Female" {% if user_profile.gender == 'Female' %}
-                                                        selected {% endif %}>Female</option>
-                                                    <option value="Other" {% if user_profile.gender == 'Other' %}
-                                                        selected {% endif %}>Others</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Date Of Birth</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.dob }}" name="dob">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label>Address</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.address }}" name="address">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>State</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.state }}" name="state">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Country</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.country }}" name="country">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Phone Number</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.phn }}" name="phn">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>City</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.city }}" name="city">
-                                            </div>
-                                        </div>
-                                        <div class="card-box">
-                                            <h3 class="card-title">Educational Information</h3>
-                                            <div class="row">
-                                        
-                                         
-                                        <div class="col-md-6">
-                                            <label>Institution</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.institution }}" name="institution">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Place</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.subject }}" name="subject">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Degree</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.degree }}" name="degree">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Year</label>
-                                            <div class="form-group form-focus">
-                                                <input type="text" class="form-control floating"
-                                                    value="{{ user_profile.year }}" name="year">
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label for="address" id="carde" class="form-label text animated zoomIn">Reset Password:</label>
-                                            <hr class=" text animated zoomIn" id="signintext2">
-                                            <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="old_password" placeholder="current password">
-                                            <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="reset_password" style="margin-top:20px;" placeholder="new password">
-                                            <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="cpass" style="margin-top:20px;" placeholder="confirm new password">
-                                            <span id="pspan" class="text-danger" style="margin-left:50%;"></span>
-                                        </div>
-                                        {% if messages %}
-                                        {% for message in messages %}
-                                            <p class="text-danger" >{{ message }}</p>
-                                        {% endfor %}
-                                        {% endif %}
-                </form>
-                                        </div>
-                                        <!-- end row -->
-                                        </div>
-                                        </div>
-                                        </div>
-                                        <div class="text-center m-t-20">
-                                            <button class="btn btn-primary submit-btn" type="submit">Save</button>
-                                        </div>
-                                    </div>
+                            <div class="col-md-6">
+                                <label>Name</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.Name }}" name="Name">
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <label>Email</label>
+                                <div class="form-group form-focus">
+                                    <input type="email" class="form-control floating" value="{{ user.email }}" name="email">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Gender</label>
+                                <div class="form-group form-focus select-focus">
+                                    <select class="select form-control floating" name="gender">
+                                        <option value="Male" {% if user_profile.gender == 'Male' %} selected {% endif %}>Male</option>
+                                        <option value="Female" {% if user_profile.gender == 'Female' %} selected {% endif %}>Female</option>
+                                        <option value="Other" {% if user_profile.gender == 'Other' %} selected {% endif %}>Others</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Date Of Birth</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.dob }}" name="dob">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label>Address</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.address }}" name="address">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>State</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.state }}" name="state">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Country</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.country }}" name="country">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Phone Number</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.phn }}" name="phn">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>City</label>
+                                <div class="form-group form-focus">
+                                    <input type="text" class="form-control floating" value="{{ user_profile.city }}" name="city">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Profile Picture</label>
+                                <div class="form-group form-focus">
+                                    <input type="file" class="form-control floating" name="profile_picture">
+                                </div>
+                            </div>
+                            <div class="card-box">
+                                <h3 class="card-title">Educational Information</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Institution</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" value="{{ user_profile.institution }}" name="institution">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Place</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" value="{{ user_profile.subject }}" name="subject">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Degree</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" value="{{ user_profile.degree }}" name="degree">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Year</label>
+                                        <div class="form-group form-focus">
+                                            <input type="text" class="form-control floating" value="{{ user_profile.year }}" name="year">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="address" id="carde" class="form-label text animated zoomIn">Reset Password:</label>
+                                        <hr class=" text animated zoomIn" id="signintext2">
+                                        <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="old_password" placeholder="current password">
+                                        <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="reset_password" style="margin-top:20px;" placeholder="new password">
+                                        <input type="Password" class="form-control text animated zoomIn"  id="cardelement" name="cpass" style="margin-top:20px;" placeholder="confirm new password">
+                                        <span id="pspan" class="text-danger" style="margin-left:50%;"></span>
+                                    </div>
+                                </div>
+                                {% if messages %}
+                                {% for message in messages %}
+                                <p class="text-danger">{{ message }}</p>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="sidebar-overlay" data-reff=""></div>
-                        <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
-                        <script src="{% static 'assets/js/popper.min.js'%}"></script>
-                        <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
-                        <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
-                        <script src="{% static 'assets/js/app.js'%}"></script>
-                        <script>
-                            function validateForm() {
-                                // Get form input values
-                                var name = document.forms["yourForm"]["Name"].value;
-                                var email = document.forms["yourForm"]["email"].value;
-                                var gender = document.forms["yourForm"]["gender"].value;
-                                var dob = document.forms["yourForm"]["dob"].value;
-                                var address = document.forms["yourForm"]["address"].value;
-                                var state = document.forms["yourForm"]["state"].value;
-                                var country = document.forms["yourForm"]["country"].value;
-                                var phn = document.forms["yourForm"]["phn"].value;
-                                var city = document.forms["yourForm"]["city"].value;
-                        
-                                // Perform validation checks
-                                if (name === "") {
-                                    alert("Name must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                                if (email === "") {
-                                    alert("Email must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                                if (gender === "") {
-                                    alert("Gender must be selected");
-                                    return false; // Prevent form submission
-                                }
-                                if (dob === "") {
-                                    alert("Date of Birth must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                                if (address === "") {
-                                    alert("Address must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                                if (state === "") {
-                                    alert("State must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                                if (country === "") {
-                                    alert("Country must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                                if (phn === "") {
-                                    alert("Phone Number must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                                if (city === "") {
-                                    alert("City must be filled out");
-                                    return false; // Prevent form submission
-                                }
-                        
-                                // Add more validation checks for other fields as needed
-                        
-                                // If all validations pass, allow form submission
-                                return true;
-                            }
-                        </script>
-                        
+                    </div>
+                    <div class="text-center m-t-20">
+                        <button class="btn btn-primary submit-btn" type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-overlay" data-reff=""></div>
+    <script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
+    <script src="{% static 'assets/js/popper.min.js'%}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'assets/js/jquery.slimscroll.js'%}"></script>
+    <script src="{% static 'assets/js/app.js'%}"></script>
+    <script>
+        function validateForm() {
+            // Get form input values
+            var name = document.forms["yourForm"]["Name"].value;
+            var email = document.forms["yourForm"]["email"].value;
+            var gender = document.forms["yourForm"]["gender"].value;
+            var dob = document.forms["yourForm"]["dob"].value;
+            var address = document.forms["yourForm"]["address"].value;
+            var state = document.forms["yourForm"]["state"].value;
+            var country = document.forms["yourForm"]["country"].value;
+            var phn = document.forms["yourForm"]["phn"].value;
+            var city = document.forms["yourForm"]["city"].value;
+
+            // Perform validation checks
+            if (name === "") {
+                alert("Name must be filled out");
+                return false; // Prevent form submission
+            }
+            if (email === "") {
+                alert("Email must be filled out");
+                return false; // Prevent form submission
+            }
+            if (gender === "") {
+                alert("Gender must be selected");
+                return false; // Prevent form submission
+            }
+            if (dob === "") {
+                alert("Date of Birth must be filled out");
+                return false; // Prevent form submission
+            }
+            if (address === "") {
+                alert("Address must be filled out");
+                return false; // Prevent form submission
+            }
+            if (state === "") {
+                alert("State must be filled out");
+                return false; // Prevent form submission
+            }
+            if (country === "") {
+                alert("Country must be filled out");
+                return false; // Prevent form submission
+            }
+            if (phn === "") {
+                alert("Phone Number must be filled out");
+                return false; // Prevent form submission
+            }
+            if (city === "") {
+                alert("City must be filled out");
+                return false; // Prevent form submission
+            }
+
+            // Add more validation checks for other fields as needed
+
+            // If all validations pass, allow form submission
+            return true;
+        }
+    </script>
 </body>
 
 </html>

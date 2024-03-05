@@ -70,7 +70,6 @@ urlpatterns = [
     path('dd',views.dd,name='dd'), 
     path('generate_pdf/', views.generate_pdf, name='generate_pdf'),    
     path('loggout', loggout, name='loggout'),
-    
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
@@ -120,10 +119,11 @@ urlpatterns = [
     path('career-openings/', views.career_openings, name='career_openings'),
     path('job_application/<int:career_opening_id>/', views.job_application, name='job_application'),
     path('job_applications/', views.job_application_list, name='job_application_list'),
-
-
-
-
+    path('generate-medicine-names-pdf/', views.generate_medicine_names_pdf, name='generate_medicine_names_pdf'),
+    path('generate_medicine_names_excel/', views.generate_medicine_names_excel, name='generate_medicine_names_excel'),
+    path('edit_medicine/<int:medicine_id>/', views.edit_medicine, name='edit_medicine'),
+    path('patient_appointments/', views.patient_appointments, name='patient_appointments'),
+    
 
 
  

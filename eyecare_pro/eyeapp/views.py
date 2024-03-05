@@ -261,58 +261,53 @@ def search_doc(request):
 
         return render(request, 'admin_doctors.html', context)
 # pharmacist profile
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render, redirect
+from .models import Phar
+
 def phar_profile(request):
     user = request.user
-    print(user)
-    
     user_profile = Phar.objects.get(user=user)
+
     if request.method == 'POST':
         # Update user fields
-        print('POST')
-        # Update user profile fields
         user_profile.Name = request.POST.get('Name')
-        print("Name:", user_profile.Name)
         user_profile.address = request.POST.get('address')
-        print("Address:", user_profile.address)
         user_profile.country = request.POST.get('country')
-        print("Country:", user_profile.country)
         user_profile.state = request.POST.get('state')
-        print("State:", user_profile.state)
         user_profile.phn = request.POST.get('phn')
-        print("Phone Number:", user_profile.phn)
         user_profile.city = request.POST.get('city')
-        print("City:", user_profile.city)
         user_profile.gender = request.POST.get('gender')
-        print("Gender:", user_profile.gender)
         user_profile.dob = request.POST.get('dob')
-        print("Birth Day:", user_profile.dob)
         user_profile.institution = request.POST.get('institution')
-        print("Institution:", user_profile.institution)
         user_profile.subject = request.POST.get('subject')
-        print("Place:", user_profile.subject)
         user_profile.degree = request.POST.get('degree')
-        print("Degree:", user_profile.degree)
         user_profile.year = request.POST.get('year')
-        print("Grade:", user_profile.year)
+
+        # Handle profile photo upload
+        profile_pic = request.FILES.get('profile_pic')
+        if profile_pic:
+            user_profile.profile_pic = profile_pic
+
         reset_password = request.POST.get('reset_password')
         old_password = request.POST.get('old_password')
 
-
+        # Update user's password if old password is correct
         if old_password and reset_password and request.POST.get('cpass') == reset_password:
             if user.check_password(old_password):
-                # The old password is correct, set the new password
                 user.set_password(reset_password)
                 user.save()
                 update_session_auth_hash(request, request.user)  # Update the session to prevent logging out
             else:
                 messages.error(request, "Incorrect old password. Password not updated.")
         else:
-            print("Please fill all three password fields correctly.")
-        
+            messages.error(request, "Please fill all three password fields correctly.")
+
         user_profile.reset_password = reset_password
         user_profile.save()
         return redirect('phar_profile')
-        
+
     context = {
         'user': user,
         'user_profile': user_profile
@@ -1838,3 +1833,150 @@ from .models import JobApplication
 def job_application_list(request):
     job_applications = JobApplication.objects.all()
     return render(request, 'job_application_list.html', {'job_applications': job_applications})
+
+
+
+############################################ MEDICINE NAMES PDF GENERATION #############################
+
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from .models import Medicine
+
+def generate_medicine_names_pdf(request):
+    # Fetch medicine data from the database
+    medicine_data = Medicine.objects.all()
+
+    # Create a PDF document
+    pdf_filename = "medicine_names.pdf"
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{pdf_filename}"'
+
+    # Create a ReportLab PDF document
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    styles = getSampleStyleSheet()
+
+    # Create a list to hold the PDF contents
+    elements = []
+
+    # Add header
+    header = Paragraph("Medicine Stock Details", styles['Title'])
+    elements.append(header)
+
+    # Create a table for medicine details
+    data = [["Medicine Name", "Details", "Company", "Expiry Date", "Contains", "Dosage", "Price", "Category"]]
+    for medicine in medicine_data:
+        data.append([
+            medicine.medicineName if medicine.medicineName else "",
+            medicine.details if medicine.details else "",
+            medicine.companyName if medicine.companyName else "",
+            str(medicine.expiryDate) if medicine.expiryDate else "",
+            medicine.contains if medicine.contains else "",
+            medicine.dosage if medicine.dosage else "",
+            str(medicine.price) if medicine.price else "",
+            medicine.MedCatId.category_name if medicine.MedCatId else ""
+        ])
+
+    # Customize table style
+    table_style = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+                              ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+                              ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                              ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                              ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                              ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                              ('GRID', (0, 0), (-1, -1), 1, colors.black)])
+
+    # Create the table and apply style
+    medicine_table = Table(data)
+    medicine_table.setStyle(table_style)
+
+    # Add the table to the elements list
+    elements.append(medicine_table)
+
+    # Build the PDF document
+    doc.build(elements)
+
+    return response
+
+######################### excel################
+
+import xlsxwriter
+from django.http import HttpResponse
+from .models import Medicine
+
+def generate_medicine_names_excel(request):
+    # Fetch medicine data from the database
+    medicine_data = Medicine.objects.all()
+
+    # Create an Excel workbook and add a worksheet
+    output = HttpResponse(content_type='application/ms-excel')
+    output['Content-Disposition'] = 'attachment; filename="medicine_names.xlsx"'
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet()
+
+    # Write headers
+    headers = ["Medicine Name", "Details", "Company", "Expiry Date", "Contains", "Dosage", "Price", "Category"]
+    for col, header in enumerate(headers):
+        worksheet.write(0, col, header)
+
+    # Write medicine data
+    for row, medicine in enumerate(medicine_data, start=1):
+        worksheet.write(row, 0, medicine.medicineName)
+        worksheet.write(row, 1, medicine.details)
+        worksheet.write(row, 2, medicine.companyName)
+        worksheet.write(row, 3, str(medicine.expiryDate) if medicine.expiryDate else "")
+        worksheet.write(row, 4, medicine.contains)
+        worksheet.write(row, 5, medicine.dosage)
+        worksheet.write(row, 6, str(medicine.price) if medicine.price else "")
+        worksheet.write(row, 7, medicine.MedCatId.category_name if medicine.MedCatId else "")
+
+    # Close the workbook
+    workbook.close()
+
+    return output
+
+
+################# EDIT MEDICINE ################
+
+from django.shortcuts import render, redirect
+from .models import Medicine
+
+def edit_medicine(request, medicine_id):
+    # Retrieve the medicine object from the database
+    medicine = Medicine.objects.get(id=medicine_id)
+    
+    if request.method == 'POST':
+        # If the form is submitted, process the form data
+        medicine.medicineName = request.POST.get('medicineName')
+        medicine.details = request.POST.get('details')
+        medicine.companyName = request.POST.get('companyName')
+        medicine.expiryDate = request.POST.get('expiryDate')
+        medicine.contains = request.POST.get('contains')
+        medicine.dosage = request.POST.get('dosage')
+        medicine.price = request.POST.get('price')
+        medicine.MedCatId.category_name = request.POST.get('category')
+        
+        # Save the updated medicine object
+        medicine.save()
+        
+        return redirect('view_medicine')  # Redirect to the view medicine page after editing
+    
+    # Render the edit medicine template with the medicine object
+    return render(request, 'edit_medicine.html', {'medicine': medicine})
+
+
+##################################appointment seen by patient######################
+
+from django.shortcuts import render
+from .models import Appointment, Docs, CustomUser
+
+@login_required(login_url='dd')
+def patient_appointments(request):
+    user_id = request.user.id
+    patient_history = PatientHistory.objects.get(user=user_id)
+    appointments = Appointment.objects.filter(patientHistory=patient_history)
+    
+    return render(request, 'patient_appointments.html', {'appointments': appointments})

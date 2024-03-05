@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Custom Styles */
+        body {
+            background-color: #f8f9fa;
+            padding-top: 60px; /* Offset the navbar height */
+        }
+        .navbar-custom {
+            background-color: #223a66; /* Navbar background color */
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-text {
+            color: #ffffff; /* Navbar text color */
+        }
+        .container-custom {
+            margin-top: 20px;
+        }
+        .appointment-card {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .appointment-card h4 {
+            color: #007bff;
+        }
+        .appointment-card hr {
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="#">EyeCare Hospital </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'patient_appointments' %}">My Appointments <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container container-custom">
+        <h1 class="mb-4">My Appointments</h1>
+        <div class="row">
+            {% for appointment in appointments %}
+            <div class="col-md-6">
+                <div class="appointment-card">
+                    <h4>Doctor: {{ appointment.doctor.Name }}</h4>
+                    <p><strong>Date:</strong> {{ appointment.date }}</p>
+                    <p><strong>Time:</strong> {{ appointment.slot.start_time }} - {{ appointment.slot.end_time }}</p>
+                    <p><strong>Status:</strong> {% if appointment.status %}Confirmed{% else %}Pending{% endif %}</p>
+                    <hr>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col">
+                <p>No appointments found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
