@@ -238,6 +238,20 @@ class PatientHistory(models.Model):
            return f"Patient History for {self.name}"
 
 class Appointment(models.Model):
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+    PENDING = 'pending'
+    
+    APPROVAL_CHOICES = [
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+        (PENDING, 'Pending'),
+    ]
+    is_approved = models.CharField(
+        max_length=10,
+        choices=APPROVAL_CHOICES,
+        default=PENDING,
+    )
     patientHistory= models.ForeignKey(PatientHistory, on_delete=models.CASCADE, related_name='patient_history',null=True, blank=True)
 
     # allergy = models.CharField(max_length=3,null=True, blank=True)
@@ -245,8 +259,7 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Docs, on_delete=models.CASCADE, related_name='appointments',null=True, blank=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     slot = models.ForeignKey(Slots, on_delete=models.CASCADE)
-    date = models.DateField(blank=True, null=True)
-    status=models.BooleanField(default=False,null=True, blank=True)
+    date = models.DateField(blank=True, null=True) 
      
 
     

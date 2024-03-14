@@ -1980,3 +1980,57 @@ def patient_appointments(request):
     appointments = Appointment.objects.filter(patientHistory=patient_history)
     
     return render(request, 'patient_appointments.html', {'appointments': appointments})
+
+
+#################################APPOINTMENT REJECT OR APPROVE ###########################
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import Appointment
+
+def approve_appointment(request):
+    if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+        appointment = Appointment.objects.get(id=appointment_id)
+        appointment.is_approved = Appointment.APPROVED # Assuming 'status' field indicates approval
+        appointment.save()
+    return redirect('rep_appointmentlist')
+
+def reject_appointment(request):
+    if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+        appointment = Appointment.objects.get(id=appointment_id)
+        appointment.is_approved = Appointment.REJECTED # Assuming 'status' field indicates approval
+        appointment.save()
+    return redirect('rep_appointmentlist')
+
+
+
+
+
+# flutter applicationn view for medicine
+
+
+
+from django.http import JsonResponse
+from .models import Medicine
+
+def all_medicines(request):
+    medicines = Medicine.objects.all()
+    data = []
+    for medicine in medicines:
+        data.append({
+            'medicineName': medicine.medicineName,
+            'details': medicine.details,
+            'companyName': medicine.companyName,
+            'expiryDate': str(medicine.expiryDate),
+            'contains': medicine.contains,
+            'dosage': medicine.dosage,
+            'MedCatId': medicine.MedCatId.category_name,  # Accessing category_name from MedicineCategory
+            'price': str(medicine.price),
+            'is_active': medicine.is_active,
+        })
+    return JsonResponse(data, safe=False)
+
+
+

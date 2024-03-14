@@ -74,7 +74,11 @@
                     <h4>Doctor: {{ appointment.doctor.Name }}</h4>
                     <p><strong>Date:</strong> {{ appointment.date }}</p>
                     <p><strong>Time:</strong> {{ appointment.slot.start_time }} - {{ appointment.slot.end_time }}</p>
-                    <p><strong>Status:</strong> {% if appointment.status %}Confirmed{% else %}Pending{% endif %}</p>
+                    {% if appointment.status %}
+                    <p><strong>Status:</strong> Confirmed</p>
+                    {% else %}
+                    <p><strong>Status:</strong> Pending</p>
+                    {% endif %}
                     <hr>
                 </div>
             </div>

@@ -122,8 +122,14 @@ urlpatterns = [
     path('generate-medicine-names-pdf/', views.generate_medicine_names_pdf, name='generate_medicine_names_pdf'),
     path('generate_medicine_names_excel/', views.generate_medicine_names_excel, name='generate_medicine_names_excel'),
     path('edit_medicine/<int:medicine_id>/', views.edit_medicine, name='edit_medicine'),
-    path('patient_appointments/', views.patient_appointments, name='patient_appointments'),
+    path('patient_appointments/', views.patient_appointments, name='patient_appointments'), 
+    # URL pattern for approving appointment
+    path('approve_appointment/', views.approve_appointment, name='approve_appointment'),
     
+    # URL pattern for rejecting appointment
+    path('reject_appointment/', views.reject_appointment, name='reject_appointment'),
+
+    path('medicines/', views.all_medicines, name='all_medicines'),    
 
 
  

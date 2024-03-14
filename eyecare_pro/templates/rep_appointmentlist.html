@@ -111,8 +111,7 @@
                 </div>
             </div>
         </form>
-
-
+ 
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -142,6 +141,37 @@
                     <td>{{ i.doctor }}</td>
                     <td>{{ i.slot }}</td>
                     <td>{{ i.date }}</td>
+                    <td>
+                        {% if i.is_approved == 'pending' %}
+                        <form action="{% url 'approve_appointment' %}" method="POST" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="appointment_id" value="{{ i.id }}">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+                        <form action="{% url 'reject_appointment' %}" method="POST" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="appointment_id" value="{{ i.id }}">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                      {% elif i.is_approved == 'approved' %}
+                         
+                      <form action="{% url 'reject_appointment' %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="appointment_id" value="{{ i.id }}">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                      {% else %}
+                         
+                      <form action="{% url 'approve_appointment' %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="appointment_id" value="{{ i.id }}">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                     
+                      {% endif %}
+                       
+                        
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>

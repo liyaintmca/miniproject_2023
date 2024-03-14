@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-4-2td9o7l&h&99mf30=h))8x*(421%i^%n1*z4c7^*xzyo*l2#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1' ,'10.0.2.2']
 
 
 # Application definition
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'chartjs',
+    'rest_framework',
 ]
 
 SITE_ID = 1
