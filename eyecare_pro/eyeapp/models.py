@@ -1,5 +1,5 @@
 from datetime import date
- 
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
@@ -407,3 +407,76 @@ class JobApplication(models.Model):
         return self.name
 
  
+from django.db import models
+
+class Donation(models.Model):
+    full_name = models.CharField(max_length=100,null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    place = models.CharField(max_length=100,null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2,null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True, blank=True)
+
+    def __str__(self):
+        return f"Donation #{self.pk}: {self.full_name} - {self.amount}"
+    
+class Payment(models.Model):
+    class PaymentStatusChoices(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        SUCCESSFUL = 'successful', 'Successful'
+        FAILED = 'failed', 'Failed'
+        
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Link the payment to a user
+    razorpay_order_id = models.CharField(max_length=255,null=True, blank=True)  # Razorpay order ID
+    payment_id = models.CharField(max_length=255,null=True, blank=True)  # Razorpay payment ID
+    amount = models.DecimalField(max_digits=8, decimal_places=2,null=True, blank=True)  # Amount paid
+    currency = models.CharField(max_length=3,null=True, blank=True)  # Currency code (e.g., "INR")
+    timestamp = models.DateTimeField(auto_now_add=True,null=True, blank=True)  # Timestamp of the payment
+    payment_status = models.CharField(max_length=20, choices=PaymentStatusChoices.choices, default=PaymentStatusChoices.PENDING)
+    donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
+
+    def str(self):
+        return f"Order for {self.user.email}"
+
+    class Meta:
+        ordering = ['-timestamp']
+
+#Update Status not implemented
+    def update_status(self):
+        # Calculate the time difference in minutes
+        time_difference = (timezone.now() - self.timestamp).total_seconds() / 60
+
+        if self.payment_status == self.PaymentStatusChoices.PENDING and time_difference > 1:
+            # Update the status to "Failed"
+            self.payment_status = self.PaymentStatusChoices.FAILED
+            self.save()
+
+
+class Award(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    photo = models.ImageField(upload_to='awards/photos/')
+
+    def __str__(self):
+        return self.title
+ 
+
+class EyeDonor(models.Model):
+    email = models.EmailField(null=True, blank=True)
+    name = models.CharField(max_length=255,null=True, blank=True)
+    dob = models.DateField(null=True, blank=True)
+    district = models.CharField(max_length=100,null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15,null=True, blank=True)
+    signature = models.ImageField(upload_to='signatures/',null=True, blank=True)
+    witness1_name = models.CharField(max_length=255,null=True, blank=True)
+    witness1_age = models.DateField(null=True, blank=True)
+    witness1_address = models.TextField(null=True, blank=True)
+    witness1_signature = models.ImageField(upload_to='signatures/',null=True, blank=True)
+    witness2_name = models.CharField(max_length=255,null=True, blank=True)
+    witness2_age = models.DateField(null=True, blank=True)
+    witness2_address = models.TextField(null=True, blank=True)
+    witness2_signature = models.ImageField(upload_to='signatures/',null=True, blank=True)
+    consent_notify_next_of_kin = models.BooleanField(default=False,null=True, blank=True)
+
+    def __str__(self):
+        return self.name

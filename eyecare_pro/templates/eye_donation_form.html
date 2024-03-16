@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye Hospital</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #223a66; /* Updated background color */
+            font-family: Arial, sans-serif;
+            color: #fff; /* Text color */
+        }
+
+        .navbar {
+            background-color: #004080; /* Navbar background color */
+            color: #fff; /* Navbar text color */
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #1565c0;
+        }
+
+        p {
+            color: #c3c3c3; /* Paragraph text color */
+        }
+
+        label {
+            font-weight: bold;
+            color: black; /* Label text color */
+        }
+        element.style {
+            color: #0a0a0a;
+        }
+        signaturePreview {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            display: none; /* Hide initially */
+        }
+        form-control-file{
+            display: block;
+            width: 100%;
+            color:black; /*
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Eye Hospital</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'show_award' %}">Awards</a>
+                </li>
+                <!-- Add more navbar links as needed -->
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Eye Donation</h2>
+                <p>Contacting an Ahalia Eye Bank is easy, as a dedicated number has been assigned to them. By calling this number, information about eye donation can be obtained.</p>
+                <p>Land Line No.: 04923  225222</p>
+                <p>Mobile No.: 9188954112</p>
+                <h3>Guidelines for Eye Donation</h3>
+                <ul>
+                    <li>Age, sex, race or religion is no bar. Keep informed close relatives about your desire to donate.</li>
+                    <li>Wearing glasses, cataract, certain eye problems of blood group does not affect eye donation.</li>
+                    <li>On death, inform eye bank immediately.</li>
+                    <li>The donation must be within 6 hours of death. Close eyes and place wet cotton over lids (to keep cornea moist & healthy).</li>
+                    <li>Switch off fans.</li>
+                    <li>Removal takes only about 20 minutes.</li>
+                    <li>No special room necessary.</li>
+                    <li>No disfiguration is caused.</li>
+                    <li>Donated eyes are never sold/used otherwise.</li>
+                    <li>Two persons gain sight. 2.5 million Indians need sight. Do not deny them life. Spread the message of eye donation.</li>
+                </ul>
+                <h3>Who can be an eye donor?</h3>
+                <p>Practically anyone from the age of 1 year. There is no maximum age limit. Spectacle wearers, persons who had cataract surgery, diabetics, and hypertensive individuals can donate eyes.</p>
+                <h3>How do I donate?</h3>
+                <p>The eyes need to be collected within 6 hours of death. So, call the nearest eye bank as early as possible after death.</p>
+                <p>Things to do after making the call:</p>
+                <ul>
+                    <li>Keep both eyes of deceased closed and covered with moist cotton.</li>
+                    <li>Switch off the overhead fan.</li>
+                    <li>Raise the head end of the body by about 6 inches, if possible, to lessen the incidence of bleeding during the removal of the eyes.</li>
+                    <li>Will there be any delay in funeral arrangements? Eye removal takes under 10 minutes and leaves no visible signs that would interfere with common funeral practices.</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Eye Donation Form</h2>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth:</label>
+                                <input type="date" class="form-control" name="dob">
+                            </div>
+                            <div class="form-group">
+                                <label for="district">District:</label>
+                                <input type="text" class="form-control" name="district">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address:</label>
+                                <textarea class="form-control" name="address"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Phone Number:</label>
+                                <input type="text" class="form-control" name="phone_number">
+                            </div>
+                            <div class="form-group">
+                                <label for="signature">Signature:</label>
+                                <input type="file" class="form-control-file" name="signature">
+                            </div>
+                            <!-- Witness 1 -->
+                            <h2>Witness 1</h2>
+                            <div class="form-group">
+                                <label for="witness1_name">Name:</label>
+                                <input type="text" class="form-control" name="witness1_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="witness1_age">Age:</label>
+                                <input type="date" class="form-control" name="witness1_age">
+                            </div>
+                            <div class="form-group">
+                                <label for="witness1_address">Address:</label>
+                                <textarea class="form-control" name="witness1_address"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="witness1_signature">Signature:</label>
+                                <input type="file" class="form-control-file" name="witness1_signature" id="signaturePreview">
+                            </div>
+                            <!-- Witness 2 -->
+                            <h2>Witness 2</h2>
+                            <div class="form-group">
+                                <label for="witness2_name">Name:</label>
+                                <input type="text" class="form-control" name="witness2_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="witness2_age">Age:</label>
+                                <input type="date" class="form-control" name="witness2_age">
+                            </div>
+                            <div class="form-group">
+                                <label for="witness2_address">Address:</label>
+                                <textarea class="form-control" name="witness2_address"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="witness2_signature">Signature:</label>
+                                <input type="file" class="form-control-file" name="witness2_signature">
+                            </div>
+                            <!-- Consent -->
+                            <div class="form-group">
+                                <input type="checkbox" name="consent_notify_next_of_kin" id="consent_notify_next_of_kin" value="true">
+                                <label for="consent_notify_next_of_kin" style="color: #black;">Notify Next of Kin</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate to ColonCare</title>
+    <!-- Include your CSS file if needed -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Donation Form -->
+    <form action="{% url 'donate' %}" method="POST">
+        {% csrf_token %}
+        <h3>Make a Donation</h3>
+        <label for="full_name">Full Name:</label><br>
+        <input type="text" id="full_name" name="full_name" required><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="place">Place:</label><br>
+        <input type="text" id="place" name="place" required><br><br>
+        
+        <label for="amount">Donation Amount :</label><br>
+        <input type="number" id="amount" name="amount" min="1" required><br><br>
+        
+        <button type="submit">Make My Gift</button>
+    </form>
+
+    {% if key %}
+        <!-- Razorpay Payment Integration -->
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            var options = {
+                key: "{{ razorpay_merchant_key }}",
+                amount: "{{ razorpay_amount }}",
+                currency: "{{ currency }}",
+                name: "ColonCare",
+                order_id: "{{ razorpay_order_id }}",
+                callback_url: "{{ callback_url }}",
+            };
+            
+            var rzp1 = new Razorpay(options);
+            document.getElementById("pay-btn").onclick = function (e) {
+                rzp1.open();
+                e.preventDefault();
+            };
+        </script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye Donor List</title>
+    <!-- Bootstrap CSS link -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            padding-top: 50px; /* Adjust based on your sidebar height */
+            font-family: Arial, sans-serif; /* Change font family */
+        }
+        .container-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .sidebar {
+            height: 100%;
+            width: 250px; /* Adjust as needed */
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40; /* Bootstrap dark theme color */
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #5a6268; /* Bootstrap dark theme color on hover */
+        }
+        h1, h2 {
+            color: #007bff; /* Bootstrap primary color */
+        }
+        p {
+            font-size: 16px;
+            color: #6c757d; /* Bootstrap secondary color */
+        }
+        .total-count {
+            font-size: 20px;
+            font-weight: bold;
+            color: #28a745; /* Bootstrap success color */
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="{% url 'chart' %}">Dashboard</a>
+        <a href="{% url 'admin_doctors' %}">Doctors</a>
+        <a href="{% url 'departments' %}">Departments</a>
+        <a href="{% url 'rep' %}">Receptionists</a>
+        <a href="{% url 'phar' %}">Pharmacists</a>
+        <a href="{% url 'admin_add_blog' %}">Blog</a>
+        <a href="{% url 'leave_list' %}">Staff Leave</a>
+        <a href="{% url 'add_career_opening' %}">Careers</a>
+        <a href="{% url 'add_award' %}">Awards and Certifications</a>
+        <!-- Add more links as needed -->
+    </div>
+
+    <!-- Content -->
+    <div class="container">
+        <h1>Eye Donor List</h1>
+        <!-- Total count with styling -->
+        <p class="total-count">Total Donor Requests: {{ donor_count }}</p>
+
+        <!-- Donor details -->
+        {% for donor in donors %}
+        <div class="container-box">
+            <h2>{{ donor.name }}</h2>
+            <p><strong>Email:</strong> {{ donor.email }}</p>
+            <p><strong>Date of Birth:</strong> {{ donor.dob }}</p>
+            <p><strong>District:</strong> {{ donor.district }}</p>
+            <p><strong>Address:</strong> {{ donor.address }}</p>
+            <p><strong>Phone Number:</strong> {{ donor.phone_number }}</p>
+            <p><strong>Witness 1 Name:</strong> {{ donor.witness1_name }}</p>
+            <p><strong>Witness 1 Age:</strong> {{ donor.witness1_age }}</p>
+            <p><strong>Witness 1 Address:</strong> {{ donor.witness1_address }}</p>
+            <!-- Signature as a downloadable link -->
+            <p><strong>Signature:</strong> <a href="{{ donor.signature.url }}" download>{{ donor.signature }}</a></p>
+            <!-- Witness 1 Signature as a downloadable link -->
+            <p><strong>Witness 1 Signature:</strong> <a href="{{ donor.witness1_signature.url }}" download>{{ donor.witness1_signature }}</a></p>
+            <p><strong>Witness 2 Name:</strong> {{ donor.witness2_name }}</p>
+            <p><strong>Witness 2 Age:</strong> {{ donor.witness2_age }}</p>
+            <p><strong>Witness 2 Address:</strong> {{ donor.witness2_address }}</p>
+            <!-- Witness 2 Signature as a downloadable link -->
+            <p><strong>Witness 2 Signature:</strong> <a href="{{ donor.witness2_signature.url }}" download>{{ donor.witness2_signature }}</a></p>
+            <p><strong>Consent Notify Next of Kin:</strong> {{ donor.consent_notify_next_of_kin }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Bootstrap JS links (if needed) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

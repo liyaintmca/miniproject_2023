@@ -38,11 +38,47 @@
         .btn {
             padding: 10px 20px;
         }
+        .sidebar {
+            height: 100%;
+            width: 250px; /* Adjust as needed */
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40; /* Bootstrap dark theme color */
+            padding-top: 20px;
+            z-index: 1; /* Ensure sidebar appears in front */
+        }
+        .sidebar a {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #5a6268; /* Bootstrap dark theme color on hover */
+        }
+        .navbar {
+            z-index: 0; /* Ensure navbar appears behind sidebar */
+        }
     </style>
 </head>
 <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="{% url 'chart' %}">Admin Dashboard</a>
+        <a href="{% url 'admin_doctors' %}">Doctors</a>
+        <a href="{% url 'departments' %}">Departments</a>
+        <a href="{% url 'rep' %}">Receptionists</a>
+        <a href="{% url 'phar' %}">Pharmacists</a>
+        <a href="{% url 'admin_add_blog' %}">Blog</a>
+        <a href="{% url 'eye_donor_list' %}">Eye Donors List</a>
+        <a href="{% url 'add_career_opening' %}">Careers</a>
+        <a href="{% url 'add_award' %}">Awards and Certifications</a>
+        <!-- Add more links as needed -->
+    </div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">Admin Dashboard</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +99,7 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav> {% endcomment %}
 
     <!-- Content -->
     <div class="container">
@@ -171,39 +207,39 @@
 
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn-approve').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const leaveId = this.dataset.leaveId;
+                    fetch(`/approve-leave/${leaveId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            // You can update the UI here if needed
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+
+            document.querySelectorAll('.btn-reject').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const leaveId = this.dataset.leaveId;
+                    fetch(`/reject-leave/${leaveId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            // You can update the UI here if needed
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+        });
+    </script>
+
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.btn-approve').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                const leaveId = this.dataset.leaveId;
-                fetch(`/approve-leave/${leaveId}/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                        // You can update the UI here if needed
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
-        });
-
-        document.querySelectorAll('.btn-reject').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                const leaveId = this.dataset.leaveId;
-                fetch(`/reject-leave/${leaveId}/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                        // You can update the UI here if needed
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
-        });
-    });
-</script>
-
 </html>

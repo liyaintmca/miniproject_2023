@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-from .models import Docs,Phar
+from .models import Docs, Payment,Phar
 from .models import Deps,MedicineCategory
 from .models import Rep
 from .models import CustomUser, PatientHistory
@@ -2033,4 +2033,267 @@ def all_medicines(request):
     return JsonResponse(data, safe=False)
 
 
+
+###################################### DONATION FOR HOSPITAL #######################################
+
+from django.shortcuts import render, redirect
+from .models import Donation
+
+def donate(request):
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        place = request.POST.get('place')
+        amount = request.POST.get('amount')
+
+        # Save the data to the Donation model
+        donation = Donation.objects.create(
+            full_name=full_name,
+            email=email,
+            place=place,
+            amount=amount
+        )
+        # Optionally, you can do further processing here, such as sending a confirmation email
+
+        # Redirect to the donation detail page with the donation ID
+        return redirect('donation', donation_id=donation.id)
+
+    return render(request, 'donation.html')
+
+
+from django.shortcuts import render, HttpResponse
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+import razorpay
+from .models import Donation
+
+# Initialize Razorpay client with your API key and secret
+razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+def donation(request, donation_id):
+   
+        donation = Donation.objects.get(pk=donation_id)
+        # Currency and amount conversion
+        amount = donation.amount
+        currency = 'INR'
+        amount_in_paise = int(amount * 100)
+
+        # Create a Razorpay Order
+        razorpay_order = razorpay_client.order.create(dict(
+            amount=amount_in_paise,
+            currency=currency,
+            payment_capture='0'  # Payment capture should be '0' for manual capture
+        ))
+
+        # Order ID of the newly created order
+        razorpay_order_id = razorpay_order['id']
+        callback_url = '/paymenthandler_donation/'  # You can specify your callback URL
+
+        # Save the payment details to the Payment model
+        payment = Payment.objects.create(
+            user=request.user,  # Assuming you have a logged-in user
+            razorpay_order_id=razorpay_order_id,
+            amount=amount,
+            currency=currency,
+            donation=donation
+        )
+
+        # Pass these details to the frontend
+        context = {
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_merchant_key': settings.RAZOR_KEY_ID,
+            'razorpay_amount': amount,
+            'currency': currency,
+            'callback_url': callback_url,
+            'amount': amount,
+            'key': True,
+            'donation': donation
+
+        }
+
+        return render(request, 'donation.html', context=context)
+
+
+@csrf_exempt
+def paymenthandler_donation(request):
+    # only accept POST request.
+    if request.method == "POST":
+        try:
+            # get the required parameters from post request.
+            payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature
+            }
+
+            # verify the payment signature.
+            result = razorpay_client.utility.verify_payment_signature(params_dict)
+            payment = Payment.objects.get(razorpay_order_id=razorpay_order_id)
+            if result is not None:
+                payment = Payment.objects.get(razorpay_order_id=razorpay_order_id)
+                amount = int(payment.amount * 100)  # Convert Decimal to paise
+                try:
+                    # capture the payment
+                    razorpay_client.payment.capture(payment_id, amount)
+                    payment = Payment.objects.get(razorpay_order_id=razorpay_order_id)
+
+                    # Update the order with payment ID and change status to "Successful"
+                    payment.payment_id = payment_id
+                    payment.payment_status = Payment.PaymentStatusChoices.SUCCESSFUL
+                    payment.save()
+
+                    # Send the welcome email with PDF invoice
+                    
+                    
+                    # render success page on successful capture of payment
+                    return render(request, 'index.html')
+                except:
+                    # if there is an error while capturing payment.
+                    payment.payment_status = Payment.PaymentStatusChoices.FAILED
+                    return render(request, 'paymentfail.html')
+            else:
+                # if signature verification fails.
+                payment.payment_status = Payment.PaymentStatusChoices.FAILED
+                return render(request, 'paymentfail.html')
+        except:
+            # if we don't find the required parameters in POST data
+            return HttpResponseBadRequest()
+    else:
+        # if other than POST request is made.
+        return HttpResponseBadRequest()
+
+############################# AWARDS AND CERTIFICATion ############################
+
+from django.shortcuts import render, redirect
+from .models import Award
+
+def add_award(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        photo = request.FILES.get('photo')
+        Award.objects.create(title=title, description=description, photo=photo)
+        return redirect('show_award')
+    return render(request, 'award.html')
+
+from django.shortcuts import render
+from .models import Award
+
+def show_award(request):
+    awards = Award.objects.all()
+    return render(request, 'show_award.html', {'awards': awards})
+
+# views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Award
+
+def edit_award(request, award_id):
+    award = get_object_or_404(Award, id=award_id)
+    if request.method == 'POST':
+        # Retrieve data from the POST request
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        photo = request.FILES.get('photo')
+
+        # Update award object with new data
+        award.title = title
+        award.description = description
+        if photo:
+            award.photo = photo
+        award.save()
+
+        return redirect('show_award')  # Redirect to page displaying awards
+
+    return render(request, 'edit_award.html', {'award': award})
+
+# views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Award
+
+def delete_award(request, award_id):
+    award = get_object_or_404(Award, id=award_id)
+    if request.method == 'POST':
+        award.delete()
+        return redirect('show_award')  # Redirect to page displaying awards
+    return render(request, 'delete_award.html', {'award': award})
+
+# views.py
+from django.shortcuts import render
+from .models import Award
+
+def award_gallery(request):
+    awards = Award.objects.all()
+    return render(request, 'award_gallery.html', {'awards': awards})
+
+
+######################### EYE DONATION FORM ####################################
+
+# views.py
+
+from django.shortcuts import render, redirect
+from .models import EyeDonor
+
+def eye_donation_form(request):
+    if request.method == 'POST':
+        # Handle form submission
+        email = request.POST.get('email')
+        name = request.POST.get('name')
+        dob = request.POST.get('dob')
+        district = request.POST.get('district')
+        address = request.POST.get('address')
+        phone_number = request.POST.get('phone_number')
+        signature = request.FILES.get('signature')
+        witness1_name = request.POST.get('witness1_name')
+        witness1_age = request.POST.get('witness1_age')
+        witness1_address = request.POST.get('witness1_address')
+        witness1_signature = request.FILES.get('witness1_signature')
+        witness2_name = request.POST.get('witness2_name')
+        witness2_age = request.POST.get('witness2_age')
+        witness2_address = request.POST.get('witness2_address')
+        witness2_signature = request.FILES.get('witness2_signature')
+        
+        # Check if the checkbox is checked
+        consent_notify_next_of_kin = request.POST.get('consent_notify_next_of_kin')
+        if consent_notify_next_of_kin == 'true':
+            consent_notify_next_of_kin = True
+        else:
+            consent_notify_next_of_kin = False
+
+        EyeDonor.objects.create(
+            email=email,
+            name=name,
+            dob=dob,
+            district=district,
+            address=address,
+            phone_number=phone_number,
+            signature=signature,
+            witness1_name=witness1_name,
+            witness1_age=witness1_age,
+            witness1_address=witness1_address,
+            witness1_signature=witness1_signature,
+            witness2_name=witness2_name,
+            witness2_age=witness2_age,
+            witness2_address=witness2_address,
+            witness2_signature=witness2_signature,
+            consent_notify_next_of_kin=consent_notify_next_of_kin
+        )
+        # Redirect to a thank you page or any other appropriate page
+        return redirect('index')
+    else:
+        # Render the form template
+        return render(request, 'eye_donation_form.html')
+
+from django.shortcuts import render
+from .models import EyeDonor
+
+def eye_donor_list(request):
+    donors = EyeDonor.objects.all()
+    donor_count = donors.count()
+    return render(request, 'eye_donor_list.html', {'donors': donors, 'donor_count': donor_count})
+
+
+  
 

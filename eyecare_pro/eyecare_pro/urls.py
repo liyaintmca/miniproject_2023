@@ -122,7 +122,31 @@ urlpatterns = [
     path('generate-medicine-names-pdf/', views.generate_medicine_names_pdf, name='generate_medicine_names_pdf'),
     path('generate_medicine_names_excel/', views.generate_medicine_names_excel, name='generate_medicine_names_excel'),
     path('edit_medicine/<int:medicine_id>/', views.edit_medicine, name='edit_medicine'),
-    path('patient_appointments/', views.patient_appointments, name='patient_appointments'), 
+    path('patient_appointments/', views.patient_appointments, name='patient_appointments'),  
+    path('donation/<int:donation_id>/', views.donation, name='donation'),
+    path('donate/', views.donate, name='donate'),
+
+    path('paymenthandler_donation/', views.paymenthandler_donation, name='paymenthandler_donation'),
+    path('add_award/', views.add_award, name='add_award'),
+    path('show_award/', views.show_award, name='show_award'),
+    path('edit_award/<int:award_id>/', views.edit_award, name='edit_award'),
+    path('delete_award/<int:award_id>/', views.delete_award, name='delete_award'),
+    path('award_gallery/', views.award_gallery, name='award_gallery'),
+    path('eye_donation_form/', views.eye_donation_form, name='eye_donation_form'),
+    path('eye-donor-list/', views.eye_donor_list, name='eye_donor_list'),
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
     # URL pattern for approving appointment
     path('approve_appointment/', views.approve_appointment, name='approve_appointment'),
     

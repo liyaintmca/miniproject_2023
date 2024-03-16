@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Confirmation</title>
+    <!-- Include your CSS file if needed -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h3>Thank you for your donation!</h3>
+    <p>Here are the details of your donation:</p>
+    <ul>
+        <li><strong>Full Name:</strong> {{ donation.full_name }}</li>
+        <li><strong>Email:</strong> {{ donation.email }}</li>
+        <li><strong>Place:</strong> {{ donation.place }}</li>
+        <li><strong>Donation Amount:</strong> ${{ donation.amount }}</li>
+    </ul>
+    <!-- Optionally, you can provide additional information or actions here -->
+</body>
+</html>

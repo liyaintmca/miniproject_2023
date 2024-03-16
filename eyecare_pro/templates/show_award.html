@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Awards and Certifications</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 20px;
+            color: #fff;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .sidebar li {
+            padding: 10px 20px;
+            border-bottom: 1px solid #5e636b;
+        }
+        .sidebar li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .sidebar li a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .award-container {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #ffffff;
+            position: relative; /* For positioning buttons */
+        }
+        .award-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .award-description {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .award-image {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .action-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .btn {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <!-- Add more sidebar links as needed -->
+            <li><a href="{% url 'chart' %}">Dashboard</a></li>
+            <li><a href="{% url 'add_career_opening' %}">Career</a></li>
+        </ul>
+    </div>
+    <div class="content container">
+        <h1>Awards and Certifications</h1>
+        {% for award in awards %}
+        <div class="award-container">
+            <div class="action-buttons">
+                <a href="{% url 'edit_award' award.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'delete_award' award.id %}" class="btn btn-danger">Delete</a>
+            </div>
+            <h2 class="award-title">{{ award.title }}</h2>
+            <p class="award-description">{{ award.description }}</p>
+            <img src="{{ award.photo.url }}" alt="{{ award.title }}" class="award-image">
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

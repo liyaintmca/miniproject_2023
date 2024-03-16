@@ -149,16 +149,45 @@
 						<li class="nav-item active">
 							<a class="nav-link" href="{% url 'index' %}">Home</a>
 						</li>
-						{% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'payment' %}">Payment</a></li> {% endcomment %}
-						<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-						<li class="nav-item"><a class="nav-link" href="{% url 'service' %}">Services</a></li>
+						 
 						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="{% url 'about' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About<i class="icofont-thin-down"></i></a>
+							<ul class="dropdown-menu" aria-labelledby="dropdown02">
+								<li><a class="dropdown-item" href="{% url 'about' %}">About Us</a></li>
+								<li><a class="dropdown-item" href=" {% url 'award_gallery' %}">Accreditation</a></li>
+								<li><a class="dropdown-item" href=" {% url 'department-single' %}">Gallery</a></li>
+
+							</ul>
+						</li>
+
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="{% url 'donate' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Donation<i class="icofont-thin-down"></i></a>
+							<ul class="dropdown-menu" aria-labelledby="dropdown02">
+								<li><a class="dropdown-item" href="{% url 'eye_donation_form' %}">Donate Eye</a></li>
+								<li><a class="dropdown-item" href=" {% url 'donate' %}">Make Charity</a></li>
+							</ul>
+						</li>
+						
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="{% url 'service' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Services<i class="icofont-thin-down"></i></a>
+							<ul class="dropdown-menu" aria-labelledby="dropdown02">
+								<li><a class="dropdown-item" href="{% url 'department' %}">Departments</a></li>
+								<li><a class="dropdown-item" href=" {% url 'donate' %}">Camp Registration</a></li>
+								<li><a class="dropdown-item" href=" {% url 'donate' %}">Patients Educate Videos</a></li>
+
+							</ul>
+						</li>
+
+
+						 
+
+ 						{% comment %} <li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="{% url 'department' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Department <i class="icofont-thin-down"></i></a>
 							<ul class="dropdown-menu" aria-labelledby="dropdown02">
 								<li><a class="dropdown-item" href="{% url 'department' %}">Departments</a></li>
 								<li><a class="dropdown-item" href=" {% url 'department-single' %}">Department Single</a></li>
 							</ul>
-						</li>
+						</li> {% endcomment %}
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="{% url 'career_openings' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Careers <i class="icofont-thin-down"></i></a>
 							<ul class="dropdown-menu" aria-labelledby="dropdown02">
@@ -166,14 +195,27 @@
 								<li><a class="dropdown-item" href=" {% url 'department-single' %}">Apply For Jobs</a></li>
 							</ul>
 						</li>
-						<li class="nav-item dropdown">
+
+						<li class="nav-item"><a class="nav-link" href=" {% url 'blog-sidebar' %}">Blog</a></li>
+
+						{% comment %} <li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="{% url 'blog-sidebar' %}" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blog <i class="icofont-thin-down"></i></a>
 							<ul class="dropdown-menu" aria-labelledby="dropdown05">
 								<li><a class="dropdown-item" href=" {% url 'blog-sidebar' %}">Blog with Sidebar</a></li>
 								<li><a class="dropdown-item" href=" {% url 'blog-single' %}">Blog Single</a></li>
 							</ul>
 						</li>
-						<li class="nav-item"><a class="nav-link" href=" {% url 'contact' %}">Contact</a></li>
+						<li class="nav-item"><a class="nav-link" href=" {% url 'contact' %}">Contact</a></li> {% endcomment %}
+
+
+
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="{% url 'contact' %}" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact <i class="icofont-thin-down"></i></a>
+							<ul class="dropdown-menu" aria-labelledby="dropdown05">
+								<li><a class="dropdown-item" href=" {% url 'contact' %}">Contact Us</a></li>
+								<li><a class="dropdown-item" href=" {% url 'blog-single' %}">Add Review</a></li>
+							</ul>
+						</li>
 						{% if user.is_authenticated %}
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="{% url 'edit_patient_profile' %}" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PATIENT PORTAL<i class="icofont-thin-down"></i></a>
@@ -748,6 +790,14 @@
     
     <script src="/static/js/script.js"></script>
     <script src="/static/js/contact.js"></script>
+	<script type="text/javascript"> 
+		function googleTranslateElementInit() 
+		{
+			new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+		}
+	</script>
+	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+	
 
   </body>
   </html>
@@ -759,10 +809,4 @@
     }
 </script>
 
-<script type="text/javascript"> 
-	function googleTranslateElementInit() 
-	{
-		new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-	}
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+ 
