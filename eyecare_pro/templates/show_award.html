@@ -82,10 +82,11 @@
             <!-- Add more sidebar links as needed -->
             <li><a href="{% url 'chart' %}">Dashboard</a></li>
             <li><a href="{% url 'add_career_opening' %}">Career</a></li>
+            <li><a href="{% url 'add_award' %}" id="add">Add Awards and Certifications</a></li>
         </ul>
     </div>
     <div class="content container">
-        <h1>Awards and Certifications</h1>
+        <h1 id="list">Awards and Certifications</h1>
         {% for award in awards %}
         <div class="award-container">
             <div class="action-buttons">
