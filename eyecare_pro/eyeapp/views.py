@@ -2053,8 +2053,6 @@ def donate(request):
             place=place,
             amount=amount
         )
-        # Optionally, you can do further processing here, such as sending a confirmation email
-
         # Redirect to the donation detail page with the donation ID
         return redirect('donation', donation_id=donation.id)
 
@@ -2071,7 +2069,7 @@ from .models import Donation
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 def donation(request, donation_id):
-   
+        user = request.user
         donation = Donation.objects.get(pk=donation_id)
         # Currency and amount conversion
         amount = donation.amount
@@ -2091,7 +2089,7 @@ def donation(request, donation_id):
 
         # Save the payment details to the Payment model
         payment = Payment.objects.create(
-            user=request.user,  # Assuming you have a logged-in user
+            user=user,  # Assuming you have a logged-in user
             razorpay_order_id=razorpay_order_id,
             amount=amount,
             currency=currency,
@@ -2111,7 +2109,7 @@ def donation(request, donation_id):
 
         }
 
-        return render(request, 'donation.html', context=context)
+        return render(request, 'confirmation1.html', context=context)
 
 
 @csrf_exempt
@@ -2146,8 +2144,10 @@ def paymenthandler_donation(request):
                     payment.save()
 
                     # Send the welcome email with PDF invoice
-                    
-                    
+
+
+
+
                     # render success page on successful capture of payment
                     return render(request, 'index.html')
                 except:

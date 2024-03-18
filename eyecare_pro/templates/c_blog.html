@@ -90,7 +90,9 @@
 
     <div class="container">
         <h1 class="text-center mb-4">Blog List</h1>
-
+        <div class="container mt-5">
+            <a href="{% url 'admin_add_blog' %}" class="btn btn-success" id="add_blogs">Add Blog</a>
+        </div>
         {% for blog in blogs %}
             <div class="blog-card">
                 <h2>{{ blog.title }}</h2>
@@ -104,7 +106,9 @@
 
                 <!-- Add links or buttons for further actions if necessary -->
             </div>
+            
         {% endfor %}
+         
     </div>
 
     <!-- Bootstrap JS and dependencies -->
